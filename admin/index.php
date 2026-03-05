@@ -133,6 +133,10 @@ function ratingLabel($val) {
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(10,25,18,0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.3); border-radius: 99px; }
+        .nav-link { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
+        .nav-link:hover { background: rgba(201,169,110,0.08); color: rgba(255,255,255,0.7); }
+        .nav-link.active { background: rgba(201,169,110,0.12); color: #C9A96E; }
     </style>
 </head>
 <body class="font-sans text-white min-h-screen">
@@ -143,7 +147,11 @@ function ratingLabel($val) {
                 <h1 class="font-script text-3xl text-white/70">John Hay Hotels</h1>
                 <span class="text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <a href="index.php" class="nav-link active">Dashboard</a>
+                <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
+                <a href="reports.php" class="nav-link text-white/40">Reports</a>
+                <span class="text-white/10 mx-2">|</span>
                 <span class="text-white/30 text-sm">Welcome, <span class="text-gold-400/70"><?= htmlspecialchars($_SESSION['admin_username'] ?? 'Admin') ?></span></span>
                 <a href="logout.php" class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
