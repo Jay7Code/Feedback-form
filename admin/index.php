@@ -165,18 +165,18 @@ function ratingLabel($val)
     <nav class="border-b border-white/[0.06] px-6 py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <h1 class="font-script text-3xl text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
+                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
             </div>
             <div class="flex items-center gap-2">
                 <a href="index.php" class="nav-link active">Dashboard</a>
                 <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
                 <a href="reports.php" class="nav-link text-white/40">Reports</a>
                 <span class="text-white/10 mx-2">|</span>
-                <span class="text-white/30 text-sm">Welcome, <span class="text-gold-400/70"><?= htmlspecialchars(
+                <span class="text-white/30 text-[1.125rem]">Welcome, <span class="text-gold-400/90"><?= htmlspecialchars(
                     $_SESSION["admin_username"] ?? "Admin",
                 ) ?></span></span>
-                <a href="logout.php" class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
@@ -198,9 +198,9 @@ function ratingLabel($val)
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Total Feedback</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Total Feedback</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80"><?= $totalCount ?></p>
+                <p class="text-[2.125rem] font-bold text-white/80"><?= $totalCount ?></p>
             </div>
 
             <!-- Average NPS -->
@@ -211,9 +211,9 @@ function ratingLabel($val)
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80"><?= $avgRating ?><span class="text-lg text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80"><?= $avgRating ?><span class="text-[1.375rem] text-white/30">/10</span></p>
             </div>
 
             <!-- Latest Submission -->
@@ -224,9 +224,9 @@ function ratingLabel($val)
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Latest Submission</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Latest Submission</span>
                 </div>
-                <p class="text-xl font-bold text-white/80"><?= $latestFormatted ?></p>
+                <p class="text-[1.5rem] font-bold text-white/80"><?= $latestFormatted ?></p>
             </div>
         </div>
 
@@ -234,34 +234,34 @@ function ratingLabel($val)
         <div class="glass-card rounded-xl p-5 mb-6">
             <form method="GET" class="flex flex-wrap items-end gap-4">
                 <div class="flex-1 min-w-[180px]">
-                    <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Search</label>
+                    <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">Search</label>
                     <input type="text" name="search" value="<?= htmlspecialchars(
                         $_GET["search"] ?? "",
                     ) ?>" placeholder="Name, email, or room..." class="lodge-input w-full">
                 </div>
                 <div>
-                    <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Date From</label>
+                    <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">Date From</label>
                     <input type="date" name="date_from" value="<?= htmlspecialchars(
                         $_GET["date_from"] ?? "",
                     ) ?>" class="lodge-input">
                 </div>
                 <div>
-                    <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Date To</label>
+                    <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">Date To</label>
                     <input type="date" name="date_to" value="<?= htmlspecialchars(
                         $_GET["date_to"] ?? "",
                     ) ?>" class="lodge-input">
                 </div>
                 <div>
-                    <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Room</label>
+                    <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">Room</label>
                     <input type="text" name="room" value="<?= htmlspecialchars(
                         $_GET["room"] ?? "",
                     ) ?>" placeholder="Room #" class="lodge-input w-24">
                 </div>
-                <button type="submit" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
+                <button type="submit" class="px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
                     Filter
                 </button>
-                <a href="index.php" class="px-4 py-2.5 rounded-lg text-xs text-white/30 hover:text-white/50 border border-white/10 transition-colors">Clear</a>
-                <a href="?export=csv" class="ml-auto px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider border border-gold-400/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2">
+                <a href="index.php" class="px-4 py-2.5 rounded-lg text-[1rem] text-white/30 hover:text-white/50 border border-white/10 transition-colors">Clear</a>
+                <a href="?export=csv" class="ml-auto px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
@@ -272,8 +272,8 @@ function ratingLabel($val)
         <!-- ═══ FEEDBACK TABLE ═══ -->
         <div class="glass-card rounded-xl overflow-hidden">
             <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
-                <h2 class="font-serif text-white/70 text-base tracking-wider uppercase">Guest Feedback</h2>
-                <span class="text-white/20 text-xs"><?= $totalCount ?> entries</span>
+                <h2 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Guest Feedback</h2>
+                <span class="text-white/20 text-[1rem]"><?= $totalCount ?> entries</span>
             </div>
 
             <?php if (empty($feedbacks)): ?>
@@ -281,21 +281,21 @@ function ratingLabel($val)
                     <svg class="w-16 h-16 text-white/10 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>
-                    <p class="text-white/25 text-sm">No feedback entries found.</p>
-                    <p class="text-white/15 text-xs mt-1">Feedback will appear here once guests submit the form.</p>
+                    <p class="text-white/60 text-[1.125rem]">No feedback entries found.</p>
+                    <p class="text-white/15 text-[1rem] mt-1">Feedback will appear here once guests submit the form.</p>
                 </div>
             <?php else: ?>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                    <table class="w-full text-[1.125rem]">
                         <thead>
                             <tr class="border-b border-white/[0.06]">
-                                <th class="px-5 py-3.5 text-left text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Date</th>
-                                <th class="px-5 py-3.5 text-left text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Guest</th>
-                                <th class="px-5 py-3.5 text-center text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Room</th>
-                                <th class="px-5 py-3.5 text-center text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Rating</th>
-                                <th class="px-5 py-3.5 text-left text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Purpose</th>
-                                <th class="px-5 py-3.5 text-center text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Stay</th>
-                                <th class="px-5 py-3.5 text-center text-[0.6rem] font-bold text-gold-400/60 uppercase tracking-[0.15em]">Action</th>
+                                <th class="px-5 py-3.5 text-left text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Date</th>
+                                <th class="px-5 py-3.5 text-left text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Guest</th>
+                                <th class="px-5 py-3.5 text-center text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Room</th>
+                                <th class="px-5 py-3.5 text-center text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Rating</th>
+                                <th class="px-5 py-3.5 text-left text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Purpose</th>
+                                <th class="px-5 py-3.5 text-center text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Stay</th>
+                                <th class="px-5 py-3.5 text-center text-[0.85rem] font-bold text-gold-400/90 uppercase tracking-[0.15em]">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -322,7 +322,7 @@ function ratingLabel($val)
                                 }
                                 ?>
                                 <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                                    <td class="px-5 py-3.5 text-white/40 text-xs"><?= date(
+                                    <td class="px-5 py-3.5 text-white/70 text-[1rem] font-medium"><?= date(
                                         "M d, Y",
                                         strtotime($fb["created_at"]),
                                     ) ?></td>
@@ -333,10 +333,10 @@ function ratingLabel($val)
                                             ? htmlspecialchars(
                                                 $fb["guest_name"],
                                             )
-                                            : '<span class="text-white/25 italic">Anonymous</span>' ?></span>
+                                            : '<span class="text-white/60 italic">Anonymous</span>' ?></span>
                                     </td>
                                     <td class="px-5 py-3.5 text-center">
-                                        <span class="px-2.5 py-1 rounded-md bg-pine-800/50 text-gold-400/70 text-xs font-semibold"><?= htmlspecialchars(
+                                        <span class="px-2.5 py-1 rounded-md bg-pine-800/50 text-gold-400/90 text-[1rem] font-semibold"><?= htmlspecialchars(
                                             $fb["room_no"],
                                         ) ?></span>
                                     </td>
@@ -345,18 +345,18 @@ function ratingLabel($val)
                                             <span class="font-bold text-white/70"><?= $fb[
                                                 "overall_rating"
                                             ] ?></span>
-                                            <span class="text-[0.55rem] font-semibold uppercase <?= $ratingInfo[1] ?>"><?= $ratingInfo[0] ?></span>
+                                            <span class="text-[0.8rem] font-semibold uppercase <?= $ratingInfo[1] ?>"><?= $ratingInfo[0] ?></span>
                                         </div>
                                     </td>
-                                    <td class="px-5 py-3.5 text-white/35 text-xs"><?= htmlspecialchars(
+                                    <td class="px-5 py-3.5 text-white/70 text-[1rem] font-medium"><?= htmlspecialchars(
                                         $fb["purpose_of_stay"] ?: "—",
                                     ) ?></td>
-                                    <td class="px-5 py-3.5 text-center text-white/30 text-xs"><?= $stayDates ?:
+                                    <td class="px-5 py-3.5 text-center text-white/70 text-[1rem] font-medium"><?= $stayDates ?:
                                         "—" ?></td>
                                     <td class="px-5 py-3.5 text-center">
                                         <a href="view.php?id=<?= $fb[
                                             "id"
-                                        ] ?>" class="text-gold-400/60 hover:text-gold-400 transition-colors text-xs font-semibold uppercase tracking-wider">View</a>
+                                        ] ?>" class="text-gold-400/90 hover:text-gold-400 transition-colors text-[1rem] font-semibold uppercase tracking-wider">View</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -370,7 +370,7 @@ function ratingLabel($val)
 
     <!-- Footer -->
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8">
-        <p class="text-white/15 text-[0.55rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
+        <p class="text-white/15 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
 </body>

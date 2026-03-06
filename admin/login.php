@@ -94,10 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="scene-bg"></div>
     <div class="relative z-10 w-full max-w-md px-6">
         <div class="text-center mb-10 fade-up">
-            <h1 class="font-script text-5xl text-white/80 mb-2">John Hay Hotels</h1>
+            <h1 class="font-script text-[3.25rem] text-white/80 mb-2">John Hay Hotels</h1>
             <div class="flex items-center justify-center gap-3">
                 <span class="w-10 h-px bg-gold-400/40"></span>
-                <span class="text-gold-400/70 text-[0.6rem] font-semibold tracking-[0.3em] uppercase">Admin Panel</span>
+                <span class="text-gold-400/90 text-[0.85rem] font-semibold tracking-[0.3em] uppercase">Admin Panel</span>
                 <span class="w-10 h-px bg-gold-400/40"></span>
             </div>
         </div>
@@ -108,28 +108,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                     </svg>
                 </div>
-                <h2 class="font-serif text-xl text-white/80 tracking-wide">Sign In</h2>
+                <h2 class="font-serif text-[1.5rem] text-white/80 tracking-wide">Sign In</h2>
             </div>
             <?php if ($error): ?>
                 <div class="bg-red-900/20 border border-red-400/20 rounded-xl px-4 py-3 mb-6 text-center">
-                    <p class="text-red-400/80 text-sm"><?= htmlspecialchars(
+                    <p class="text-red-400/80 text-[1.125rem]"><?= htmlspecialchars(
                         $error,
                     ) ?></p>
                 </div>
             <?php endif; ?>
             <form method="POST" class="space-y-5">
                 <div>
-                    <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Username</label>
+                    <label class="block text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">Username</label>
                     <input type="text" name="username" required autofocus placeholder="Enter username" class="lodge-input">
                 </div>
                 <div>
-                    <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Password</label>
+                    <label class="block text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">Password</label>
                     <input type="password" name="password" required placeholder="Enter password" class="lodge-input">
                 </div>
-                <button type="submit" class="w-full py-3.5 rounded-full font-semibold text-sm uppercase tracking-[0.15em] transition-all duration-300 hover:shadow-lg" style="background: linear-gradient(135deg, #C9A96E, #b5893a); color: #0A1912;">Sign In</button>
+                <button type="submit" class="w-full py-3.5 rounded-full font-semibold text-[1.125rem] uppercase tracking-[0.15em] transition-all duration-300 hover:shadow-lg" style="background: linear-gradient(135deg, #C9A96E, #b5893a); color: #0A1912;">Sign In</button>
             </form>
         </div>
-        <p class="text-center text-white/15 text-[0.6rem] uppercase tracking-[0.3em] mt-8 fade-up" style="animation-delay: 0.4s;">Forest Wing - Camp John Hay - Baguio City</p>
+        <p class="text-center text-white/15 text-[0.85rem] uppercase tracking-[0.3em] mt-8 fade-up" style="animation-delay: 0.4s;">Forest Wing - Camp John Hay - Baguio City</p>
     </div>
 </body>
 </html>

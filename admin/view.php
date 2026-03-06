@@ -97,7 +97,7 @@ function ratingText($val)
                     Back to Dashboard
                 </a>
             </div>
-            <span class="text-white/15 text-xs">Feedback #<?= $id ?></span>
+            <span class="text-white/15 text-[1rem]">Feedback #<?= $id ?></span>
         </div>
     </nav>
 
@@ -107,12 +107,12 @@ function ratingText($val)
         <div class="glass-card rounded-xl p-6">
             <div class="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                    <h1 class="font-serif text-2xl text-white/80 mb-1">
+                    <h1 class="font-serif text-[1.75rem] text-white/80 mb-1">
                         <?= !empty($fb["guest_name"])
                             ? htmlspecialchars($fb["guest_name"])
                             : '<span class="italic text-white/30">Anonymous Guest</span>' ?>
                     </h1>
-                    <div class="flex flex-wrap items-center gap-3 text-xs text-white/30">
+                    <div class="flex flex-wrap items-center gap-3 text-[1rem] text-white/30">
                         <?php if (!empty($fb["email"])): ?>
                             <span><?= htmlspecialchars($fb["email"]) ?></span>
                             <span class="text-white/10">|</span>
@@ -130,43 +130,43 @@ function ratingText($val)
                 </div>
                 <div class="text-right">
                     <div class="flex items-center gap-2 mb-1">
-                        <span class="text-4xl font-bold text-gold-400"><?= $fb[
+                        <span class="text-[2.5rem] font-bold text-gold-400"><?= $fb[
                             "overall_rating"
                         ] ?></span>
-                        <span class="text-white/25 text-lg">/10</span>
+                        <span class="text-white/60 text-[1.375rem]">/10</span>
                     </div>
-                    <span class="text-[0.6rem] font-bold text-gold-400/50 uppercase tracking-[0.2em]">Overall Rating</span>
+                    <span class="text-[0.85rem] font-bold text-gold-400/80 uppercase tracking-[0.2em]">Overall Rating</span>
                 </div>
             </div>
 
             <!-- Quick info row -->
             <div class="mt-5 pt-5 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
-                    <span class="block text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.15em] mb-1">Room</span>
-                    <span class="text-sm text-white/60 font-semibold"><?= htmlspecialchars(
+                    <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">Room</span>
+                    <span class="text-[1.125rem] text-white/60 font-semibold"><?= htmlspecialchars(
                         $fb["room_no"],
                     ) ?></span>
                 </div>
                 <div>
-                    <span class="block text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.15em] mb-1">First Stay?</span>
-                    <span class="text-sm text-white/60"><?= htmlspecialchars(
+                    <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">First Stay?</span>
+                    <span class="text-[1.125rem] text-white/60"><?= htmlspecialchars(
                         $fb["first_stay"] ?: "—",
                     ) ?></span>
                 </div>
                 <div>
-                    <span class="block text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.15em] mb-1">Purpose</span>
-                    <span class="text-sm text-white/60"><?= htmlspecialchars(
+                    <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">Purpose</span>
+                    <span class="text-[1.125rem] text-white/60"><?= htmlspecialchars(
                         $fb["purpose_of_stay"] ?: "—",
                     ) ?></span>
                     <?php if (!empty($fb["other_purpose_text"])): ?>
-                        <span class="text-xs text-white/30 block">(<?= htmlspecialchars(
+                        <span class="text-[1rem] text-white/30 block">(<?= htmlspecialchars(
                             $fb["other_purpose_text"],
                         ) ?>)</span>
                     <?php endif; ?>
                 </div>
                 <div>
-                    <span class="block text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.15em] mb-1">Stay Dates</span>
-                    <span class="text-sm text-white/60">
+                    <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">Stay Dates</span>
+                    <span class="text-[1.125rem] text-white/60">
                         <?php if (
                             !empty($fb["check_in"]) &&
                             !empty($fb["check_out"])
@@ -188,42 +188,42 @@ function ratingText($val)
         <!-- ═══ FRONT OF HOUSE RATINGS ═══ -->
         <div class="glass-card rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-white/[0.06]">
-                <h2 class="font-serif text-white/60 text-base tracking-wider uppercase">Front of House</h2>
+                <h2 class="font-serif text-white/60 text-[1.25rem] tracking-wider uppercase">Front of House</h2>
             </div>
             <div class="px-6 py-5">
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6">
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Front Desk</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Front Desk</span><?= ratingText(
                         $fb["frontdesk"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Reservations</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Reservations</span><?= ratingText(
                         $fb["reservations"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Telephone</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Telephone</span><?= ratingText(
                         $fb["telephone_operator"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Valet</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Valet</span><?= ratingText(
                         $fb["valet"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Housekeeping</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Housekeeping</span><?= ratingText(
                         $fb["housekeeping"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Accommodation</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Accommodation</span><?= ratingText(
                         $fb["accommodation"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Safety</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Safety</span><?= ratingText(
                         $fb["safety"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Security</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Security</span><?= ratingText(
                         $fb["security"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Overall Service</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Overall Service</span><?= ratingText(
                         $fb["overall_service"],
                     ) ?></div>
                 </div>
                 <?php if (!empty($fb["frontdesk_comments"])): ?>
                     <div class="mt-5 pt-4 border-t border-white/[0.04]">
-                        <span class="text-[0.55rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Comments</span>
-                        <p class="text-sm text-white/50 italic leading-relaxed"><?= nl2br(
+                        <span class="text-[0.8rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Comments</span>
+                        <p class="text-[1.125rem] text-white/50 italic leading-relaxed"><?= nl2br(
                             htmlspecialchars($fb["frontdesk_comments"]),
                         ) ?></p>
                     </div>
@@ -234,47 +234,47 @@ function ratingText($val)
         <!-- ═══ FOOD & BEVERAGE RATINGS ═══ -->
         <div class="glass-card rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-white/[0.06]">
-                <h2 class="font-serif text-white/60 text-base tracking-wider uppercase">Food & Beverage</h2>
+                <h2 class="font-serif text-white/60 text-[1.25rem] tracking-wider uppercase">Food & Beverage</h2>
             </div>
             <div class="px-6 py-5">
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6">
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Food Quality</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Food Quality</span><?= ratingText(
                         $fb["food_quality"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Serving Time</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Serving Time</span><?= ratingText(
                         $fb["serving_time"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Wait Staff</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Wait Staff</span><?= ratingText(
                         $fb["wait_staff"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Grooming</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Grooming</span><?= ratingText(
                         $fb["grooming"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Behavior</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Behavior</span><?= ratingText(
                         $fb["behavior"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Service</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Service</span><?= ratingText(
                         $fb["fnb_service"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Bar</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Bar</span><?= ratingText(
                         $fb["bar"],
                     ) ?></div>
-                    <div><span class="text-[0.6rem] font-bold text-white/25 uppercase tracking-wider block mb-1">Bartender</span><?= ratingText(
+                    <div><span class="text-[0.85rem] font-bold text-white/60 uppercase tracking-wider block mb-1">Bartender</span><?= ratingText(
                         $fb["bartender"],
                     ) ?></div>
                 </div>
                 <?php if (!empty($fb["fnb_comments"])): ?>
                     <div class="mt-5 pt-4 border-t border-white/[0.04]">
-                        <span class="text-[0.55rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Comments</span>
-                        <p class="text-sm text-white/50 italic leading-relaxed"><?= nl2br(
+                        <span class="text-[0.8rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Comments</span>
+                        <p class="text-[1.125rem] text-white/50 italic leading-relaxed"><?= nl2br(
                             htmlspecialchars($fb["fnb_comments"]),
                         ) ?></p>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($fb["helpful_staff_names"])): ?>
                     <div class="mt-4 pt-4 border-t border-white/[0.04]">
-                        <span class="text-[0.55rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Especially Helpful Staff</span>
-                        <p class="text-sm text-gold-400/70 font-medium"><?= htmlspecialchars(
+                        <span class="text-[0.8rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Especially Helpful Staff</span>
+                        <p class="text-[1.125rem] text-gold-400/90 font-medium"><?= htmlspecialchars(
                             $fb["helpful_staff_names"],
                         ) ?></p>
                     </div>
@@ -289,21 +289,21 @@ function ratingText($val)
         ): ?>
             <div class="glass-card rounded-xl overflow-hidden">
                 <div class="px-6 py-4 border-b border-white/[0.06]">
-                    <h2 class="font-serif text-white/60 text-base tracking-wider uppercase">Additional Comments</h2>
+                    <h2 class="font-serif text-white/60 text-[1.25rem] tracking-wider uppercase">Additional Comments</h2>
                 </div>
                 <div class="px-6 py-5 space-y-5">
                     <?php if (!empty($fb["suggestions_future"])): ?>
                         <div>
-                            <span class="text-[0.55rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Suggestions for the Future</span>
-                            <p class="text-sm text-white/50 italic leading-relaxed"><?= nl2br(
+                            <span class="text-[0.8rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Suggestions for the Future</span>
+                            <p class="text-[1.125rem] text-white/50 italic leading-relaxed"><?= nl2br(
                                 htmlspecialchars($fb["suggestions_future"]),
                             ) ?></p>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty($fb["other_comments"])): ?>
                         <div>
-                            <span class="text-[0.55rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Other Comments</span>
-                            <p class="text-sm text-white/50 italic leading-relaxed"><?= nl2br(
+                            <span class="text-[0.8rem] font-bold text-gold-400/40 uppercase tracking-wider block mb-2">Other Comments</span>
+                            <p class="text-[1.125rem] text-white/50 italic leading-relaxed"><?= nl2br(
                                 htmlspecialchars($fb["other_comments"]),
                             ) ?></p>
                         </div>
@@ -314,7 +314,7 @@ function ratingText($val)
 
         <!-- Submitted timestamp -->
         <div class="text-center py-4">
-            <p class="text-white/15 text-xs">Submitted on <?= date(
+            <p class="text-white/15 text-[1rem]">Submitted on <?= date(
                 'F d, Y \a\t h:i A',
                 strtotime($fb["created_at"]),
             ) ?></p>

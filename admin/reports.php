@@ -138,15 +138,15 @@ $_SESSION["admin_logged_in"] !== true
     <nav class="border-b border-white/[0.06] px-6 py-4 no-print">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <h1 class="font-script text-3xl text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
+                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
             </div>
             <div class="flex items-center gap-2">
                 <a href="index.php" class="nav-link text-white/40">Dashboard</a>
                 <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
                 <a href="reports.php" class="nav-link active">Reports</a>
                 <span class="text-white/10 mx-2">|</span>
-                <a href="logout.php" class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
@@ -162,8 +162,8 @@ $_SESSION["admin_logged_in"] !== true
         <div id="controlsPanel" class="no-print">
             <div class="flex flex-wrap items-center justify-between gap-4 mb-6 fade-up">
                 <div>
-                    <h2 class="font-serif text-2xl text-white/80 tracking-wide">Feedback Reports</h2>
-                    <p class="text-white/30 text-sm mt-1">Generate and print daily, weekly, or monthly feedback summaries</p>
+                    <h2 class="font-serif text-[1.75rem] text-white/80 tracking-wide">Feedback Reports</h2>
+                    <p class="text-white/30 text-[1.125rem] mt-1">Generate and print daily, weekly, or monthly feedback summaries</p>
                 </div>
             </div>
 
@@ -171,7 +171,7 @@ $_SESSION["admin_logged_in"] !== true
             <div class="glass-card rounded-xl p-5 mb-6 fade-up" style="animation-delay:0.1s">
                 <div class="flex flex-wrap items-end gap-4">
                     <div>
-                        <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-2">Quick Presets</label>
+                        <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">Quick Presets</label>
                         <div class="flex gap-2" id="presetBtns">
                             <button class="preset-btn" data-preset="today">Daily (Today)</button>
                             <button class="preset-btn" data-preset="yesterday">Yesterday</button>
@@ -181,17 +181,17 @@ $_SESSION["admin_logged_in"] !== true
                     </div>
                     <div class="flex items-end gap-3 ml-auto">
                         <div>
-                            <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">From</label>
+                            <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">From</label>
                             <input type="date" id="dateFrom" class="lodge-input">
                         </div>
                         <div>
-                            <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">To</label>
+                            <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">To</label>
                             <input type="date" id="dateTo" class="lodge-input">
                         </div>
-                        <button id="btnGenerate" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
+                        <button id="btnGenerate" class="px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
                             Generate Report
                         </button>
-                        <button id="btnPrint" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider border border-gold-400/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2" style="visibility:hidden; opacity:0; pointer-events:none;">
+                        <button id="btnPrint" class="px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2" style="visibility:hidden; opacity:0; pointer-events:none;">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                             </svg>
@@ -205,18 +205,18 @@ $_SESSION["admin_logged_in"] !== true
         <!-- ═══ LOADING ═══ -->
         <div id="loadingReport" class="no-print text-center py-16" style="display:none">
             <div class="spinner mx-auto mb-4"></div>
-            <p class="text-white/30 text-sm">Generating report...</p>
+            <p class="text-white/30 text-[1.125rem]">Generating report...</p>
         </div>
 
         <!-- ═══ EMPTY STATE ═══ -->
         <div id="emptyState" class="no-print glass-card rounded-xl p-12 text-center fade-up" style="animation-delay:0.2s">
             <div class="w-20 h-20 rounded-full bg-gold-400/10 flex items-center justify-center mx-auto mb-6">
-                <svg class="w-10 h-10 text-gold-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 text-gold-400/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
             </div>
-            <h3 class="font-serif text-xl text-white/60 mb-2">Select a Report Period</h3>
-            <p class="text-white/30 text-sm max-w-md mx-auto">Choose a quick preset or specify a custom date range above, then click "Generate Report" to view the feedback summary.</p>
+            <h3 class="font-serif text-[1.5rem] text-white/60 mb-2">Select a Report Period</h3>
+            <p class="text-white/30 text-[1.125rem] max-w-md mx-auto">Choose a quick preset or specify a custom date range above, then click "Generate Report" to view the feedback summary.</p>
         </div>
 
         <!-- ═══ REPORT CONTENT (Generated via JS) ═══ -->
@@ -226,7 +226,7 @@ $_SESSION["admin_logged_in"] !== true
 
     <!-- Footer -->
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8 no-print">
-        <p class="text-white/15 text-[0.55rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
+        <p class="text-white/15 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
     <script>
@@ -411,8 +411,8 @@ $_SESSION["admin_logged_in"] !== true
             html += '<div class="no-print mb-6">';
             html += '<div class="flex items-center justify-between">';
             html += '<div>';
-            html += '<h3 class="font-serif text-xl text-white/80 tracking-wide">Report: ' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</h3>';
-            html += '<p class="text-white/20 text-xs mt-1">Generated: ' + generatedAt + '</p>';
+            html += '<h3 class="font-serif text-[1.5rem] text-white/80 tracking-wide">Report: ' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</h3>';
+            html += '<p class="text-white/20 text-[1rem] mt-1">Generated: ' + generatedAt + '</p>';
             html += '</div></div></div>';
 
             // ── Summary Stats ──

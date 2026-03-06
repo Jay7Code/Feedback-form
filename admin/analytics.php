@@ -89,15 +89,15 @@ $_SESSION["admin_logged_in"] !== true
     <nav class="border-b border-white/[0.06] px-6 py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <h1 class="font-script text-3xl text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
+                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
             </div>
             <div class="flex items-center gap-2">
                 <a href="index.php" class="nav-link text-white/40">Dashboard</a>
                 <a href="analytics.php" class="nav-link active">Analytics</a>
                 <a href="reports.php" class="nav-link text-white/40">Reports</a>
                 <span class="text-white/10 mx-2">|</span>
-                <a href="logout.php" class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
@@ -112,8 +112,8 @@ $_SESSION["admin_logged_in"] !== true
         <!-- ═══ PAGE HEADER + PERIOD FILTERS ═══ -->
         <div class="flex flex-wrap items-center justify-between gap-4 mb-8 fade-up">
             <div>
-                <h2 class="font-serif text-2xl text-white/80 tracking-wide">Feedback Analytics</h2>
-                <p class="text-white/30 text-sm mt-1">Visual summary of guest feedback and satisfaction scores</p>
+                <h2 class="font-serif text-[1.75rem] text-white/80 tracking-wide">Feedback Analytics</h2>
+                <p class="text-white/30 text-[1.125rem] mt-1">Visual summary of guest feedback and satisfaction scores</p>
             </div>
             <div class="flex flex-wrap gap-2" id="periodFilters">
                 <button class="period-btn" data-period="today">Today</button>
@@ -134,9 +134,9 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Total Responses</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Total Responses</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value" id="statTotal">—</p>
+                <p class="text-[2.125rem] font-bold text-white/80 stat-value" id="statTotal">—</p>
             </div>
             <!-- Average NPS -->
             <div class="glass-card rounded-xl p-5">
@@ -146,9 +146,9 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statNps">—</span><span class="text-lg text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80 stat-value"><span id="statNps">—</span><span class="text-[1.375rem] text-white/30">/10</span></p>
             </div>
             <!-- FOH Score -->
             <div class="glass-card rounded-xl p-5">
@@ -158,9 +158,9 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. FOH Score</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. FOH Score</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFoh">—</span><span class="text-lg text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80 stat-value"><span id="statFoh">—</span><span class="text-[1.375rem] text-white/30">/10</span></p>
             </div>
             <!-- F&B Score -->
             <div class="glass-card rounded-xl p-5">
@@ -170,9 +170,9 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. F&B Score</span>
+                    <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. F&B Score</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFnb">—</span><span class="text-lg text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80 stat-value"><span id="statFnb">—</span><span class="text-[1.375rem] text-white/30">/10</span></p>
             </div>
         </div>
 
@@ -186,7 +186,7 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Satisfaction Score Trend</h3>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Satisfaction Score Trend</h3>
                 </div>
                 <div class="p-6 chart-container" style="height: 320px;">
                     <div class="loading-overlay" id="loadingTrend"><div class="spinner"></div></div>
@@ -201,7 +201,7 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Rating Distribution</h3>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Rating Distribution</h3>
                 </div>
                 <div class="p-6 chart-container" style="height: 320px;">
                     <div class="loading-overlay" id="loadingDist"><div class="spinner"></div></div>
@@ -220,8 +220,8 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Front of House Performance</h3>
-                    <span class="text-xs text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Front of House Performance</h3>
+                    <span class="text-[1rem] text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
                 </div>
                 <div class="p-6 chart-container" style="height: 360px;">
                     <div class="loading-overlay" id="loadingFoh"><div class="spinner"></div></div>
@@ -236,8 +236,8 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Food & Beverage Performance</h3>
-                    <span class="text-xs text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Food & Beverage Performance</h3>
+                    <span class="text-[1rem] text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
                 </div>
                 <div class="p-6 chart-container" style="height: 360px;">
                     <div class="loading-overlay" id="loadingFnb"><div class="spinner"></div></div>
@@ -256,7 +256,7 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Daily Feedback Volume</h3>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Daily Feedback Volume</h3>
                 </div>
                 <div class="p-6 chart-container" style="height: 280px;">
                     <div class="loading-overlay" id="loadingVolume"><div class="spinner"></div></div>
@@ -271,7 +271,7 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Guest Type</h3>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Guest Type</h3>
                 </div>
                 <div class="p-6 chart-container" style="height: 280px;">
                     <div class="loading-overlay" id="loadingGuest"><div class="spinner"></div></div>
@@ -289,7 +289,7 @@ $_SESSION["admin_logged_in"] !== true
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Purpose of Stay</h3>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Purpose of Stay</h3>
                 </div>
                 <div class="p-6 chart-container" style="height: 300px;">
                     <div class="loading-overlay" id="loadingPurpose"><div class="spinner"></div></div>
@@ -299,15 +299,15 @@ $_SESSION["admin_logged_in"] !== true
             <!-- Empty info card -->
             <div class="glass-card rounded-xl overflow-hidden fade-up flex flex-col items-center justify-center p-8 text-center" style="animation-delay:0.5s" id="noDataCard">
                 <div class="w-16 h-16 rounded-full bg-gold-400/10 flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-gold-400/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8 text-gold-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h4 class="font-serif text-white/60 text-lg mb-2">Analytics Overview</h4>
-                <p class="text-white/30 text-sm leading-relaxed max-w-xs">
+                <h4 class="font-serif text-white/60 text-[1.375rem] mb-2">Analytics Overview</h4>
+                <p class="text-white/30 text-[1.125rem] leading-relaxed max-w-xs">
                     Charts update in real-time as guests submit feedback. Use the period filters above to analyze specific time ranges.
                 </p>
-                <div class="mt-6 flex items-center gap-3 text-xs text-white/20">
+                <div class="mt-6 flex items-center gap-3 text-[1rem] text-white/20">
                     <span class="flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-400/60"></span> Excellent (9-10)
                     </span>
@@ -328,7 +328,7 @@ $_SESSION["admin_logged_in"] !== true
 
     <!-- Footer -->
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8">
-        <p class="text-white/15 text-[0.55rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
+        <p class="text-white/15 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
     <!-- ═══ CHART.JS INITIALIZATION ═══ -->
