@@ -191,7 +191,7 @@ $_SESSION["admin_logged_in"] !== true
                         <button id="btnGenerate" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
                             Generate Report
                         </button>
-                        <button id="btnPrint" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider border border-gold-400/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2" style="display:none">
+                        <button id="btnPrint" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider border border-gold-400/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2" style="visibility:hidden; opacity:0; pointer-events:none;">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                             </svg>
@@ -257,21 +257,15 @@ $_SESSION["admin_logged_in"] !== true
 
         // ─── Helper: score class ───
         function scoreClass(val, max) {
-            if (max === 3) {
-                if (val >= 2.5) return 'score-excellent';
-                if (val >= 1.5) return 'score-good';
-                return 'score-poor';
-            } else {
-                if (val >= 8) return 'score-excellent';
-                if (val >= 5) return 'score-good';
-                return 'score-poor';
-            }
+            if (val >= 8) return 'score-excellent';
+            if (val >= 5) return 'score-good';
+            return 'score-poor';
         }
 
         // ─── Helper: score label ───
         function scoreLabel(val) {
-            if (val >= 2.5) return 'Excellent';
-            if (val >= 1.5) return 'Good';
+            if (val >= 8) return 'Excellent';
+            if (val >= 5) return 'Good';
             if (val > 0) return 'Poor';
             return 'N/A';
         }
@@ -313,6 +307,7 @@ $_SESSION["admin_logged_in"] !== true
             document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             setPreset(btn.dataset.preset);
+            generateReport(dateFrom.value, dateTo.value);
         });
 
         // ─── Generate report ───
@@ -332,9 +327,25 @@ $_SESSION["admin_logged_in"] !== true
         // ─── Build report HTML ───
         function generateReport(from, to) {
             emptyState.style.display = 'none';
-            reportContent.style.display = 'none';
-            loadingEl.style.display = 'block';
-            btnPrint.style.display = 'none';
+            
+            // Disable buttons to avoid multiple clicks
+            btnGenerate.disabled = true;
+            btnGenerate.style.opacity = '0.7';
+            btnGenerate.innerText = 'Generating...';
+            
+            btnPrint.disabled = true;
+            btnPrint.style.opacity = '0.5';
+            btnPrint.style.pointerEvents = 'none';
+
+            // Keep reportContent visible but dim it (if it already has content)
+            if (reportContent.innerHTML.trim() !== '') {
+                reportContent.style.opacity = '0.4';
+                reportContent.style.pointerEvents = 'none';
+                loadingEl.style.display = 'none'; // Don't show large spinner if we already have content
+            } else {
+                reportContent.style.display = 'none';
+                loadingEl.style.display = 'block';
+            }
 
             fetch('api/report_data.php?date_from=' + encodeURIComponent(from) + '&date_to=' + encodeURIComponent(to))
                 .then(function(res) {
@@ -342,18 +353,42 @@ $_SESSION["admin_logged_in"] !== true
                     return res.json();
                 })
                 .then(function(data) {
-                    if (data.error) { alert(data.error); loadingEl.style.display = 'none'; emptyState.style.display = 'block'; return; }
+                    if (data.error) { 
+                        alert(data.error); 
+                        resetLoadingState(); 
+                        loadingEl.style.display = 'none';
+                        if (reportContent.innerHTML.trim() === '') emptyState.style.display = 'block'; 
+                        return; 
+                    }
                     renderReport(data);
+                    
                     loadingEl.style.display = 'none';
                     reportContent.style.display = 'block';
-                    btnPrint.style.display = 'flex';
+                    reportContent.style.opacity = '1';
+                    reportContent.style.pointerEvents = 'auto';
+                    
+                    btnPrint.style.visibility = 'visible';
+                    btnPrint.style.opacity = '1';
+                    btnPrint.style.pointerEvents = 'auto';
+                    resetLoadingState();
                 })
                 .catch(function(err) {
                     console.error(err);
+                    resetLoadingState();
                     loadingEl.style.display = 'none';
-                    emptyState.style.display = 'block';
+                    if (reportContent.innerHTML.trim() === '') emptyState.style.display = 'block';
                     alert('Failed to generate report. Please try again.');
                 });
+        }
+        
+        function resetLoadingState() {
+            btnGenerate.disabled = false;
+            btnGenerate.style.opacity = '1';
+            btnGenerate.innerText = 'Generate Report';
+            
+            btnPrint.disabled = false;
+            btnPrint.style.opacity = '1';
+            btnPrint.style.pointerEvents = 'auto';
         }
 
         function renderReport(data) {
@@ -426,23 +461,23 @@ $_SESSION["admin_logged_in"] !== true
             // ── Front of House ──
             html += '<div class="report-section">';
             html += '<h3>Front of House Ratings</h3>';
-            html += '<table class="report-table"><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
             (data.front_of_house || []).forEach(function(item) {
-                var cls = scoreClass(item.avg, 3);
+                var cls = scoreClass(item.avg, 10);
                 html += '<tr><td>' + item.label + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(2) + '/3' : 'N/A') + '</td>';
+                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
                 html += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
             });
             html += '</tbody></table></div>';
 
             // ── Food & Beverage ──
             html += '<div class="report-section">';
-            html += '<h3>Food & Beverage Ratings</h3>';
-            html += '<table class="report-table"><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            html += '<h3>Food &amp; Beverage Ratings</h3>';
+            html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
             (data.food_beverage || []).forEach(function(item) {
-                var cls = scoreClass(item.avg, 3);
+                var cls = scoreClass(item.avg, 10);
                 html += '<tr><td>' + item.label + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(2) + '/3' : 'N/A') + '</td>';
+                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
                 html += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
             });
             html += '</tbody></table></div>';

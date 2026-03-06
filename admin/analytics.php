@@ -9,8 +9,8 @@ session_start();
 require_once "../config.php";
 
 if (
-    !isset($_SESSION["admin_logged_in"]) ||
-    $_SESSION["admin_logged_in"] !== true
+!isset($_SESSION["admin_logged_in"]) ||
+$_SESSION["admin_logged_in"] !== true
 ) {
     header("Location: login.php");
     exit();
@@ -159,7 +159,7 @@ if (
                     </div>
                     <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. FOH Score</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFoh">—</span><span class="text-lg text-white/30">/3</span></p>
+                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFoh">—</span><span class="text-lg text-white/30">/10</span></p>
             </div>
             <!-- F&B Score -->
             <div class="glass-card rounded-xl p-5">
@@ -171,7 +171,7 @@ if (
                     </div>
                     <span class="text-[0.65rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em]">Avg. F&B Score</span>
                 </div>
-                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFnb">—</span><span class="text-lg text-white/30">/3</span></p>
+                <p class="text-3xl font-bold text-white/80 stat-value"><span id="statFnb">—</span><span class="text-lg text-white/30">/10</span></p>
             </div>
         </div>
 
@@ -493,8 +493,8 @@ if (
                         label: 'Avg. Score',
                         data: fohItems.map(function(i) { return i.avg; }),
                         backgroundColor: fohItems.map(function(i) {
-                            if (i.avg >= 2.5) return 'rgba(16,185,129,0.7)';
-                            if (i.avg >= 1.5) return 'rgba(234,179,8,0.7)';
+                            if (i.avg >= 8) return 'rgba(16,185,129,0.7)';
+                            if (i.avg >= 5) return 'rgba(234,179,8,0.7)';
                             return 'rgba(239,68,68,0.7)';
                         }),
                         borderRadius: 6,
@@ -506,10 +506,8 @@ if (
                     responsive: true, maintainAspectRatio: false,
                     indexAxis: 'y',
                     scales: {
-                        x: { min: 0, max: 3, grid: { color: COLORS.grid },
-                            ticks: { stepSize: 1, callback: function(v) {
-                                return v === 1 ? 'Poor' : v === 2 ? 'Good' : v === 3 ? 'Excellent' : '';
-                            }}
+                        x: { min: 0, max: 10, grid: { color: COLORS.grid },
+                            ticks: { stepSize: 2 }
                         },
                         y: { grid: { display: false } }
                     },
@@ -522,8 +520,8 @@ if (
                             callbacks: {
                                 label: function(ctx) {
                                     var v = ctx.parsed.x;
-                                    var label = v >= 2.5 ? 'Excellent' : v >= 1.5 ? 'Good' : 'Poor';
-                                    return v.toFixed(2) + '/3 (' + label + ')';
+                                    var label = v >= 8 ? 'Excellent' : v >= 5 ? 'Good' : 'Poor';
+                                    return v.toFixed(1) + '/10 (' + label + ')';
                                 }
                             }
                         }
@@ -541,8 +539,8 @@ if (
                         label: 'Avg. Score',
                         data: fnbItems.map(function(i) { return i.avg; }),
                         backgroundColor: fnbItems.map(function(i) {
-                            if (i.avg >= 2.5) return 'rgba(16,185,129,0.7)';
-                            if (i.avg >= 1.5) return 'rgba(234,179,8,0.7)';
+                            if (i.avg >= 8) return 'rgba(16,185,129,0.7)';
+                            if (i.avg >= 5) return 'rgba(234,179,8,0.7)';
                             return 'rgba(239,68,68,0.7)';
                         }),
                         borderRadius: 6,
@@ -554,10 +552,8 @@ if (
                     responsive: true, maintainAspectRatio: false,
                     indexAxis: 'y',
                     scales: {
-                        x: { min: 0, max: 3, grid: { color: COLORS.grid },
-                            ticks: { stepSize: 1, callback: function(v) {
-                                return v === 1 ? 'Poor' : v === 2 ? 'Good' : v === 3 ? 'Excellent' : '';
-                            }}
+                        x: { min: 0, max: 10, grid: { color: COLORS.grid },
+                            ticks: { stepSize: 2 }
                         },
                         y: { grid: { display: false } }
                     },
@@ -570,8 +566,8 @@ if (
                             callbacks: {
                                 label: function(ctx) {
                                     var v = ctx.parsed.x;
-                                    var label = v >= 2.5 ? 'Excellent' : v >= 1.5 ? 'Good' : 'Poor';
-                                    return v.toFixed(2) + '/3 (' + label + ')';
+                                    var label = v >= 8 ? 'Excellent' : v >= 5 ? 'Good' : 'Poor';
+                                    return v.toFixed(1) + '/10 (' + label + ')';
                                 }
                             }
                         }
