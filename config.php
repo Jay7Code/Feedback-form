@@ -7,14 +7,14 @@
  */
 
 // ─── Database credentials ───
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'feedback_form_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define("DB_HOST", "localhost");
+define("DB_NAME", "feedback_form_db");
+define("DB_USER", "root");
+define("DB_PASS", "");
 
-// ─── Admin credentials ───
-define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', 'admin123');
+// ─── Super Admin credentials (hardcoded — only one super admin) ───
+define("SUPERADMIN_USERNAME", "superadmin");
+define("SUPERADMIN_PASSWORD", "superadmin123");
 
 /**
  * Get a PDO database connection.
@@ -22,17 +22,18 @@ define('ADMIN_PASSWORD', 'admin123');
  *
  * @return PDO
  */
-function getDBConnection() {
+function getDBConnection()
+{
     try {
         $pdo = new PDO(
             "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
             DB_USER,
             DB_PASS,
             [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ]
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ],
         );
         return $pdo;
     } catch (PDOException $e) {

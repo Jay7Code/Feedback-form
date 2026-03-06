@@ -1,0 +1,49 @@
+<?php
+/**
+ * ADMIN LOGIN PAGE
+ * John Hay Hotels - Forest Wing Guest Feedback System
+ */
+session_start();
+require_once '../config.php';
+
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    header('Location: index.php');
+    exit;
+}
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    if (!empty($username) && !empty($password)) {
+        try {
+            $pdo = getDBConnection();
+            $stmt = $pdo->prepare("SELECT id, username, password, full_name, is_active FROM admins WHERE username = :username LIMIT 1");
+            $stmt->execute([':username' => $username]);
+            $admin = $stmt->fetch();
+
+            if ($admin && password_verify($password, $admin['password'])) {
+                if ($admin['is_active'] == 1) {
+                    $_SESSION['admin_logged_in'] = true;
+                    $_SESSION['admin_id'] = $admin['id'];
+                    $_SESSION['admin_username'] = $admin['username'];
+                    $_SESSION['admin_full_name'] = $admin['full_name'];
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    $error = 'Your account has been deactivated. Please contact the Super Admin.';
+                }
+            } else {
+                $error = 'Invalid username or password.';
+            }
+        } catch (PDOException $e) {
+            error_log("Login error: " . $e->getMessage());
+            $error = 'A system error occurred. Please try again.';
+        }
+    } else {
+        $error = 'Please enter both username and password.';
+    }
+}
+?>

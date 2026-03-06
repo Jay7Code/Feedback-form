@@ -14,58 +14,68 @@
  */
 
 // ─── Include database config ───
-require_once 'config.php';
+require_once "config.php";
 
 // ─── Redirect if not a POST request ───
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: index.php');
-    exit;
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    header("Location: index.php");
+    exit();
 }
 
 // ─── Collect and sanitize all form data ───
 $data = [
     // Front of House ratings (1=Poor, 2=Good, 3=Excellent)
-    'frontdesk'          => intval($_POST['frontdesk'] ?? 0),
-    'reservations'       => intval($_POST['reservations'] ?? 0),
-    'telephone_operator' => intval($_POST['telephone_operator'] ?? 0),
-    'valet'              => intval($_POST['valet'] ?? 0),
-    'housekeeping'       => intval($_POST['housekeeping'] ?? 0),
-    'accommodation'      => intval($_POST['accommodation'] ?? 0),
-    'safety'             => intval($_POST['safety'] ?? 0),
-    'security'           => intval($_POST['security'] ?? 0),
-    'overall_service'    => intval($_POST['overall_service'] ?? 0),
-    'frontdesk_comments' => htmlspecialchars(trim($_POST['frontdesk_comments'] ?? '')),
+    "frontdesk" => intval($_POST["frontdesk"] ?? 0),
+    "reservations" => intval($_POST["reservations"] ?? 0),
+    "telephone_operator" => intval($_POST["telephone_operator"] ?? 0),
+    "valet" => intval($_POST["valet"] ?? 0),
+    "housekeeping" => intval($_POST["housekeeping"] ?? 0),
+    "accommodation" => intval($_POST["accommodation"] ?? 0),
+    "safety" => intval($_POST["safety"] ?? 0),
+    "security" => intval($_POST["security"] ?? 0),
+    "overall_service" => intval($_POST["overall_service"] ?? 0),
+    "frontdesk_comments" => htmlspecialchars(
+        trim($_POST["frontdesk_comments"] ?? ""),
+    ),
 
     // Food & Beverage ratings
-    'food_quality'       => intval($_POST['food_quality'] ?? 0),
-    'serving_time'       => intval($_POST['serving_time'] ?? 0),
-    'wait_staff'         => intval($_POST['wait_staff'] ?? 0),
-    'grooming'           => intval($_POST['grooming'] ?? 0),
-    'behavior'           => intval($_POST['behavior'] ?? 0),
-    'fnb_service'        => intval($_POST['fnb_service'] ?? 0),
-    'bar'                => intval($_POST['bar'] ?? 0),
-    'bartender'          => intval($_POST['bartender'] ?? 0),
-    'fnb_comments'       => htmlspecialchars(trim($_POST['fnb_comments'] ?? '')),
-    'helpful_staff_names'=> htmlspecialchars(trim($_POST['helpful_staff_names'] ?? '')),
+    "food_quality" => intval($_POST["food_quality"] ?? 0),
+    "serving_time" => intval($_POST["serving_time"] ?? 0),
+    "wait_staff" => intval($_POST["wait_staff"] ?? 0),
+    "grooming" => intval($_POST["grooming"] ?? 0),
+    "behavior" => intval($_POST["behavior"] ?? 0),
+    "fnb_service" => intval($_POST["fnb_service"] ?? 0),
+    "bar" => intval($_POST["bar"] ?? 0),
+    "bartender" => intval($_POST["bartender"] ?? 0),
+    "fnb_comments" => htmlspecialchars(trim($_POST["fnb_comments"] ?? "")),
+    "helpful_staff_names" => htmlspecialchars(
+        trim($_POST["helpful_staff_names"] ?? ""),
+    ),
 
     // Overall satisfaction (1-10 NPS scale)
-    'overall_rating'     => intval($_POST['overall_rating'] ?? 0),
+    "overall_rating" => intval($_POST["overall_rating"] ?? 0),
 
     // Additional comments
-    'suggestions_future' => htmlspecialchars(trim($_POST['suggestions_future'] ?? '')),
-    'other_comments'     => htmlspecialchars(trim($_POST['other_comments'] ?? '')),
+    "suggestions_future" => htmlspecialchars(
+        trim($_POST["suggestions_future"] ?? ""),
+    ),
+    "other_comments" => htmlspecialchars(trim($_POST["other_comments"] ?? "")),
 
     // Guest information
-    'first_stay'         => htmlspecialchars(trim($_POST['first_stay'] ?? '')),
-    'purpose_of_stay'    => htmlspecialchars(trim($_POST['purpose_of_stay'] ?? '')),
-    'other_purpose_text' => htmlspecialchars(trim($_POST['other_purpose_text'] ?? '')),
-    'guest_name'         => htmlspecialchars(trim($_POST['guest_name'] ?? '')),
-    'email'              => htmlspecialchars(trim($_POST['email'] ?? '')),
-    'address'            => htmlspecialchars(trim($_POST['address'] ?? '')),
-    'contact_no'         => htmlspecialchars(trim($_POST['contact_no'] ?? '')),
-    'room_no'            => htmlspecialchars(trim($_POST['room_no'] ?? '')),
-    'check_in'           => htmlspecialchars(trim($_POST['check_in'] ?? '')),
-    'check_out'          => htmlspecialchars(trim($_POST['check_out'] ?? '')),
+    "first_stay" => htmlspecialchars(trim($_POST["first_stay"] ?? "")),
+    "purpose_of_stay" => htmlspecialchars(
+        trim($_POST["purpose_of_stay"] ?? ""),
+    ),
+    "other_purpose_text" => htmlspecialchars(
+        trim($_POST["other_purpose_text"] ?? ""),
+    ),
+    "guest_name" => htmlspecialchars(trim($_POST["guest_name"] ?? "")),
+    "email" => htmlspecialchars(trim($_POST["email"] ?? "")),
+    "address" => htmlspecialchars(trim($_POST["address"] ?? "")),
+    "contact_no" => htmlspecialchars(trim($_POST["contact_no"] ?? "")),
+    "room_no" => htmlspecialchars(trim($_POST["room_no"] ?? "")),
+    "check_in" => htmlspecialchars(trim($_POST["check_in"] ?? "")),
+    "check_out" => htmlspecialchars(trim($_POST["check_out"] ?? "")),
 ];
 
 // ─── Save feedback to database ───
@@ -97,43 +107,42 @@ try {
 
     // Bind all parameters
     $stmt->execute([
-        ':frontdesk'          => $data['frontdesk'],
-        ':reservations'       => $data['reservations'],
-        ':telephone_operator' => $data['telephone_operator'],
-        ':valet'              => $data['valet'],
-        ':housekeeping'       => $data['housekeeping'],
-        ':accommodation'      => $data['accommodation'],
-        ':safety'             => $data['safety'],
-        ':security'           => $data['security'],
-        ':overall_service'    => $data['overall_service'],
-        ':frontdesk_comments' => $data['frontdesk_comments'],
-        ':food_quality'       => $data['food_quality'],
-        ':serving_time'       => $data['serving_time'],
-        ':wait_staff'         => $data['wait_staff'],
-        ':grooming'           => $data['grooming'],
-        ':behavior'           => $data['behavior'],
-        ':fnb_service'        => $data['fnb_service'],
-        ':bar'                => $data['bar'],
-        ':bartender'          => $data['bartender'],
-        ':fnb_comments'       => $data['fnb_comments'],
-        ':helpful_staff_names'=> $data['helpful_staff_names'],
-        ':overall_rating'     => $data['overall_rating'],
-        ':suggestions_future' => $data['suggestions_future'],
-        ':other_comments'     => $data['other_comments'],
-        ':first_stay'         => $data['first_stay'],
-        ':purpose_of_stay'    => $data['purpose_of_stay'],
-        ':other_purpose_text' => $data['other_purpose_text'],
-        ':guest_name'         => $data['guest_name'],
-        ':email'              => $data['email'],
-        ':address'            => $data['address'],
-        ':contact_no'         => $data['contact_no'],
-        ':room_no'            => $data['room_no'],
-        ':check_in'           => !empty($data['check_in'])  ? $data['check_in']  : null,
-        ':check_out'          => !empty($data['check_out']) ? $data['check_out'] : null,
+        ":frontdesk" => $data["frontdesk"],
+        ":reservations" => $data["reservations"],
+        ":telephone_operator" => $data["telephone_operator"],
+        ":valet" => $data["valet"],
+        ":housekeeping" => $data["housekeeping"],
+        ":accommodation" => $data["accommodation"],
+        ":safety" => $data["safety"],
+        ":security" => $data["security"],
+        ":overall_service" => $data["overall_service"],
+        ":frontdesk_comments" => $data["frontdesk_comments"],
+        ":food_quality" => $data["food_quality"],
+        ":serving_time" => $data["serving_time"],
+        ":wait_staff" => $data["wait_staff"],
+        ":grooming" => $data["grooming"],
+        ":behavior" => $data["behavior"],
+        ":fnb_service" => $data["fnb_service"],
+        ":bar" => $data["bar"],
+        ":bartender" => $data["bartender"],
+        ":fnb_comments" => $data["fnb_comments"],
+        ":helpful_staff_names" => $data["helpful_staff_names"],
+        ":overall_rating" => $data["overall_rating"],
+        ":suggestions_future" => $data["suggestions_future"],
+        ":other_comments" => $data["other_comments"],
+        ":first_stay" => $data["first_stay"],
+        ":purpose_of_stay" => $data["purpose_of_stay"],
+        ":other_purpose_text" => $data["other_purpose_text"],
+        ":guest_name" => $data["guest_name"],
+        ":email" => $data["email"],
+        ":address" => $data["address"],
+        ":contact_no" => $data["contact_no"],
+        ":room_no" => $data["room_no"],
+        ":check_in" => !empty($data["check_in"]) ? $data["check_in"] : null,
+        ":check_out" => !empty($data["check_out"]) ? $data["check_out"] : null,
     ]);
 
     $success = true;
-
 } catch (PDOException $e) {
     error_log("Feedback submission failed: " . $e->getMessage());
     $success = false;
@@ -214,7 +223,9 @@ try {
                 </div>
 
                 <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">
-                    Thank You, <?= !empty($data['guest_name']) ? $data['guest_name'] : 'Valued Guest' ?>!
+                    Thank You, <?= !empty($data["guest_name"])
+                        ? $data["guest_name"]
+                        : "Valued Guest" ?>!
                 </h2>
                 <p class="font-serif italic text-white/40 text-base md:text-lg leading-relaxed mb-8 fade-up" style="animation-delay:.5s">
                     Your feedback has been recorded and is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.

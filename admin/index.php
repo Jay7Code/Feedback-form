@@ -6,25 +6,32 @@
  * ═══════════════════════════════════════════════════════════════
  */
 session_start();
-require_once '../config.php';
+require_once "../config.php";
 
 // Auth check
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: login.php');
-    exit;
+if (
+    !isset($_SESSION["admin_logged_in"]) ||
+    $_SESSION["admin_logged_in"] !== true
+) {
+    header("Location: login.php");
+    exit();
 }
 
 $pdo = getDBConnection();
 
 // ─── Handle CSV Export ───
-if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+if (isset($_GET["export"]) && $_GET["export"] === "csv") {
     $stmt = $pdo->query("SELECT * FROM feedbacks ORDER BY created_at DESC");
     $rows = $stmt->fetchAll();
 
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="feedback_export_' . date('Y-m-d') . '.csv"');
+    header("Content-Type: text/csv");
+    header(
+        'Content-Disposition: attachment; filename="feedback_export_' .
+            date("Y-m-d") .
+            '.csv"',
+    );
 
-    $output = fopen('php://output', 'w');
+    $output = fopen("php://output", "w");
     if (!empty($rows)) {
         fputcsv($output, array_keys($rows[0]));
         foreach ($rows as $row) {
@@ -32,60 +39,74 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         }
     }
     fclose($output);
-    exit;
+    exit();
 }
 
 // ─── Filters ───
 $where = [];
 $params = [];
 
-if (!empty($_GET['date_from'])) {
+if (!empty($_GET["date_from"])) {
     $where[] = "DATE(created_at) >= :date_from";
-    $params[':date_from'] = $_GET['date_from'];
+    $params[":date_from"] = $_GET["date_from"];
 }
-if (!empty($_GET['date_to'])) {
+if (!empty($_GET["date_to"])) {
     $where[] = "DATE(created_at) <= :date_to";
-    $params[':date_to'] = $_GET['date_to'];
+    $params[":date_to"] = $_GET["date_to"];
 }
-if (!empty($_GET['room'])) {
+if (!empty($_GET["room"])) {
     $where[] = "room_no = :room";
-    $params[':room'] = $_GET['room'];
+    $params[":room"] = $_GET["room"];
 }
-if (!empty($_GET['search'])) {
-    $where[] = "(guest_name LIKE :search OR email LIKE :search2 OR room_no LIKE :search3)";
-    $params[':search'] = '%' . $_GET['search'] . '%';
-    $params[':search2'] = '%' . $_GET['search'] . '%';
-    $params[':search3'] = '%' . $_GET['search'] . '%';
+if (!empty($_GET["search"])) {
+    $where[] =
+        "(guest_name LIKE :search OR email LIKE :search2 OR room_no LIKE :search3)";
+    $params[":search"] = "%" . $_GET["search"] . "%";
+    $params[":search2"] = "%" . $_GET["search"] . "%";
+    $params[":search3"] = "%" . $_GET["search"] . "%";
 }
 
-$whereSQL = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
+$whereSQL = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
 
 // ─── Stats ───
 $totalStmt = $pdo->prepare("SELECT COUNT(*) FROM feedbacks $whereSQL");
 $totalStmt->execute($params);
 $totalCount = $totalStmt->fetchColumn();
 
-$avgStmt = $pdo->prepare("SELECT ROUND(AVG(overall_rating), 1) FROM feedbacks $whereSQL");
+$avgStmt = $pdo->prepare(
+    "SELECT ROUND(AVG(overall_rating), 1) FROM feedbacks $whereSQL",
+);
 $avgStmt->execute($params);
-$avgRating = $avgStmt->fetchColumn() ?: '—';
+$avgRating = $avgStmt->fetchColumn() ?: "—";
 
 $latestStmt = $pdo->prepare("SELECT MAX(created_at) FROM feedbacks $whereSQL");
 $latestStmt->execute($params);
 $latestDate = $latestStmt->fetchColumn();
-$latestFormatted = $latestDate ? date('M d, Y', strtotime($latestDate)) : '—';
+$latestFormatted = $latestDate ? date("M d, Y", strtotime($latestDate)) : "—";
 
 // ─── Feedback list ───
-$listStmt = $pdo->prepare("SELECT id, guest_name, room_no, overall_rating, purpose_of_stay, check_in, check_out, created_at FROM feedbacks $whereSQL ORDER BY created_at DESC LIMIT 200");
+$listStmt = $pdo->prepare(
+    "SELECT id, guest_name, room_no, overall_rating, purpose_of_stay, check_in, check_out, created_at FROM feedbacks $whereSQL ORDER BY created_at DESC LIMIT 200",
+);
 $listStmt->execute($params);
 $feedbacks = $listStmt->fetchAll();
 
 // Rating label helper
-function ratingLabel($val) {
-    if ($val >= 9) return ['Excellent', 'text-emerald-400'];
-    if ($val >= 7) return ['Good', 'text-green-400'];
-    if ($val >= 5) return ['Average', 'text-yellow-400'];
-    if ($val >= 3) return ['Below Avg', 'text-orange-400'];
-    return ['Poor', 'text-red-400'];
+function ratingLabel($val)
+{
+    if ($val >= 9) {
+        return ["Excellent", "text-emerald-400"];
+    }
+    if ($val >= 7) {
+        return ["Good", "text-green-400"];
+    }
+    if ($val >= 5) {
+        return ["Average", "text-yellow-400"];
+    }
+    if ($val >= 3) {
+        return ["Below Avg", "text-orange-400"];
+    }
+    return ["Poor", "text-red-400"];
 }
 ?>
 <!DOCTYPE html>
@@ -152,7 +173,9 @@ function ratingLabel($val) {
                 <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
                 <a href="reports.php" class="nav-link text-white/40">Reports</a>
                 <span class="text-white/10 mx-2">|</span>
-                <span class="text-white/30 text-sm">Welcome, <span class="text-gold-400/70"><?= htmlspecialchars($_SESSION['admin_username'] ?? 'Admin') ?></span></span>
+                <span class="text-white/30 text-sm">Welcome, <span class="text-gold-400/70"><?= htmlspecialchars(
+                    $_SESSION["admin_username"] ?? "Admin",
+                ) ?></span></span>
                 <a href="logout.php" class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -212,19 +235,27 @@ function ratingLabel($val) {
             <form method="GET" class="flex flex-wrap items-end gap-4">
                 <div class="flex-1 min-w-[180px]">
                     <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Search</label>
-                    <input type="text" name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" placeholder="Name, email, or room..." class="lodge-input w-full">
+                    <input type="text" name="search" value="<?= htmlspecialchars(
+                        $_GET["search"] ?? "",
+                    ) ?>" placeholder="Name, email, or room..." class="lodge-input w-full">
                 </div>
                 <div>
                     <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Date From</label>
-                    <input type="date" name="date_from" value="<?= htmlspecialchars($_GET['date_from'] ?? '') ?>" class="lodge-input">
+                    <input type="date" name="date_from" value="<?= htmlspecialchars(
+                        $_GET["date_from"] ?? "",
+                    ) ?>" class="lodge-input">
                 </div>
                 <div>
                     <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Date To</label>
-                    <input type="date" name="date_to" value="<?= htmlspecialchars($_GET['date_to'] ?? '') ?>" class="lodge-input">
+                    <input type="date" name="date_to" value="<?= htmlspecialchars(
+                        $_GET["date_to"] ?? "",
+                    ) ?>" class="lodge-input">
                 </div>
                 <div>
                     <label class="block text-[0.6rem] font-semibold text-gold-400/60 uppercase tracking-[0.15em] mb-1.5">Room</label>
-                    <input type="text" name="room" value="<?= htmlspecialchars($_GET['room'] ?? '') ?>" placeholder="Room #" class="lodge-input w-24">
+                    <input type="text" name="room" value="<?= htmlspecialchars(
+                        $_GET["room"] ?? "",
+                    ) ?>" placeholder="Room #" class="lodge-input w-24">
                 </div>
                 <button type="submit" class="px-5 py-2.5 rounded-lg font-semibold text-xs uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
                     Filter
@@ -270,30 +301,62 @@ function ratingLabel($val) {
                         <tbody>
                             <?php foreach ($feedbacks as $fb): ?>
                                 <?php
-                                    $ratingInfo = ratingLabel($fb['overall_rating']);
-                                    $stayDates = '';
-                                    if (!empty($fb['check_in']) && !empty($fb['check_out'])) {
-                                        $stayDates = date('M d', strtotime($fb['check_in'])) . ' - ' . date('M d', strtotime($fb['check_out']));
-                                    }
+                                $ratingInfo = ratingLabel(
+                                    $fb["overall_rating"],
+                                );
+                                $stayDates = "";
+                                if (
+                                    !empty($fb["check_in"]) &&
+                                    !empty($fb["check_out"])
+                                ) {
+                                    $stayDates =
+                                        date(
+                                            "M d",
+                                            strtotime($fb["check_in"]),
+                                        ) .
+                                        " - " .
+                                        date(
+                                            "M d",
+                                            strtotime($fb["check_out"]),
+                                        );
+                                }
                                 ?>
                                 <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                                    <td class="px-5 py-3.5 text-white/40 text-xs"><?= date('M d, Y', strtotime($fb['created_at'])) ?></td>
+                                    <td class="px-5 py-3.5 text-white/40 text-xs"><?= date(
+                                        "M d, Y",
+                                        strtotime($fb["created_at"]),
+                                    ) ?></td>
                                     <td class="px-5 py-3.5">
-                                        <span class="text-white/70 font-medium"><?= !empty($fb['guest_name']) ? htmlspecialchars($fb['guest_name']) : '<span class="text-white/25 italic">Anonymous</span>' ?></span>
+                                        <span class="text-white/70 font-medium"><?= !empty(
+                                            $fb["guest_name"]
+                                        )
+                                            ? htmlspecialchars(
+                                                $fb["guest_name"],
+                                            )
+                                            : '<span class="text-white/25 italic">Anonymous</span>' ?></span>
                                     </td>
                                     <td class="px-5 py-3.5 text-center">
-                                        <span class="px-2.5 py-1 rounded-md bg-pine-800/50 text-gold-400/70 text-xs font-semibold"><?= htmlspecialchars($fb['room_no']) ?></span>
+                                        <span class="px-2.5 py-1 rounded-md bg-pine-800/50 text-gold-400/70 text-xs font-semibold"><?= htmlspecialchars(
+                                            $fb["room_no"],
+                                        ) ?></span>
                                     </td>
                                     <td class="px-5 py-3.5 text-center">
                                         <div class="flex items-center justify-center gap-2">
-                                            <span class="font-bold text-white/70"><?= $fb['overall_rating'] ?></span>
+                                            <span class="font-bold text-white/70"><?= $fb[
+                                                "overall_rating"
+                                            ] ?></span>
                                             <span class="text-[0.55rem] font-semibold uppercase <?= $ratingInfo[1] ?>"><?= $ratingInfo[0] ?></span>
                                         </div>
                                     </td>
-                                    <td class="px-5 py-3.5 text-white/35 text-xs"><?= htmlspecialchars($fb['purpose_of_stay'] ?: '—') ?></td>
-                                    <td class="px-5 py-3.5 text-center text-white/30 text-xs"><?= $stayDates ?: '—' ?></td>
+                                    <td class="px-5 py-3.5 text-white/35 text-xs"><?= htmlspecialchars(
+                                        $fb["purpose_of_stay"] ?: "—",
+                                    ) ?></td>
+                                    <td class="px-5 py-3.5 text-center text-white/30 text-xs"><?= $stayDates ?:
+                                        "—" ?></td>
                                     <td class="px-5 py-3.5 text-center">
-                                        <a href="view.php?id=<?= $fb['id'] ?>" class="text-gold-400/60 hover:text-gold-400 transition-colors text-xs font-semibold uppercase tracking-wider">View</a>
+                                        <a href="view.php?id=<?= $fb[
+                                            "id"
+                                        ] ?>" class="text-gold-400/60 hover:text-gold-400 transition-colors text-xs font-semibold uppercase tracking-wider">View</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

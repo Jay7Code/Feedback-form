@@ -6,11 +6,14 @@
  * ═══════════════════════════════════════════════════════════════
  */
 session_start();
-require_once '../config.php';
+require_once "../config.php";
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: login.php');
-    exit;
+if (
+    !isset($_SESSION["admin_logged_in"]) ||
+    $_SESSION["admin_logged_in"] !== true
+) {
+    header("Location: login.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -476,10 +479,10 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                 html += '<h3>Guest Comments</h3>';
                 (data.comments || []).forEach(function(c) {
                     var allComments = [];
-                    if (c.frontdesk_comments) allComments.push('<strong>Front of House:</strong> ' + escapeHtml(c.frontdesk_comments));
-                    if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + escapeHtml(c.fnb_comments));
-                    if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + escapeHtml(c.suggestions_future));
-                    if (c.other_comments) allComments.push('<strong>Other:</strong> ' + escapeHtml(c.other_comments));
+                    if (c.frontdesk_comments) allComments.push('<strong>Front of House:</strong> ' + c.frontdesk_comments);
+                    if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + c.fnb_comments);
+                    if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + c.suggestions_future);
+                    if (c.other_comments) allComments.push('<strong>Other:</strong> ' + c.other_comments);
                     if (allComments.length === 0) return;
 
                     html += '<div class="comment-card">';

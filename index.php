@@ -276,8 +276,15 @@
                  * @param string $commentPH   Placeholder for the textarea
                  * @param string $extraFields Optional extra HTML after comments
                  */
-                function ratingSection($title, $icon, $items, $commentName, $commentPH, $extraFields = '') {
-                ?>
+                function ratingSection(
+                    $title,
+                    $icon,
+                    $items,
+                    $commentName,
+                    $commentPH,
+                    $extraFields = "",
+                ) {
+                    ?>
                     <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                         <!-- Section header -->
                         <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
@@ -301,11 +308,21 @@
                                 <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px] gap-2 items-center py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
                                     <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
-                                        <?php foreach ([['1','Poor'], ['2','Good'], ['3','Excellent']] as $rating): ?>
+                                        <?php foreach (
+                                            [
+                                                ["1", "Poor"],
+                                                ["2", "Good"],
+                                                ["3", "Excellent"],
+                                            ]
+                                            as $rating
+                                        ): ?>
                                             <div class="flex flex-col items-center gap-1">
                                                 <span class="text-[0.55rem] text-gold-400/60 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
-                                                    <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0]==='1'?'required':'' ?>>
+                                                    <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0] ===
+"1"
+    ? "required"
+    : "" ?>>
                                                     <span class="radio-mark"></span>
                                                 </label>
                                             </div>
@@ -320,7 +337,9 @@
                                 <textarea name="<?= $commentName ?>" rows="3" placeholder="<?= $commentPH ?>" class="lodge-input"></textarea>
                             </div>
 
-                            <?php if ($extraFields) echo $extraFields; ?>
+                            <?php if ($extraFields) {
+                                echo $extraFields;
+                            } ?>
                         </div>
                     </section>
                 <?php
@@ -328,40 +347,40 @@
 
                 // ═══ SECTION 1: FRONT OF HOUSE ═══
                 ratingSection(
-                    'Front of House',
+                    "Front of House",
                     '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
                     [
-                        'frontdesk'          => 'Front Desk',
-                        'reservations'       => 'Reservations',
-                        'telephone_operator' => 'Telephone Operator',
-                        'valet'              => 'Valet',
-                        'housekeeping'       => 'Housekeeping',
-                        'accommodation'      => 'Accommodation',
-                        'safety'             => 'Safety',
-                        'security'           => 'Security',
-                        'overall_service'    => 'Overall Service',
+                        "frontdesk" => "Front Desk",
+                        "reservations" => "Reservations",
+                        "telephone_operator" => "Telephone Operator",
+                        "valet" => "Valet",
+                        "housekeeping" => "Housekeeping",
+                        "accommodation" => "Accommodation",
+                        "safety" => "Safety",
+                        "security" => "Security",
+                        "overall_service" => "Overall Service",
                     ],
-                    'frontdesk_comments',
-                    'Share your thoughts about our front of house service...'
+                    "frontdesk_comments",
+                    "Share your thoughts about our front of house service...",
                 );
 
                 // ═══ SECTION 2: FOOD & BEVERAGE ═══
                 ratingSection(
-                    'Food &amp; Beverage',
+                    "Food &amp; Beverage",
                     '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
                     [
-                        'food_quality' => 'Food Quality',
-                        'serving_time' => 'Serving Time',
-                        'wait_staff'   => 'Wait Staff',
-                        'grooming'     => 'Grooming',
-                        'behavior'     => 'Behavior',
-                        'fnb_service'  => 'Service',
-                        'bar'          => 'Bar',
-                        'bartender'    => 'Bartender',
+                        "food_quality" => "Food Quality",
+                        "serving_time" => "Serving Time",
+                        "wait_staff" => "Wait Staff",
+                        "grooming" => "Grooming",
+                        "behavior" => "Behavior",
+                        "fnb_service" => "Service",
+                        "bar" => "Bar",
+                        "bartender" => "Bartender",
                     ],
-                    'fnb_comments',
-                    'Share your thoughts about our food and beverage service...',
-                    '<div class="mt-4"><label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>'
+                    "fnb_comments",
+                    "Share your thoughts about our food and beverage service...",
+                    '<div class="mt-4"><label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
                 );
                 ?>
                 <!-- ═══ SECTION 3: OVERALL EXPERIENCE (NPS 1-10) ═══ -->
@@ -383,7 +402,10 @@
                         <div class="flex justify-center gap-2 sm:gap-3 flex-wrap">
                             <?php for ($i = 1; $i <= 10; $i++): ?>
                                 <label class="cursor-pointer">
-                                    <input type="radio" name="overall_rating" value="<?= $i ?>" <?= $i === 1 ? 'required' : '' ?> class="nps-radio sr-only">
+                                    <input type="radio" name="overall_rating" value="<?= $i ?>" <?= $i ===
+1
+    ? "required"
+    : "" ?> class="nps-radio sr-only">
                                     <span class="nps-btn"><?= $i ?></span>
                                 </label>
                             <?php endfor; ?>

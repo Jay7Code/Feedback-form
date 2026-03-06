@@ -11,10 +11,10 @@
  */
 
 // ─── Database credentials (same as config.php) ───
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$dbName = 'feedback_form_db';
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbName = "feedback_form_db";
 
 try {
     // Connect without database selected
@@ -23,7 +23,9 @@ try {
     ]);
 
     // Create database if it doesn't exist
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $pdo->exec(
+        "CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
+    );
     $pdo->exec("USE `$dbName`");
 
     // Create feedbacks table
@@ -83,6 +85,35 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
 
+    // Create admins table
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `admins` (
+            `id`            INT AUTO_INCREMENT PRIMARY KEY,
+            `username`      VARCHAR(50) NOT NULL UNIQUE,
+            `password`      VARCHAR(255) NOT NULL,
+            `full_name`     VARCHAR(100) NOT NULL DEFAULT '',
+            `is_active`     TINYINT NOT NULL DEFAULT 1,
+            `created_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    ");
+
+    // Insert default admin user if not already present
+    $checkAdmin = $pdo->query(
+        "SELECT COUNT(*) FROM `admins` WHERE `username` = 'admin'",
+    );
+    if ($checkAdmin->fetchColumn() == 0) {
+        $hashedPassword = password_hash("admin123", PASSWORD_DEFAULT);
+        $insertAdmin = $pdo->prepare(
+            "INSERT INTO `admins` (`username`, `password`, `full_name`, `is_active`) VALUES (:username, :password, :full_name, 1)",
+        );
+        $insertAdmin->execute([
+            ":username" => "admin",
+            ":password" => $hashedPassword,
+            ":full_name" => "System Administrator",
+        ]);
+    }
+
     echo "<!DOCTYPE html><html><head><title>Setup Complete</title>";
     echo "<script src='https://cdn.tailwindcss.com'></script>";
     echo "<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap' rel='stylesheet'>";
@@ -91,12 +122,12 @@ try {
     echo "<div class='w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center' style='background:linear-gradient(135deg,#C9A96E,#b5893a)'>";
     echo "<svg class='w-10 h-10' fill='none' stroke='white' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M5 13l4 4L19 7'/></svg></div>";
     echo "<h1 class='text-2xl font-semibold mb-3' style='color:#C9A96E'>Database Setup Complete!</h1>";
-    echo "<p class='text-white/50 mb-6'>The database <strong class='text-white/70'>$dbName</strong> and <strong class='text-white/70'>feedbacks</strong> table have been created successfully.</p>";
+    echo "<p class='text-white/50 mb-6'>The database <strong class='text-white/70'>$dbName</strong>, <strong class='text-white/70'>feedbacks</strong> table, and <strong class='text-white/70'>admins</strong> table have been created successfully.</p>";
     echo "<div class='space-y-3'>";
     echo "<a href='index.php' class='block px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wider' style='background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912'>Go to Feedback Form</a>";
     echo "<a href='admin/login.php' class='block px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wider border border-[#C9A96E]/30 text-[#C9A96E]/70 hover:text-[#C9A96E]'>Go to Admin Panel</a>";
+    echo "<a href='superadmin/login.php' class='block px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wider border border-[#C9A96E]/30 text-[#C9A96E]/70 hover:text-[#C9A96E]'>Go to Super Admin Panel</a>";
     echo "</div></div></body></html>";
-
 } catch (PDOException $e) {
     echo "<!DOCTYPE html><html><head><title>Setup Error</title>";
     echo "<script src='https://cdn.tailwindcss.com'></script>";
@@ -105,7 +136,9 @@ try {
     echo "<div class='w-20 h-20 mx-auto mb-6 rounded-full bg-red-900/30 flex items-center justify-center'>";
     echo "<svg class='w-10 h-10 text-red-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'/></svg></div>";
     echo "<h1 class='text-2xl font-semibold text-red-400 mb-3'>Setup Failed</h1>";
-    echo "<p class='text-white/50 mb-2'>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p class='text-white/50 mb-2'>Error: " .
+        htmlspecialchars($e->getMessage()) .
+        "</p>";
     echo "<p class='text-white/30 text-sm'>Make sure MySQL is running in XAMPP.</p>";
     echo "</div></body></html>";
 }

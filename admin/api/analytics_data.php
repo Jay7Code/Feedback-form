@@ -1,19 +1,36 @@
 <?php
 session_start();
-require_once '../../config.php';
-header('Content-Type: application/json');
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    http_response_code(401); echo json_encode(['error' => 'Unauthorized']); exit;
+require_once "../../config.php";
+header("Content-Type: application/json");
+if (
+    !isset($_SESSION["admin_logged_in"]) ||
+    $_SESSION["admin_logged_in"] !== true
+) {
+    http_response_code(401);
+    echo json_encode(["error" => "Unauthorized"]);
+    exit();
 }
 $pdo = getDBConnection();
-$period = $_GET['period'] ?? 'all';
-$dateFilter = '';
+$period = $_GET["period"] ?? "all";
+$dateFilter = "";
 switch ($period) {
-    case 'today': $dateFilter = "WHERE DATE(created_at) = CURDATE()"; break;
-    case 'week': $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"; break;
-    case 'month': $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"; break;
-    case 'quarter': $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)"; break;
-    default: $dateFilter = ''; break;
+    case "today":
+        $dateFilter = "WHERE DATE(created_at) = CURDATE()";
+        break;
+    case "week":
+        $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+        break;
+    case "month":
+        $dateFilter =
+            "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+        break;
+    case "quarter":
+        $dateFilter =
+            "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)";
+        break;
+    default:
+        $dateFilter = "";
+        break;
 }
 try {
     $stmt = $pdo->query("SELECT COUNT(*) as total_responses, ROUND(AVG(overall_rating),1) as avg_nps,
@@ -37,24 +54,119 @@ try {
         MIN(created_at) as earliest, MAX(created_at) as latest
         FROM feedbacks $dateFilter");
     $summary = $stmt->fetch();
-    $stmt = $pdo->query("SELECT overall_rating as rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY overall_rating ORDER BY overall_rating");
+    $stmt = $pdo->query(
+        "SELECT overall_rating as rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY overall_rating ORDER BY overall_rating",
+    );
     $npsDistribution = [];
-    for ($i = 1; $i <= 10; $i++) $npsDistribution[$i] = 0;
-    while ($row = $stmt->fetch()) { if ($row['rating'] >= 1 && $row['rating'] <= 10) { $npsDistribution[(int)$row['rating']] = (int)$row['count']; } }
-    $stmt = $pdo->query("SELECT DATE(created_at) as date, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date");
+    for ($i = 1; $i <= 10; $i++) {
+        $npsDistribution[$i] = 0;
+    }
+    while ($row = $stmt->fetch()) {
+        if ($row["rating"] >= 1 && $row["rating"] <= 10) {
+            $npsDistribution[(int) $row["rating"]] = (int) $row["count"];
+        }
+    }
+    $stmt = $pdo->query(
+        "SELECT DATE(created_at) as date, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date",
+    );
     $dailyVolume = $stmt->fetchAll();
-    $stmt = $pdo->query("SELECT CASE WHEN purpose_of_stay='' OR purpose_of_stay IS NULL THEN 'Not Specified' ELSE purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY purpose ORDER BY count DESC");
+    $stmt = $pdo->query(
+        "SELECT CASE WHEN purpose_of_stay='' OR purpose_of_stay IS NULL THEN 'Not Specified' ELSE purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY purpose ORDER BY count DESC",
+    );
     $purposeBreakdown = $stmt->fetchAll();
-    $stmt = $pdo->query("SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC");
+    $stmt = $pdo->query(
+        "SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC",
+    );
     $firstStayData = $stmt->fetchAll();
-    $stmt = $pdo->query("SELECT DATE(created_at) as date, ROUND(AVG(overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date");
+    $stmt = $pdo->query(
+        "SELECT DATE(created_at) as date, ROUND(AVG(overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date",
+    );
     $npsTrend = $stmt->fetchAll();
     $response = [
-        'summary' => ['total_responses'=>(int)($summary['total_responses']??0),'avg_nps'=>$summary['avg_nps']!==null?(float)$summary['avg_nps']:null,'earliest'=>$summary['earliest']??null,'latest'=>$summary['latest']??null],
-        'front_of_house' => [['label'=>'Front Desk','avg'=>(float)($summary['avg_frontdesk']??0)],['label'=>'Reservations','avg'=>(float)($summary['avg_reservations']??0)],['label'=>'Telephone','avg'=>(float)($summary['avg_telephone']??0)],['label'=>'Valet','avg'=>(float)($summary['avg_valet']??0)],['label'=>'Housekeeping','avg'=>(float)($summary['avg_housekeeping']??0)],['label'=>'Accommodation','avg'=>(float)($summary['avg_accommodation']??0)],['label'=>'Safety','avg'=>(float)($summary['avg_safety']??0)],['label'=>'Security','avg'=>(float)($summary['avg_security']??0)],['label'=>'Overall Service','avg'=>(float)($summary['avg_overall_service']??0)]],
-        'food_beverage' => [['label'=>'Food Quality','avg'=>(float)($summary['avg_food_quality']??0)],['label'=>'Serving Time','avg'=>(float)($summary['avg_serving_time']??0)],['label'=>'Wait Staff','avg'=>(float)($summary['avg_wait_staff']??0)],['label'=>'Grooming','avg'=>(float)($summary['avg_grooming']??0)],['label'=>'Behavior','avg'=>(float)($summary['avg_behavior']??0)],['label'=>'Service','avg'=>(float)($summary['avg_fnb_service']??0)],['label'=>'Bar','avg'=>(float)($summary['avg_bar']??0)],['label'=>'Bartender','avg'=>(float)($summary['avg_bartender']??0)]],
-        'nps_distribution' => $npsDistribution, 'daily_volume' => $dailyVolume, 'purpose_breakdown' => $purposeBreakdown, 'first_stay' => $firstStayData, 'nps_trend' => $npsTrend,
+        "summary" => [
+            "total_responses" => (int) ($summary["total_responses"] ?? 0),
+            "avg_nps" =>
+                $summary["avg_nps"] !== null
+                    ? (float) $summary["avg_nps"]
+                    : null,
+            "earliest" => $summary["earliest"] ?? null,
+            "latest" => $summary["latest"] ?? null,
+        ],
+        "front_of_house" => [
+            [
+                "label" => "Front Desk",
+                "avg" => (float) ($summary["avg_frontdesk"] ?? 0),
+            ],
+            [
+                "label" => "Reservations",
+                "avg" => (float) ($summary["avg_reservations"] ?? 0),
+            ],
+            [
+                "label" => "Telephone",
+                "avg" => (float) ($summary["avg_telephone"] ?? 0),
+            ],
+            ["label" => "Valet", "avg" => (float) ($summary["avg_valet"] ?? 0)],
+            [
+                "label" => "Housekeeping",
+                "avg" => (float) ($summary["avg_housekeeping"] ?? 0),
+            ],
+            [
+                "label" => "Accommodation",
+                "avg" => (float) ($summary["avg_accommodation"] ?? 0),
+            ],
+            [
+                "label" => "Safety",
+                "avg" => (float) ($summary["avg_safety"] ?? 0),
+            ],
+            [
+                "label" => "Security",
+                "avg" => (float) ($summary["avg_security"] ?? 0),
+            ],
+            [
+                "label" => "Overall Service",
+                "avg" => (float) ($summary["avg_overall_service"] ?? 0),
+            ],
+        ],
+        "food_beverage" => [
+            [
+                "label" => "Food Quality",
+                "avg" => (float) ($summary["avg_food_quality"] ?? 0),
+            ],
+            [
+                "label" => "Serving Time",
+                "avg" => (float) ($summary["avg_serving_time"] ?? 0),
+            ],
+            [
+                "label" => "Wait Staff",
+                "avg" => (float) ($summary["avg_wait_staff"] ?? 0),
+            ],
+            [
+                "label" => "Grooming",
+                "avg" => (float) ($summary["avg_grooming"] ?? 0),
+            ],
+            [
+                "label" => "Behavior",
+                "avg" => (float) ($summary["avg_behavior"] ?? 0),
+            ],
+            [
+                "label" => "Service",
+                "avg" => (float) ($summary["avg_fnb_service"] ?? 0),
+            ],
+            ["label" => "Bar", "avg" => (float) ($summary["avg_bar"] ?? 0)],
+            [
+                "label" => "Bartender",
+                "avg" => (float) ($summary["avg_bartender"] ?? 0),
+            ],
+        ],
+        "nps_distribution" => $npsDistribution,
+        "daily_volume" => $dailyVolume,
+        "purpose_breakdown" => $purposeBreakdown,
+        "first_stay" => $firstStayData,
+        "nps_trend" => $npsTrend,
     ];
     echo json_encode($response);
-} catch (PDOException $e) { http_response_code(500); echo json_encode(['error'=>'Database error: '.$e->getMessage()]); }
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Database error: " . $e->getMessage()]);
+}
 ?>
