@@ -536,7 +536,7 @@
 
                 <!-- ═══ SUBMIT BUTTON ═══ -->
                 <div class="reveal-section text-center pt-6 pb-4">
-                    <p class="font-serif italic text-white/30 text-sm md:text-base mb-10">
+                    <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium">
                         Thank you for staying with us. We look forward to welcoming you again to John Hay Hotels.
                     </p>
                     <button type="submit" id="submitBtn"
@@ -560,10 +560,15 @@
         </main>
 
         <!-- ═══ FOOTER ═══ -->
-        <footer class="relative z-10 text-center py-10 border-t border-white/[0.05]">
-            <p class="font-script text-3xl text-gold-400/40 mb-2">John Hay Hotels</p>
-            <p class="text-white/20 text-[0.6rem] uppercase tracking-[0.4em]">Forest Wing - Camp John Hay - Baguio City</p>
-        </footer>
+        <footer class="relative z-10 text-center py-12 border-t border-white/10 bg-black/20 backdrop-blur-sm">
+    <p class="font-script text-4xl text-gold-400/90 mb-3 drop-shadow-md">
+        John Hay Hotels
+    </p>
+    
+    <p class="text-white/60 text-[0.7rem] font-medium uppercase tracking-[0.5em]">
+        Forest Wing - Camp John Hay - Baguio City
+    </p>
+</footer>
     </div>
 
     <!-- ═══ JAVASCRIPT ═══ -->
