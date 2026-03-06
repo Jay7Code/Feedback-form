@@ -9,8 +9,8 @@ session_start();
 require_once "../config.php";
 
 if (
-    !isset($_SESSION["admin_logged_in"]) ||
-    $_SESSION["admin_logged_in"] !== true
+!isset($_SESSION["admin_logged_in"]) ||
+$_SESSION["admin_logged_in"] !== true
 ) {
     header("Location: login.php");
     exit();
@@ -407,6 +407,22 @@ if (
             html += '<td style="text-align:center"><strong>' + totalDist + '</strong></td>';
             html += '</tr></tbody></table></div>';
 
+            // ── Recognized Staff ──
+            if (data.recognized_staff && data.recognized_staff.length > 0) {
+                html += '<div class="report-section">';
+                html += '<h3>⭐ Top Recognized Staff</h3>';
+                html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">';
+                data.recognized_staff.forEach(function(staff) {
+                    html += '<div class="stat-box" style="flex:1;min-width:140px; border-color: rgba(201,169,110,0.3); background: rgba(201,169,110,0.05); padding: 12px; display:flex; flex-direction:column; justify-content:center;">';
+                    html += '<div class="stat-val" style="color: #C9A96E; font-size: 1.25rem; margin-bottom: 2px;">' + escapeHtml(staff.name) + '</div>';
+                    html += '<div class="stat-label" style="font-size: 0.5rem; text-transform: uppercase;">Mentioned ' + staff.count + ' time' + (staff.count > 1 ? 's' : '') + '</div>';
+                    html += '</div>';
+                });
+                html += '</div></div>';
+            }
+
+
+
             // ── Front of House ──
             html += '<div class="report-section">';
             html += '<h3>Front of House Ratings</h3>';
@@ -472,7 +488,7 @@ if (
             // ── Guest Comments ──
             var commentsExist = false;
             (data.comments || []).forEach(function(c) {
-                if (c.frontdesk_comments || c.fnb_comments || c.suggestions_future || c.other_comments) commentsExist = true;
+                if (c.frontdesk_comments || c.fnb_comments || c.suggestions_future || c.other_comments || c.helpful_staff_names) commentsExist = true;
             });
             if (commentsExist) {
                 html += '<div class="report-section">';
@@ -483,10 +499,16 @@ if (
                     if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + c.fnb_comments);
                     if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + c.suggestions_future);
                     if (c.other_comments) allComments.push('<strong>Other:</strong> ' + c.other_comments);
-                    if (allComments.length === 0) return;
+                    
+                    if (allComments.length === 0 && !c.helpful_staff_names) return;
 
                     html += '<div class="comment-card">';
                     html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/10 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';
+                    
+                    if (c.helpful_staff_names) {
+                        html += '<div style="margin-top: 8px; margin-bottom: 4px;"><span style="display:inline-block; background:rgba(201,169,110,0.15); color:#C9A96E; border:1px solid rgba(201,169,110,0.3); padding:4px 8px; border-radius:6px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">⭐ Recognized: <span style="color:#fff; text-transform:none; font-style:italic;">' + escapeHtml(c.helpful_staff_names) + '</span></span></div>';
+                    }
+
                     allComments.forEach(function(cm) {
                         html += '<div class="comment-text">' + cm + '</div>';
                     });
