@@ -24,6 +24,7 @@ $_SESSION["admin_logged_in"] !== true
     <title>Analytics - Admin - John Hay Hotels</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -220,6 +221,7 @@ $_SESSION["admin_logged_in"] !== true
                         </svg>
                     </div>
                     <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Front of House Performance</h3>
+                    <span class="text-xs text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
                 </div>
                 <div class="p-6 chart-container" style="height: 360px;">
                     <div class="loading-overlay" id="loadingFoh"><div class="spinner"></div></div>
@@ -235,6 +237,7 @@ $_SESSION["admin_logged_in"] !== true
                         </svg>
                     </div>
                     <h3 class="font-serif text-white/70 text-base tracking-wider uppercase">Food & Beverage Performance</h3>
+                    <span class="text-xs text-white/40 ml-auto font-sans tracking-wide">Rating 1 up to 10</span>
                 </div>
                 <div class="p-6 chart-container" style="height: 360px;">
                     <div class="loading-overlay" id="loadingFnb"><div class="spinner"></div></div>
@@ -351,6 +354,10 @@ $_SESSION["admin_logged_in"] !== true
         ];
 
         // ─── Chart.js Global Defaults ───
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+            Chart.defaults.plugins.datalabels = { display: false };
+        }
         Chart.defaults.color = COLORS.text;
         Chart.defaults.font.family = '"Inter", sans-serif';
         Chart.defaults.font.size = 11;
@@ -512,6 +519,15 @@ $_SESSION["admin_logged_in"] !== true
                         y: { grid: { display: false } }
                     },
                     plugins: {
+                        datalabels: {
+                            display: true,
+                            color: 'rgba(255,255,255,0.9)',
+                            align: 'start',
+                            anchor: 'end',
+                            offset: 6,
+                            font: { weight: '600' },
+                            formatter: function(value) { return value.toFixed(1); }
+                        },
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(10,25,18,0.9)',
@@ -558,6 +574,15 @@ $_SESSION["admin_logged_in"] !== true
                         y: { grid: { display: false } }
                     },
                     plugins: {
+                        datalabels: {
+                            display: true,
+                            color: 'rgba(255,255,255,0.9)',
+                            align: 'start',
+                            anchor: 'end',
+                            offset: 6,
+                            font: { weight: '600' },
+                            formatter: function(value) { return value.toFixed(1); }
+                        },
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(10,25,18,0.9)',
@@ -631,6 +656,20 @@ $_SESSION["admin_logged_in"] !== true
                     responsive: true, maintainAspectRatio: false,
                     cutout: '55%',
                     plugins: {
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value, ctx) {
+                                var sum = 0;
+                                var dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.forEach(function(data) { sum += data; });
+                                if (sum === 0) return '';
+                                var pct = (value * 100 / sum);
+                                if (pct < 5) return '';
+                                return pct.toFixed(0) + "%";
+                            }
+                        },
                         legend: { position: 'bottom', labels: { padding: 16 } },
                         tooltip: {
                             backgroundColor: 'rgba(10,25,18,0.9)',
@@ -660,6 +699,20 @@ $_SESSION["admin_logged_in"] !== true
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: {
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value, ctx) {
+                                var sum = 0;
+                                var dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.forEach(function(data) { sum += data; });
+                                if (sum === 0) return '';
+                                var pct = (value * 100 / sum);
+                                if (pct < 5) return '';
+                                return pct.toFixed(0) + "%";
+                            }
+                        },
                         legend: { position: 'bottom', labels: { padding: 12 } },
                         tooltip: {
                             backgroundColor: 'rgba(10,25,18,0.9)',
