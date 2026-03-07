@@ -306,16 +306,16 @@
                             <!-- Column headers (desktop only) -->
                             <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-2">
                                 <span></span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">N/A</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Poor</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Good</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Excellent</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">N/A</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Poor</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Good</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Excellent</span>
                             </div>
 
                             <!-- Rating rows -->
                             <?php foreach ($items as $name => $label): ?>
                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/60 last:border-b-0 hover:bg-white/10 active:bg-white/10 rounded-lg px-2 transition-colors duration-300">
-                                    <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
+                                    <span class="font-medium text-sm text-gold-400/100 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
                                             [
@@ -327,7 +327,7 @@
                                             as $rating
                                         ): ?>
                                             <div class="flex flex-col items-center gap-1">
-                                                <span class="text-[0.55rem] text-gold-400/100 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
+                                                <span class="text-[0.55rem] text-white font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
                                                     <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0] ===
 "0"
@@ -464,17 +464,17 @@
                     <div class="px-6 py-6">
                         <!-- First stay question -->
                         <div class="mb-6">
-                            <p class="text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
+                            <p class="text-[0.65rem] font-semibold text-white uppercase tracking-[0.15em] mb-3">
                                 Was this your first stay at John Hay Hotels? <span class="text-red-400">*</span>
                             </p>
                             <div class="flex gap-8 justify-center md:justify-start">
                                 <label class="flex items-center gap-3 cursor-pointer group">
                                     <label class="custom-radio"><input type="radio" name="first_stay" value="Yes" required><span class="radio-mark"></span></label>
-                                    <span class="text-sm text-white/50 group-hover:text-white/70 transition-colors">Yes</span>
+                                    <span class="text-sm text-white/50 group-hover:text-gold/100 transition-colors">Yes</span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer group">
                                     <label class="custom-radio"><input type="radio" name="first_stay" value="No"><span class="radio-mark"></span></label>
-                                    <span class="text-sm text-white/50 group-hover:text-white/70 transition-colors">No</span>
+                                    <span class="text-sm text-white/50 group-hover:text-gold/100 transition-colors">No</span>
                                 </label>
                             </div>
                         </div>
@@ -545,7 +545,7 @@
                                 <input type="text" name="room_no" placeholder="e.g. 205" required class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
+                                <label class="block text-[0.65rem] font-semibold text-white uppercase tracking-[0.15em] mb-3">
                                     Date(s) of Stay <span class="text-red-400">*</span>
                                 </label>
                                 <div class="grid grid-cols-2 gap-4">
