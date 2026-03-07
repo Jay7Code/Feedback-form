@@ -108,13 +108,13 @@ try {
                 </svg>
             </div>
             <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">Thank You, <?= !empty($data["guest_name"]) ? $data["guest_name"] : "Valued Guest" ?>!</h2>
-            <p class="font-serif italic text-white/40 text-base md:text-lg leading-relaxed mb-8 fade-up" style="animation-delay:.5s">Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.</p>
+           <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium" style="animation-delay:.5s">Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.</p>
             <div class="flex items-center justify-center gap-3 mb-8 fade-up" style="animation-delay:.6s">
                 <span class="w-12 h-px bg-gold-400/30"></span>
                 <span class="w-2 h-2 rotate-45 bg-gold-400/40"></span>
                 <span class="w-12 h-px bg-gold-400/30"></span>
             </div>
-            <p class="text-sm text-white/25 mb-8 fade-up" style="animation-delay:.7s">We look forward to welcoming you again soon.</p>
+            <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium" style="animation-delay:.7s">We look forward to welcoming you again soon.</p>
             <a href="index.php" class="inline-flex items-center gap-2 text-sm font-semibold text-gold-400/70 uppercase tracking-wider hover:text-gold-400 transition-colors duration-300 fade-up" style="animation-delay:.8s">
                 <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
@@ -133,8 +133,14 @@ try {
         <?php endif; ?>
         </div>
     </main>
-    <footer class="relative z-10 text-center py-6 border-t border-white/[0.05]">
-        <p class="text-white/15 text-[0.6rem] uppercase tracking-[0.3em]">Forest Wing - Camp John Hay - Baguio City</p>
-    </footer>
+     <footer class="relative z-10 text-center py-12 border-t border-white/10 bg-black/20 backdrop-blur-sm">
+    <p class="font-script text-4xl text-gold-400/90 mb-3 drop-shadow-md">
+        John Hay Hotels
+    </p>
+    
+    <p class="text-white/60 text-[0.7rem] font-medium uppercase tracking-[0.5em]">
+        Forest Wing - Camp John Hay - Baguio City
+    </p>
+</footer>
 </body>
 </html>

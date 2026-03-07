@@ -305,7 +305,7 @@
 
                             <!-- Rating rows -->
                             <?php foreach ($items as $name => $label): ?>
-                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px] gap-2 items-center py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
+                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/30 last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
                                     <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
