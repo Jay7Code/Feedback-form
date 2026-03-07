@@ -107,6 +107,7 @@ $_SESSION["admin_logged_in"] !== true
             .comment-card { border: 1px solid #eee; padding: 8px 12px; margin-bottom: 8px; border-radius: 4px; page-break-inside: avoid; }
             .comment-card .guest-info { font-size: 8pt; color: #999 !important; }
             .comment-card .comment-text { font-size: 9pt; font-style: italic; color: #333 !important; margin-top: 4px; }
+            .comment-page { display: block !important; }
             .print-footer { text-align: center; font-size: 7pt; color: #aaa !important; margin-top: 30px; padding-top: 10px; border-top: 1px solid #eee; }
         }
 
@@ -125,6 +126,7 @@ $_SESSION["admin_logged_in"] !== true
             .score-excellent { color: #10b981; font-weight: 600; }
             .score-good { color: #22c55e; font-weight: 600; }
             .score-poor { color: #ef4444; font-weight: 600; }
+            
             .comment-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px 16px; margin-bottom: 8px; border-radius: 10px; }
             .comment-card .guest-info { font-size: 0.65rem; color: rgba(201,169,110,0.5); }
             .comment-card .comment-text { font-size: 1rem; font-style: italic; color: rgba(255,255,255,0.5); margin-top: 4px; }
@@ -535,34 +537,62 @@ $_SESSION["admin_logged_in"] !== true
             }
 
             // ── Guest Comments ──
-            var commentsExist = false;
+            var validComments = [];
             (data.comments || []).forEach(function(c) {
-                if (c.frontdesk_comments || c.fnb_comments || c.suggestions_future || c.other_comments || c.helpful_staff_names) commentsExist = true;
+                if (c.frontdesk_comments || c.fnb_comments || c.suggestions_future || c.other_comments || c.helpful_staff_names) {
+                    validComments.push(c);
+                }
             });
-            if (commentsExist) {
+
+            var totalPages = 0;
+            if (validComments.length > 0) {
                 html += '<div class="report-section">';
                 html += '<h3>Guest Comments</h3>';
-                (data.comments || []).forEach(function(c) {
-                    var allComments = [];
-                    if (c.frontdesk_comments) allComments.push('<strong>Front of House:</strong> ' + c.frontdesk_comments);
-                    if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + c.fnb_comments);
-                    if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + c.suggestions_future);
-                    if (c.other_comments) allComments.push('<strong>Other:</strong> ' + c.other_comments);
+                
+                var commentsPerPage = 5;
+                totalPages = Math.ceil(validComments.length / commentsPerPage);
+                
+                html += '<div id="comments-wrapper">';
+                for (var p = 1; p <= totalPages; p++) {
+                    var displayStyle = p === 1 ? 'block' : 'none';
+                    html += '<div class="comment-page" id="comment-page-' + p + '" style="display:' + displayStyle + ';">';
                     
-                    if (allComments.length === 0 && !c.helpful_staff_names) return;
+                    var startIdx = (p - 1) * commentsPerPage;
+                    var endIdx = Math.min(startIdx + commentsPerPage, validComments.length);
+                    
+                    for (var i = startIdx; i < endIdx; i++) {
+                        var c = validComments[i];
+                        var allComments = [];
+                        if (c.frontdesk_comments) allComments.push('<strong>Front of House:</strong> ' + c.frontdesk_comments);
+                        if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + c.fnb_comments);
+                        if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + c.suggestions_future);
+                        if (c.other_comments) allComments.push('<strong>Other:</strong> ' + c.other_comments);
 
-                    html += '<div class="comment-card">';
-                    html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/10 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';
-                    
-                    if (c.helpful_staff_names) {
-                        html += '<div style="margin-top: 8px; margin-bottom: 4px;"><span style="display:inline-block; background:rgba(201,169,110,0.15); color:#C9A96E; border:1px solid rgba(201,169,110,0.3); padding:4px 8px; border-radius:6px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">⭐ Recognized: <span style="color:#fff; text-transform:none; font-style:italic;">' + escapeHtml(c.helpful_staff_names) + '</span></span></div>';
+                        html += '<div class="comment-card">';
+                        html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/10 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';
+                        
+                        if (c.helpful_staff_names) {
+                            html += '<div style="margin-top: 8px; margin-bottom: 4px;"><span style="display:inline-block; background:rgba(201,169,110,0.15); color:#C9A96E; border:1px solid rgba(201,169,110,0.3); padding:4px 8px; border-radius:6px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">⭐ Recognized: <span style="color:#fff; text-transform:none; font-style:italic;">' + escapeHtml(c.helpful_staff_names) + '</span></span></div>';
+                        }
+
+                        allComments.forEach(function(cm) {
+                            html += '<div class="comment-text">' + cm + '</div>';
+                        });
+                        html += '</div>';
                     }
-
-                    allComments.forEach(function(cm) {
-                        html += '<div class="comment-text">' + cm + '</div>';
-                    });
                     html += '</div>';
-                });
+                }
+                html += '</div>';
+                
+                if (totalPages > 1) {
+                    html += '<div class="no-print mt-4 flex items-center justify-between border-t border-white/5 pt-4">';
+                    html += '<div class="text-white/40 text-[0.85rem]">Showing page <span id="comments-current-page" class="text-gold-400 font-bold">1</span> of ' + totalPages + '</div>';
+                    html += '<div class="flex gap-2">';
+                    html += '<button id="btn-prev-comments" class="px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-white/70 text-[0.8rem] uppercase tracking-wider font-semibold disabled:opacity-30 disabled:pointer-events-none transition-colors" disabled>Previous</button>';
+                    html += '<button id="btn-next-comments" class="px-3 py-1.5 rounded bg-gold-400/20 hover:bg-gold-400/30 text-gold-400 text-[0.8rem] uppercase tracking-wider font-semibold disabled:opacity-30 disabled:pointer-events-none transition-colors">Next</button>';
+                    html += '</div>';
+                    html += '</div>';
+                }
                 html += '</div>';
             }
 
@@ -572,6 +602,34 @@ $_SESSION["admin_logged_in"] !== true
             html += '</div>';
 
             reportContent.innerHTML = html;
+
+            if (typeof totalPages !== 'undefined' && totalPages > 1) {
+                var currentPage = 1;
+                var btnPrev = document.getElementById('btn-prev-comments');
+                var btnNext = document.getElementById('btn-next-comments');
+                var pageSpan = document.getElementById('comments-current-page');
+                
+                function updatePagination() {
+                    for (var p = 1; p <= totalPages; p++) {
+                        var pageDiv = document.getElementById('comment-page-' + p);
+                        if (pageDiv) {
+                            pageDiv.style.display = (p === currentPage) ? 'block' : 'none';
+                        }
+                    }
+                    if (pageSpan) pageSpan.innerText = currentPage;
+                    if (btnPrev) btnPrev.disabled = (currentPage === 1);
+                    if (btnNext) btnNext.disabled = (currentPage === totalPages);
+                }
+                
+                if (btnPrev && btnNext) {
+                    btnPrev.addEventListener('click', function() {
+                        if (currentPage > 1) { currentPage--; updatePagination(); }
+                    });
+                    btnNext.addEventListener('click', function() {
+                        if (currentPage < totalPages) { currentPage++; updatePagination(); }
+                    });
+                }
+            }
         }
 
         // ─── HTML escape helper ───
