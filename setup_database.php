@@ -68,6 +68,8 @@ try {
             `first_stay`            VARCHAR(10),
             `purpose_of_stay`       VARCHAR(100),
             `other_purpose_text`    VARCHAR(255),
+            `nationality`           VARCHAR(100),
+            `other_nationality_text` VARCHAR(255),
             `guest_name`            VARCHAR(255),
             `email`                 VARCHAR(255),
             `address`               TEXT,
