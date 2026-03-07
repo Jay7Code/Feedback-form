@@ -246,7 +246,7 @@
                 <!-- "Forest Wing" badge -->
                 <div class="inline-flex items-center gap-4 mt-1 mb-8 animate-fade-up" style="animation-delay: 0.3s;">
                     <span class="w-12 h-px bg-gold-400/40"></span>
-                    <span class="text-gold-400/90 text-xs md:text-sm font-semibold tracking-[0.4em] uppercase">Forest Wing</span>
+                    <span class="text-white/70/90 text-xs md:text-sm font-semibold tracking-[0.4em] uppercase">Forest Wing</span>
                     <span class="w-12 h-px bg-gold-400/40"></span>
                 </div>
 
@@ -297,7 +297,7 @@
                         <!-- Section header -->
                         <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                             <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><?= $icon ?></svg>
+                                <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><?= $icon ?></svg>
                             </div>
                             <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase"><?= $title ?></h2>
                         </div>
@@ -306,10 +306,10 @@
                             <!-- Column headers (desktop only) -->
                             <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-2">
                                 <span></span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">N/A</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Poor</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Good</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Excellent</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white/70 uppercase tracking-[0.15em]">N/A</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white/70 uppercase tracking-[0.15em]">Poor</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white/70 uppercase tracking-[0.15em]">Good</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white/70 uppercase tracking-[0.15em]">Excellent</span>
                             </div>
 
                             <!-- Rating rows -->
@@ -327,7 +327,7 @@
                                             as $rating
                                         ): ?>
                                             <div class="flex flex-col items-center gap-1">
-                                                <span class="text-[0.55rem] text-gold-400/100 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
+                                                <span class="text-[0.55rem] text-white/70 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
                                                     <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0] ===
 "0"
@@ -343,7 +343,7 @@
 
                             <!-- Comments textarea -->
                             <div class="mt-6">
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Comments &amp; Suggestions</label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Comments &amp; Suggestions</label>
                                 <textarea name="<?= $commentName ?>" rows="3" placeholder="<?= $commentPH ?>" class="lodge-input"></textarea>
                             </div>
 
@@ -390,14 +390,14 @@
                     ],
                     "fnb_comments",
                     "Share your thoughts about our food and beverage service...",
-                    '<div class="mt-4"><label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
+                    '<div class="mt-4"><label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
                 );
                 ?>
                 <!-- ═══ SECTION 3: OVERALL EXPERIENCE (NPS 1-10) ═══ -->
                 <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                             </svg>
@@ -431,7 +431,7 @@
                 <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
                             </svg>
@@ -440,11 +440,11 @@
                     </div>
                     <div class="px-6 py-6 space-y-5">
                         <div>
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Suggestions for the Future</label>
+                            <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Suggestions for the Future</label>
                             <textarea name="suggestions_future" rows="3" placeholder="How can we make your next visit even better?" class="lodge-input"></textarea>
                         </div>
                         <div>
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Other Comments</label>
+                            <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Other Comments</label>
                             <textarea name="other_comments" rows="3" placeholder="Any additional thoughts..." class="lodge-input"></textarea>
                         </div>
                     </div>
@@ -454,7 +454,7 @@
                 <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
@@ -464,7 +464,7 @@
                     <div class="px-6 py-6">
                         <!-- First stay question -->
                         <div class="mb-6">
-                            <p class="text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
+                            <p class="text-[0.65rem] font-semibold text-white/70 uppercase tracking-[0.15em] mb-3">
                                 Was this your first stay at John Hay Hotels? <span class="text-red-400">*</span>
                             </p>
                             <div class="flex gap-8 justify-center md:justify-start">
@@ -481,7 +481,7 @@
 
                         <!-- Purpose of stay -->
                         <div class="mb-6">
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
+                            <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
                                 What was the purpose of your stay? <span class="text-red-400">*</span>
                             </label>
                             <select name="purpose_of_stay" id="purpose_dropdown" onchange="toggleOtherPurpose()" required class="lodge-input">
@@ -498,7 +498,7 @@
 
                         <!-- Nationality -->
                         <div class="mb-6">
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
+                            <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
                                 Nationality
                             </label>
                             <select name="nationality" id="nationality_dropdown" onchange="toggleOtherNationality()" class="lodge-input">
@@ -518,43 +518,43 @@
                         <!-- Divider -->
                         <div class="flex items-center gap-4 my-8">
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/40 to-transparent"></span>
-                            <span class="text-[0.6rem] font-bold text-gold-400/50 uppercase tracking-[0.25em]">Your Details (Optional)</span>
+                            <span class="text-[0.6rem] font-bold text-white/70/50 uppercase tracking-[0.25em]">Your Details (Optional)</span>
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></span>
                         </div>
 
                         <!-- Guest details grid -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Name</label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Name</label>
                                 <input type="text" name="guest_name" placeholder="Your full name" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Email</label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Email</label>
                                 <input type="text" name="email" placeholder="your.email@example.com" class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Address</label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Address</label>
                                 <input type="text" name="address" placeholder="Your complete address" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Contact No.</label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Contact No.</label>
                                 <input type="tel" name="contact_no" placeholder="+63 917 123 4567" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Room No. <span class="text-red-400">*</span></label>
+                                <label class="block text-[0.75rem] font-bold text-white/70 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Room No. <span class="text-red-400">*</span></label>
                                 <input type="text" name="room_no" placeholder="e.g. 205" required class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
+                                <label class="block text-[0.65rem] font-semibold text-white/70 uppercase tracking-[0.15em] mb-3">
                                     Date(s) of Stay <span class="text-red-400">*</span>
                                 </label>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-in</span>
+                                        <span class="block text-[0.6rem] text-white/70 font-bold uppercase tracking-wider mb-1">Check-in</span>
                                         <input type="date" name="check_in" id="check_in" onchange="setMinCheckout()" required class="lodge-input">
                                     </div>
                                     <div>
-                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-out</span>
+                                        <span class="block text-[0.6rem] text-white/70 font-bold uppercase tracking-wider mb-1">Check-out</span>
                                         <input type="date" name="check_out" id="check_out" required class="lodge-input">
                                     </div>
                                 </div>
@@ -590,7 +590,7 @@
 
         <!-- ═══ FOOTER ═══ -->
         <footer class="relative z-10 text-center py-12 border-t border-white/10 bg-black/20 backdrop-blur-sm">
-    <p class="font-script text-4xl text-gold-400/90 mb-3 drop-shadow-md">
+    <p class="font-script text-4xl text-white/70/90 mb-3 drop-shadow-md">
         John Hay Hotels
     </p>
     
