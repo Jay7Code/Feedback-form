@@ -266,7 +266,7 @@
                 <?php
                 /**
                  * Helper function: ratingSection()
-                 * Generates a glassmorphism card with rating rows (Poor/Good/Excellent)
+                 * Generates a glassmorphism card with rating rows (N/A/Poor/Good/Excellent)
                  * and a comments textarea. Optionally adds extra fields.
                  *
                  * @param string $title       Section heading
@@ -298,15 +298,15 @@
                             <!-- Column headers (desktop only) -->
                             <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-1">
                                 <span></span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">N/A</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Poor</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Good</span>
-                                <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Excellent</span>
+                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">N/A</span>
+                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Poor</span>
+                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Good</span>
+                                <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Excellent</span>
                             </div>
 
                             <!-- Rating rows -->
                             <?php foreach ($items as $name => $label): ?>
-                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/30 last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
+                               <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_90px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/60 last:border-b-0 hover:bg-white/10 active:bg-white/10 rounded-lg px-2 transition-colors duration-300">
                                     <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
@@ -319,7 +319,7 @@
                                             as $rating
                                         ): ?>
                                             <div class="flex flex-col items-center gap-1">
-                                                <span class="text-[0.55rem] text-gold-400/60 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
+                                                <span class="text-[0.55rem] text-gold-400/100 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
                                                     <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0] ===
 "0"
@@ -335,7 +335,7 @@
 
                             <!-- Comments textarea -->
                             <div class="mt-6">
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Comments &amp; Suggestions</label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Comments &amp; Suggestions</label>
                                 <textarea name="<?= $commentName ?>" rows="3" placeholder="<?= $commentPH ?>" class="lodge-input"></textarea>
                             </div>
 
@@ -382,7 +382,7 @@
                     ],
                     "fnb_comments",
                     "Share your thoughts about our food and beverage service...",
-                    '<div class="mt-4"><label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
+                    '<div class="mt-4"><label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
                 );
                 ?>
                 <!-- ═══ SECTION 3: OVERALL EXPERIENCE (NPS 1-10) ═══ -->
@@ -413,8 +413,8 @@
                             <?php endfor; ?>
                         </div>
                         <div class="flex justify-between mt-5 px-2">
-                            <span class="text-[0.6rem] text-white/25 uppercase tracking-[0.2em] font-medium">Not Satisfied</span>
-                            <span class="text-[0.6rem] text-white/25 uppercase tracking-[0.2em] font-medium">Highly Satisfied</span>
+                            <span class="text-[0.6rem] text-white/50 uppercase tracking-[0.2em] font-medium">Not Satisfied</span>
+                            <span class="text-[0.6rem] text-white/50 uppercase tracking-[0.2em] font-medium">Highly Satisfied</span>
                         </div>
                     </div>
                 </section>
@@ -432,11 +432,11 @@
                     </div>
                     <div class="px-6 py-6 space-y-5">
                         <div>
-                            <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Suggestions for the Future</label>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Suggestions for the Future</label>
                             <textarea name="suggestions_future" rows="3" placeholder="How can we make your next visit even better?" class="lodge-input"></textarea>
                         </div>
                         <div>
-                            <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Other Comments</label>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Other Comments</label>
                             <textarea name="other_comments" rows="3" placeholder="Any additional thoughts..." class="lodge-input"></textarea>
                         </div>
                     </div>
@@ -473,7 +473,7 @@
 
                         <!-- Purpose of stay -->
                         <div class="mb-6">
-                            <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
                                 What was the purpose of your stay? <span class="text-red-400">*</span>
                             </label>
                             <select name="purpose_of_stay" id="purpose_dropdown" onchange="toggleOtherPurpose()" required class="lodge-input">
@@ -490,7 +490,7 @@
 
                         <!-- Nationality -->
                         <div class="mb-6">
-                            <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
                                 Nationality
                             </label>
                             <select name="nationality" id="nationality_dropdown" onchange="toggleOtherNationality()" class="lodge-input">
@@ -517,23 +517,23 @@
                         <!-- Guest details grid -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Name</label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Name</label>
                                 <input type="text" name="guest_name" placeholder="Your full name" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Email</label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Email</label>
                                 <input type="text" name="email" placeholder="your.email@example.com" class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Address</label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Address</label>
                                 <input type="text" name="address" placeholder="Your complete address" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Contact No.</label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Contact No.</label>
                                 <input type="tel" name="contact_no" placeholder="+63 917 123 4567" class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">Room No. <span class="text-red-400">*</span></label>
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Room No. <span class="text-red-400">*</span></label>
                                 <input type="text" name="room_no" placeholder="e.g. 205" required class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
