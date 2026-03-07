@@ -638,6 +638,15 @@ $_SESSION["admin_logged_in"] !== true
             div.appendChild(document.createTextNode(str));
             return div.innerHTML;
         }
+
+        // ─── Auto-load Daily Report on init ───
+        document.addEventListener("DOMContentLoaded", function() {
+            var todayBtn = document.querySelector('.preset-btn[data-preset="today"]');
+            if (todayBtn) {
+                todayBtn.click();
+            }
+        });
+
     })();
     </script>
 </body>

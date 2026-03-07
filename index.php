@@ -304,7 +304,7 @@
 
                         <div class="px-6 py-6">
                             <!-- Column headers (desktop only) -->
-                            <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-1">
+                            <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-2">
                                 <span></span>
                                 <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">N/A</span>
                                 <span class="text-center text-[0.6rem] font-bold text-gold-400/100 uppercase tracking-[0.15em]">Poor</span>
@@ -314,7 +314,7 @@
 
                             <!-- Rating rows -->
                             <?php foreach ($items as $name => $label): ?>
-                               <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_90px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/60 last:border-b-0 hover:bg-white/10 active:bg-white/10 rounded-lg px-2 transition-colors duration-300">
+                               <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/60 last:border-b-0 hover:bg-white/10 active:bg-white/10 rounded-lg px-2 transition-colors duration-300">
                                     <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
