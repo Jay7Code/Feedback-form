@@ -464,7 +464,7 @@
                     <div class="px-6 py-6">
                         <!-- First stay question -->
                         <div class="mb-6">
-                            <p class="text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-3">
+                            <p class="text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
                                 Was this your first stay at John Hay Hotels? <span class="text-red-400">*</span>
                             </p>
                             <div class="flex gap-8 justify-center md:justify-start">
@@ -517,7 +517,7 @@
 
                         <!-- Divider -->
                         <div class="flex items-center gap-4 my-8">
-                            <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></span>
+                            <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/40 to-transparent"></span>
                             <span class="text-[0.6rem] font-bold text-gold-400/50 uppercase tracking-[0.25em]">Your Details (Optional)</span>
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></span>
                         </div>
@@ -545,16 +545,16 @@
                                 <input type="text" name="room_no" placeholder="e.g. 205" required class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-3">
+                                <label class="block text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
                                     Date(s) of Stay <span class="text-red-400">*</span>
                                 </label>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <span class="block text-[0.6rem] text-gold-500/50 font-bold uppercase tracking-wider mb-1">Check-in</span>
+                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-in</span>
                                         <input type="date" name="check_in" id="check_in" onchange="setMinCheckout()" required class="lodge-input">
                                     </div>
                                     <div>
-                                        <span class="block text-[0.6rem] text-gold-500/50 font-bold uppercase tracking-wider mb-1">Check-out</span>
+                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-out</span>
                                         <input type="date" name="check_out" id="check_out" required class="lodge-input">
                                     </div>
                                 </div>
