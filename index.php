@@ -296,8 +296,9 @@
 
                         <div class="px-6 py-6">
                             <!-- Column headers (desktop only) -->
-                            <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px] gap-2 mb-3 px-1">
+                            <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-1">
                                 <span></span>
+                                <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">N/A</span>
                                 <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Poor</span>
                                 <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Good</span>
                                 <span class="text-center text-[0.6rem] font-bold text-gold-400/70 uppercase tracking-[0.15em]">Excellent</span>
@@ -305,11 +306,12 @@
 
                             <!-- Rating rows -->
                             <?php foreach ($items as $name => $label): ?>
-                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/30 last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
+                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/30 last:border-b-0 hover:bg-white/[0.02] rounded-lg px-1 transition-colors duration-300">
                                     <span class="font-medium text-sm text-white/70 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
                                             [
+                                                ["0", "N/A"],
                                                 ["1", "Poor"],
                                                 ["2", "Good"],
                                                 ["3", "Excellent"],
@@ -320,7 +322,7 @@
                                                 <span class="text-[0.55rem] text-gold-400/60 font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
                                                     <input type="radio" name="<?= $name ?>" value="<?= $rating[0] ?>" <?= $rating[0] ===
-"1"
+"0"
     ? "required"
     : "" ?>>
                                                     <span class="radio-mark"></span>
