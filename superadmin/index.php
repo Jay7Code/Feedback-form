@@ -487,7 +487,7 @@ if (
                         >Full Name</label><input
                             type="text"
                             id="newFullName"
-                            placeholder="e.g. Front Desk Manager"
+                            placeholder="e.g. Juan Dela Cruz"
                             class="lodge-input"
                         ></div>
                     <div><label
@@ -496,7 +496,7 @@ if (
                             type="text"
                             id="newUsername"
                             required
-                            placeholder="e.g. frontdesk"
+                            placeholder="e.g. Juan"
                             class="lodge-input"
                         ></div>
                     <div><label
