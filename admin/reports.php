@@ -114,10 +114,10 @@ $_SESSION["admin_logged_in"] !== true
         @media screen {
             .print-header { display: none; }
             .report-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-            .report-table th { background: rgba(201,169,110,0.1); color: rgba(201,169,110,0.8); padding: 10px 14px; text-align: left; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; border-bottom: 1px solid rgba(201,169,110,0.15); }
-            .report-table td { padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+            .report-table th { background: rgba(201,169,110,0.1); color: rgba(201,169,110,0.8); padding: 10px 14px; text-align: left; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; border-bottom: 1px solid rgba(201,169,110,0.15); }
+            .report-table td { padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 1rem; }
             .report-table tr:hover td { background: rgba(255,255,255,0.02); }
-            .report-section h3 { font-family: 'Playfair Display', serif; color: #C9A96E; font-size: 1.1rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
+            .report-section h3 { font-family: 'Playfair Display', serif; color: #C9A96E; font-size: 1.3rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
                 border-bottom: 2px solid #C9A96E; border-image: linear-gradient(to right, rgba(201,169,110,0), rgba(201,169,110,1), rgba(201,169,110,0)) 1; padding-bottom: 12px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 10px rgba(201,169,110,0.2); }
             .stat-box { text-align: center; padding: 16px; background: rgba(245,235,224,0.06); border: 1px solid rgba(201,169,110,0.12); border-radius: 12px; }
             .stat-box .stat-val { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
@@ -127,7 +127,7 @@ $_SESSION["admin_logged_in"] !== true
             .score-poor { color: #ef4444; font-weight: 600; }
             .comment-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px 16px; margin-bottom: 8px; border-radius: 10px; }
             .comment-card .guest-info { font-size: 0.65rem; color: rgba(201,169,110,0.5); }
-            .comment-card .comment-text { font-size: 0.8rem; font-style: italic; color: rgba(255,255,255,0.5); margin-top: 4px; }
+            .comment-card .comment-text { font-size: 1rem; font-style: italic; color: rgba(255,255,255,0.5); margin-top: 4px; }
             .print-footer { display: none; }
         }
     </style>
