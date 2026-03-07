@@ -1,3 +1,11 @@
+<!--
+  ═══════════════════════════════════════════════════════════════
+  MAIN GUEST FEEDBACK FORM (FRONTEND)
+  This file displays the guest-facing feedback form. It contains
+  HTML structure styled with Tailwind CSS, custom animations, 
+  and basic JavaScript for form interactivity.
+  ═══════════════════════════════════════════════════════════════
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

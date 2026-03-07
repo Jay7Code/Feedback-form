@@ -1,4 +1,12 @@
 <?php
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * SUPER ADMIN DASHBOARD
+ * Main interface for super administrators to manage regular admin
+ * accounts (create, activate/deactivate, reset password).
+ * Requires superadmin session authentication.
+ * ═══════════════════════════════════════════════════════════════
+ */
 session_start();
 require_once "../config.php";
 if (
@@ -266,8 +274,8 @@ if (
                         class="text-white/10 mx-2">|</span><span
                         class="text-white/30 text-sm"
                     >Welcome, <span class="text-gold-400/70"><?= htmlspecialchars(
-    $_SESSION["superadmin_username"] ?? "Super Admin",
-) ?></span></span><a
+                        $_SESSION["superadmin_username"] ?? "Super Admin",
+                    ) ?></span></span><a
                         href="logout.php"
                         class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5"
                     ><svg

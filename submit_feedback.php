@@ -1,4 +1,12 @@
 <?php
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * FEEDBACK SUBMISSION SCRIPT
+ * Processes POST requests from the guest feedback form.
+ * Captures ratings, comments, and guest details, then inserts
+ * them into the `feedbacks` table in the database.
+ * ═══════════════════════════════════════════════════════════════
+ */
 require_once "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -18,7 +26,9 @@ $data = [
     "safety" => intval($_POST["safety"] ?? 0),
     "security" => intval($_POST["security"] ?? 0),
     "overall_service" => intval($_POST["overall_service"] ?? 0),
-    "frontdesk_comments" => htmlspecialchars(trim($_POST["frontdesk_comments"] ?? "")),
+    "frontdesk_comments" => htmlspecialchars(
+        trim($_POST["frontdesk_comments"] ?? ""),
+    ),
     "food_quality" => intval($_POST["food_quality"] ?? 0),
     "serving_time" => intval($_POST["serving_time"] ?? 0),
     "wait_staff" => intval($_POST["wait_staff"] ?? 0),
@@ -28,15 +38,25 @@ $data = [
     "bar" => intval($_POST["bar"] ?? 0),
     "bartender" => intval($_POST["bartender"] ?? 0),
     "fnb_comments" => htmlspecialchars(trim($_POST["fnb_comments"] ?? "")),
-    "helpful_staff_names" => htmlspecialchars(trim($_POST["helpful_staff_names"] ?? "")),
+    "helpful_staff_names" => htmlspecialchars(
+        trim($_POST["helpful_staff_names"] ?? ""),
+    ),
     "overall_rating" => intval($_POST["overall_rating"] ?? 0),
-    "suggestions_future" => htmlspecialchars(trim($_POST["suggestions_future"] ?? "")),
+    "suggestions_future" => htmlspecialchars(
+        trim($_POST["suggestions_future"] ?? ""),
+    ),
     "other_comments" => htmlspecialchars(trim($_POST["other_comments"] ?? "")),
     "first_stay" => htmlspecialchars(trim($_POST["first_stay"] ?? "")),
-    "purpose_of_stay" => htmlspecialchars(trim($_POST["purpose_of_stay"] ?? "")),
-    "other_purpose_text" => htmlspecialchars(trim($_POST["other_purpose_text"] ?? "")),
+    "purpose_of_stay" => htmlspecialchars(
+        trim($_POST["purpose_of_stay"] ?? ""),
+    ),
+    "other_purpose_text" => htmlspecialchars(
+        trim($_POST["other_purpose_text"] ?? ""),
+    ),
     "nationality" => htmlspecialchars(trim($_POST["nationality"] ?? "")),
-    "other_nationality_text" => htmlspecialchars(trim($_POST["other_nationality_text"] ?? "")),
+    "other_nationality_text" => htmlspecialchars(
+        trim($_POST["other_nationality_text"] ?? ""),
+    ),
     "guest_name" => htmlspecialchars(trim($_POST["guest_name"] ?? "")),
     "email" => htmlspecialchars(trim($_POST["email"] ?? "")),
     "address" => htmlspecialchars(trim($_POST["address"] ?? "")),
@@ -60,7 +80,7 @@ try {
         :overall_rating, :suggestions_future, :other_comments,
         :first_stay, :purpose_of_stay, :other_purpose_text, :nationality, :other_nationality_text, :guest_name, :email, :address, :contact_no, :room_no, :check_in, :check_out
     )";
-    
+
     $stmt = $pdo->prepare($sql);
     $success = $stmt->execute($data);
 } catch (PDOException $e) {
@@ -107,7 +127,11 @@ try {
                     <path class="check-animated" d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">Thank You, <?= !empty($data["guest_name"]) ? $data["guest_name"] : "Valued Guest" ?>!</h2>
+            <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">Thank You, <?= !empty(
+                $data["guest_name"]
+            )
+                ? $data["guest_name"]
+                : "Valued Guest" ?>!</h2>
            <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium" style="animation-delay:.5s">Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.</p>
             <div class="flex items-center justify-center gap-3 mb-8 fade-up" style="animation-delay:.6s">
                 <span class="w-12 h-px bg-gold-400/30"></span>

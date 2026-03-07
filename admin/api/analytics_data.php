@@ -1,8 +1,19 @@
 <?php
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * API - ANALYTICS DATA
+ * Serves aggregated JSON data for the Chart.js visualizations
+ * in the Admin Analytics Dashboard (analytics.php).
+ * Requires admin authentication.
+ * ═══════════════════════════════════════════════════════════════
+ */
 session_start();
 require_once "../../config.php";
 header("Content-Type: application/json");
-if (!isset($_SESSION["admin_logged_in"]) || $_SESSION["admin_logged_in"] !== true) {
+if (
+    !isset($_SESSION["admin_logged_in"]) ||
+    $_SESSION["admin_logged_in"] !== true
+) {
     http_response_code(401);
     echo json_encode(["error" => "Unauthorized"]);
     exit();
@@ -11,16 +22,29 @@ $pdo = getDBConnection();
 $period = $_GET["period"] ?? "all";
 $dateFilter = "";
 switch ($period) {
-    case "today": $dateFilter = "WHERE DATE(created_at) = CURDATE()"; break;
-    case "week": $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"; break;
-    case "month": $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"; break;
-    case "quarter": $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)"; break;
-    default: $dateFilter = ""; break;
+    case "today":
+        $dateFilter = "WHERE DATE(created_at) = CURDATE()";
+        break;
+    case "week":
+        $dateFilter = "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+        break;
+    case "month":
+        $dateFilter =
+            "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+        break;
+    case "quarter":
+        $dateFilter =
+            "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)";
+        break;
+    default:
+        $dateFilter = "";
+        break;
 }
 
-function toTenScale($val) {
+function toTenScale($val)
+{
     $v = (float) $val;
-    return $v > 0 ? round($v * 10 / 3, 1) : 0;
+    return $v > 0 ? round(($v * 10) / 3, 1) : 0;
 }
 
 try {
@@ -46,57 +70,122 @@ try {
         FROM feedbacks $dateFilter");
     $summary = $stmt->fetch();
 
-    $stmt = $pdo->query("SELECT overall_rating as rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY overall_rating ORDER BY overall_rating");
+    $stmt = $pdo->query(
+        "SELECT overall_rating as rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY overall_rating ORDER BY overall_rating",
+    );
     $npsDistribution = [];
-    for ($i = 1; $i <= 10; $i++) { $npsDistribution[$i] = 0; }
+    for ($i = 1; $i <= 10; $i++) {
+        $npsDistribution[$i] = 0;
+    }
     while ($row = $stmt->fetch()) {
         if ($row["rating"] >= 1 && $row["rating"] <= 10) {
             $npsDistribution[(int) $row["rating"]] = (int) $row["count"];
         }
     }
 
-    $stmt = $pdo->query("SELECT DATE(created_at) as date, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date");
+    $stmt = $pdo->query(
+        "SELECT DATE(created_at) as date, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date",
+    );
     $dailyVolume = $stmt->fetchAll();
 
-    $stmt = $pdo->query("SELECT CASE WHEN purpose_of_stay='' OR purpose_of_stay IS NULL THEN 'Not Specified' ELSE purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY purpose ORDER BY count DESC");
+    $stmt = $pdo->query(
+        "SELECT CASE WHEN purpose_of_stay='' OR purpose_of_stay IS NULL THEN 'Not Specified' ELSE purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY purpose ORDER BY count DESC",
+    );
     $purposeBreakdown = $stmt->fetchAll();
 
-    $stmt = $pdo->query("SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC");
+    $stmt = $pdo->query(
+        "SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC",
+    );
     $firstStayData = $stmt->fetchAll();
 
-    $stmt = $pdo->query("SELECT CASE WHEN nationality='' OR nationality IS NULL THEN 'Not Specified' ELSE nationality END as nation, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY nation ORDER BY count DESC");
+    $stmt = $pdo->query(
+        "SELECT CASE WHEN nationality='' OR nationality IS NULL THEN 'Not Specified' ELSE nationality END as nation, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY nation ORDER BY count DESC",
+    );
     $nationalityData = $stmt->fetchAll();
 
-    $stmt = $pdo->query("SELECT DATE(created_at) as date, ROUND(AVG(overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date");
+    $stmt = $pdo->query(
+        "SELECT DATE(created_at) as date, ROUND(AVG(overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date",
+    );
     $npsTrend = $stmt->fetchAll();
 
     $response = [
         "summary" => [
             "total_responses" => (int) ($summary["total_responses"] ?? 0),
-            "avg_nps" => $summary["avg_nps"] !== null ? (float) $summary["avg_nps"] : null,
+            "avg_nps" =>
+                $summary["avg_nps"] !== null
+                    ? (float) $summary["avg_nps"]
+                    : null,
             "earliest" => $summary["earliest"] ?? null,
             "latest" => $summary["latest"] ?? null,
         ],
         "front_of_house" => [
-            ["label" => "Front Desk", "avg" => toTenScale($summary["avg_frontdesk"] ?? 0)],
-            ["label" => "Reservations", "avg" => toTenScale($summary["avg_reservations"] ?? 0)],
-            ["label" => "Telephone", "avg" => toTenScale($summary["avg_telephone"] ?? 0)],
-            ["label" => "Valet", "avg" => toTenScale($summary["avg_valet"] ?? 0)],
-            ["label" => "Housekeeping", "avg" => toTenScale($summary["avg_housekeeping"] ?? 0)],
-            ["label" => "Accommodation", "avg" => toTenScale($summary["avg_accommodation"] ?? 0)],
-            ["label" => "Safety", "avg" => toTenScale($summary["avg_safety"] ?? 0)],
-            ["label" => "Security", "avg" => toTenScale($summary["avg_security"] ?? 0)],
-            ["label" => "Overall Service", "avg" => toTenScale($summary["avg_overall_service"] ?? 0)],
+            [
+                "label" => "Front Desk",
+                "avg" => toTenScale($summary["avg_frontdesk"] ?? 0),
+            ],
+            [
+                "label" => "Reservations",
+                "avg" => toTenScale($summary["avg_reservations"] ?? 0),
+            ],
+            [
+                "label" => "Telephone",
+                "avg" => toTenScale($summary["avg_telephone"] ?? 0),
+            ],
+            [
+                "label" => "Valet",
+                "avg" => toTenScale($summary["avg_valet"] ?? 0),
+            ],
+            [
+                "label" => "Housekeeping",
+                "avg" => toTenScale($summary["avg_housekeeping"] ?? 0),
+            ],
+            [
+                "label" => "Accommodation",
+                "avg" => toTenScale($summary["avg_accommodation"] ?? 0),
+            ],
+            [
+                "label" => "Safety",
+                "avg" => toTenScale($summary["avg_safety"] ?? 0),
+            ],
+            [
+                "label" => "Security",
+                "avg" => toTenScale($summary["avg_security"] ?? 0),
+            ],
+            [
+                "label" => "Overall Service",
+                "avg" => toTenScale($summary["avg_overall_service"] ?? 0),
+            ],
         ],
         "food_beverage" => [
-            ["label" => "Food Quality", "avg" => toTenScale($summary["avg_food_quality"] ?? 0)],
-            ["label" => "Serving Time", "avg" => toTenScale($summary["avg_serving_time"] ?? 0)],
-            ["label" => "Wait Staff", "avg" => toTenScale($summary["avg_wait_staff"] ?? 0)],
-            ["label" => "Grooming", "avg" => toTenScale($summary["avg_grooming"] ?? 0)],
-            ["label" => "Behavior", "avg" => toTenScale($summary["avg_behavior"] ?? 0)],
-            ["label" => "Service", "avg" => toTenScale($summary["avg_fnb_service"] ?? 0)],
+            [
+                "label" => "Food Quality",
+                "avg" => toTenScale($summary["avg_food_quality"] ?? 0),
+            ],
+            [
+                "label" => "Serving Time",
+                "avg" => toTenScale($summary["avg_serving_time"] ?? 0),
+            ],
+            [
+                "label" => "Wait Staff",
+                "avg" => toTenScale($summary["avg_wait_staff"] ?? 0),
+            ],
+            [
+                "label" => "Grooming",
+                "avg" => toTenScale($summary["avg_grooming"] ?? 0),
+            ],
+            [
+                "label" => "Behavior",
+                "avg" => toTenScale($summary["avg_behavior"] ?? 0),
+            ],
+            [
+                "label" => "Service",
+                "avg" => toTenScale($summary["avg_fnb_service"] ?? 0),
+            ],
             ["label" => "Bar", "avg" => toTenScale($summary["avg_bar"] ?? 0)],
-            ["label" => "Bartender", "avg" => toTenScale($summary["avg_bartender"] ?? 0)],
+            [
+                "label" => "Bartender",
+                "avg" => toTenScale($summary["avg_bartender"] ?? 0),
+            ],
         ],
         "nps_distribution" => $npsDistribution,
         "daily_volume" => $dailyVolume,

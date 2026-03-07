@@ -1,0 +1,30 @@
+# Feedback System Overview
+
+## Fonts Used
+- **Great Vibes** (Script/Cursive)
+- **Playfair Display** (Serif)
+- **Inter** (Sans-Serif)
+
+## Tech Stack
+- **Frontend:** HTML5, Tailwind CSS (via CDN), Vanilla JavaScript
+- **Backend:** PHP
+- **Database:** MySQL / MariaDB
+
+## Features & Capabilities
+1. **Immersive Guest Web Form:**
+   - Responsive user interface with modern glassmorphism design, custom input fields, and smooth fade-in reveal animations.
+   - Conditional inputs (e.g., specifying "Other" nationality or purpose of stay).
+
+2. **Categorized Ratings & Feedback:**
+   - Granular scale choices (N/A, Poor, Good, Excellent) for multiple departments such as "Front of House" and "Food & Beverage."
+   - Ability to gather specific comments and name "Especially Helpful Staff."
+
+3. **Overall NPS (Net Promoter Score) Tracking:**
+   - 1 to 10 scale for scoring the overall guest experience, combined with general suggestion sections.
+
+4. **Guest Data Collection:**
+   - Secure and structured gathering of guest information like contact details, room numbers, and dates of stay.
+
+5. **Management & Admin Panel:**
+   - Role-based access with Admin and Superadmin login functionality.
+   - Dedicated "Reports" and "Analytics" pages to aggregate feedback data, visualize trends, and view individual submissions.
