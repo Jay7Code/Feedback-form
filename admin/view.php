@@ -140,7 +140,7 @@ function ratingText($val)
             </div>
 
             <!-- Quick info row -->
-            <div class="mt-5 pt-5 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="mt-5 pt-5 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div>
                     <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">Room</span>
                     <span class="text-[1.125rem] text-white/60 font-semibold"><?= htmlspecialchars(
@@ -151,6 +151,12 @@ function ratingText($val)
                     <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">First Stay?</span>
                     <span class="text-[1.125rem] text-white/60"><?= htmlspecialchars(
                         $fb["first_stay"] ?: "—",
+                    ) ?></span>
+                </div>
+                <div>
+                    <span class="block text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.15em] mb-1">Nationality</span>
+                    <span class="text-[1.125rem] text-white/60"><?= htmlspecialchars(
+                        $fb["nationality"] ?: "—",
                     ) ?></span>
                 </div>
                 <div>

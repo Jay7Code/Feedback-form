@@ -70,6 +70,10 @@ try {
     $stmt->execute($params);
     $firstStayData = $stmt->fetchAll();
 
+    $stmt = $pdo->prepare("SELECT CASE WHEN nationality='' OR nationality IS NULL THEN 'Not Specified' ELSE nationality END as nation, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY nation ORDER BY count DESC");
+    $stmt->execute($params);
+    $nationalityBreakdown = $stmt->fetchAll();
+
     $stmt = $pdo->prepare("SELECT guest_name, room_no, overall_rating, frontdesk_comments, fnb_comments, suggestions_future, other_comments, helpful_staff_names, created_at FROM feedbacks $dateFilter ORDER BY created_at DESC LIMIT 20");
     $stmt->execute($params);
     $comments = $stmt->fetchAll();
@@ -134,6 +138,7 @@ try {
         "nps_distribution" => $npsDist,
         "purpose_breakdown" => $purposeBreakdown,
         "first_stay" => $firstStayData,
+        "nationality_breakdown" => $nationalityBreakdown,
         "comments" => $comments,
         "recognized_staff" => $recognizedStaff,
         "daily_breakdown" => $dailyBreakdown,

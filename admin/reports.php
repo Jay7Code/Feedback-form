@@ -496,6 +496,20 @@ $_SESSION["admin_logged_in"] !== true
                 html += '</tbody></table></div>';
             }
 
+            // ── Nationality Breakdown ──
+            if (data.nationality_breakdown && data.nationality_breakdown.length > 0) {
+                html += '<div class="report-section">';
+                html += '<h3>Nationality Distribution</h3>';
+                html += '<table class="report-table"><thead><tr><th>Nationality</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
+                var totalNation = 0;
+                data.nationality_breakdown.forEach(function(n) { totalNation += parseInt(n.count); });
+                data.nationality_breakdown.forEach(function(n) {
+                    var pct = totalNation > 0 ? ((parseInt(n.count) / totalNation) * 100).toFixed(1) : 0;
+                    html += '<tr><td>' + n.nation + '</td><td style="text-align:center">' + n.count + '</td><td style="text-align:center">' + pct + '%</td></tr>';
+                });
+                html += '</tbody></table></div>';
+            }
+
             // ── Guest Type ──
             if (data.first_stay && data.first_stay.length > 0) {
                 html += '<div class="report-section">';

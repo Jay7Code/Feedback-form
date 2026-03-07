@@ -64,6 +64,9 @@ try {
     $stmt = $pdo->query("SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC");
     $firstStayData = $stmt->fetchAll();
 
+    $stmt = $pdo->query("SELECT CASE WHEN nationality='' OR nationality IS NULL THEN 'Not Specified' ELSE nationality END as nation, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY nation ORDER BY count DESC");
+    $nationalityData = $stmt->fetchAll();
+
     $stmt = $pdo->query("SELECT DATE(created_at) as date, ROUND(AVG(overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date");
     $npsTrend = $stmt->fetchAll();
 
@@ -99,6 +102,7 @@ try {
         "daily_volume" => $dailyVolume,
         "purpose_breakdown" => $purposeBreakdown,
         "first_stay" => $firstStayData,
+        "nationality_data" => $nationalityData,
         "nps_trend" => $npsTrend,
     ];
     echo json_encode($response);

@@ -70,6 +70,9 @@ $data = [
         trim($_POST["other_purpose_text"] ?? ""),
     ),
     "guest_name" => htmlspecialchars(trim($_POST["guest_name"] ?? "")),
+    "nationality" => ($_POST["nationality"] ?? "") === "Other" 
+        ? htmlspecialchars(trim($_POST["other_nationality_text"] ?? "")) 
+        : htmlspecialchars(trim($_POST["nationality"] ?? "")),
     "email" => htmlspecialchars(trim($_POST["email"] ?? "")),
     "address" => htmlspecialchars(trim($_POST["address"] ?? "")),
     "contact_no" => htmlspecialchars(trim($_POST["contact_no"] ?? "")),
@@ -90,7 +93,7 @@ try {
         fnb_service, bar, bartender, fnb_comments, helpful_staff_names,
         overall_rating, suggestions_future, other_comments,
         first_stay, purpose_of_stay, other_purpose_text,
-        guest_name, email, address, contact_no, room_no,
+        guest_name, nationality, email, address, contact_no, room_no,
         check_in, check_out
     ) VALUES (
         :frontdesk, :reservations, :telephone_operator, :valet, :housekeeping,
@@ -99,7 +102,7 @@ try {
         :fnb_service, :bar, :bartender, :fnb_comments, :helpful_staff_names,
         :overall_rating, :suggestions_future, :other_comments,
         :first_stay, :purpose_of_stay, :other_purpose_text,
-        :guest_name, :email, :address, :contact_no, :room_no,
+        :guest_name, :nationality, :email, :address, :contact_no, :room_no,
         :check_in, :check_out
     )";
 
@@ -134,6 +137,7 @@ try {
         ":purpose_of_stay" => $data["purpose_of_stay"],
         ":other_purpose_text" => $data["other_purpose_text"],
         ":guest_name" => $data["guest_name"],
+        ":nationality" => $data["nationality"],
         ":email" => $data["email"],
         ":address" => $data["address"],
         ":contact_no" => $data["contact_no"],

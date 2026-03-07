@@ -296,30 +296,19 @@ $_SESSION["admin_logged_in"] !== true
                     <canvas id="chartPurpose"></canvas>
                 </div>
             </div>
-            <!-- Empty info card -->
-            <div class="glass-card rounded-xl overflow-hidden fade-up flex flex-col items-center justify-center p-8 text-center" style="animation-delay:0.5s" id="noDataCard">
-                <div class="w-16 h-16 rounded-full bg-gold-400/10 flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8 text-gold-400/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
+            <!-- Nationality Distribution -->
+            <div class="glass-card rounded-xl overflow-hidden fade-up" style="animation-delay:0.5s">
+                <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Nationality Distribution</h3>
                 </div>
-                <h4 class="font-serif text-white/60 text-[1.375rem] mb-2">Analytics Overview</h4>
-                <p class="text-white/30 text-[1.125rem] leading-relaxed max-w-xs">
-                    Charts update in real-time as guests submit feedback. Use the period filters above to analyze specific time ranges.
-                </p>
-                <div class="mt-6 flex items-center gap-3 text-[1rem] text-white/20">
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400/60"></span> Excellent (9-10)
-                    </span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-green-400/60"></span> Good (7-8)
-                    </span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-yellow-400/60"></span> Average (5-6)
-                    </span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-red-400/60"></span> Poor (1-4)
-                    </span>
+                <div class="p-6 chart-container" style="height: 300px;">
+                    <div class="loading-overlay" id="loadingNationality"><div class="spinner"></div></div>
+                    <canvas id="chartNationality"></canvas>
                 </div>
             </div>
         </div>
@@ -722,12 +711,56 @@ $_SESSION["admin_logged_in"] !== true
                     }
                 }
             });
+
+            // ── 8. NATIONALITY DISTRIBUTION (Doughnut) ──
+            var natLabels = (data.nationality_data || []).map(function(d) { return d.nation; });
+            var natValues = (data.nationality_data || []).map(function(d) { return parseInt(d.count); });
+            hideLoading('loadingNationality');
+            charts.nationality = new Chart(document.getElementById('chartNationality'), {
+                type: 'doughnut',
+                data: {
+                    labels: natLabels,
+                    datasets: [{
+                        data: natValues,
+                        backgroundColor: CHART_COLORS.slice(0, natLabels.length),
+                        borderColor: '#0A1912',
+                        borderWidth: 3,
+                        hoverOffset: 8,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    cutout: '55%',
+                    plugins: {
+                        datalabels: {
+                            display: true,
+                            color: '#fff',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: function(value, ctx) {
+                                var sum = 0;
+                                var dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.forEach(function(data) { sum += data; });
+                                if (sum === 0) return '';
+                                var pct = (value * 100 / sum);
+                                if (pct < 5) return '';
+                                return pct.toFixed(0) + "%";
+                            }
+                        },
+                        legend: { position: 'bottom', labels: { padding: 16 } },
+                        tooltip: {
+                            backgroundColor: 'rgba(10,25,18,0.9)',
+                            borderColor: 'rgba(201,169,110,0.3)',
+                            borderWidth: 1,
+                        }
+                    }
+                }
+            });
         }
 
         // ─── Fetch data from API ───
         function loadData(period) {
             // show all loaders
-            ['loadingTrend','loadingDist','loadingFoh','loadingFnb','loadingVolume','loadingGuest','loadingPurpose']
+            ['loadingTrend','loadingDist','loadingFoh','loadingFnb','loadingVolume','loadingGuest','loadingPurpose','loadingNationality']
                 .forEach(showLoading);
 
             fetch('api/analytics_data.php?period=' + encodeURIComponent(period))
@@ -741,7 +774,7 @@ $_SESSION["admin_logged_in"] !== true
                 })
                 .catch(function(err) {
                     console.error('Failed to load analytics:', err);
-                    ['loadingTrend','loadingDist','loadingFoh','loadingFnb','loadingVolume','loadingGuest','loadingPurpose']
+                    ['loadingTrend','loadingDist','loadingFoh','loadingFnb','loadingVolume','loadingGuest','loadingPurpose','loadingNationality']
                         .forEach(hideLoading);
                 });
         }

@@ -486,6 +486,25 @@
                             <input type="text" id="other_purpose" name="other_purpose_text" placeholder="Please specify your purpose" class="lodge-input mt-3 hidden">
                         </div>
 
+                        <!-- Nationality -->
+                        <div class="mb-6">
+                            <label class="block text-[0.65rem] font-semibold text-gold-400/70 uppercase tracking-[0.15em] mb-2">
+                                Nationality
+                            </label>
+                            <select name="nationality" id="nationality_dropdown" onchange="toggleOtherNationality()" class="lodge-input">
+                                <option value="Filipino" selected>Filipino</option>
+                                <option value="American">American</option>
+                                <option value="Chinese">Chinese</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="British">British</option>
+                                <option value="Australian">Australian</option>
+                                <option value="Canadian">Canadian</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="text" id="other_nationality" name="other_nationality_text" placeholder="Please specify your nationality" class="lodge-input mt-3 hidden">
+                        </div>
+
                         <!-- Divider -->
                         <div class="flex items-center gap-4 my-8">
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></span>
@@ -577,6 +596,17 @@
         function toggleOtherPurpose() {
             var d = document.getElementById("purpose_dropdown");
             var o = document.getElementById("other_purpose");
+            if (d.value === "Other") {
+                o.classList.remove("hidden"); o.required = true; o.focus();
+            } else {
+                o.classList.add("hidden"); o.required = false; o.value = "";
+            }
+        }
+
+        /** Toggle "Other" nationality text field visibility */
+        function toggleOtherNationality() {
+            var d = document.getElementById("nationality_dropdown");
+            var o = document.getElementById("other_nationality");
             if (d.value === "Other") {
                 o.classList.remove("hidden"); o.required = true; o.focus();
             } else {
