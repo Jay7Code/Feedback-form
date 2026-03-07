@@ -9,8 +9,8 @@ session_start();
 require_once "../config.php";
 
 if (
-    !isset($_SESSION["admin_logged_in"]) ||
-    $_SESSION["admin_logged_in"] !== true
+!isset($_SESSION["admin_logged_in"]) ||
+$_SESSION["admin_logged_in"] !== true
 ) {
     header("Location: login.php");
     exit();
@@ -94,10 +94,10 @@ if (
             .print-header p { font-size: 9pt; color: #666 !important; margin: 4px 0; }
             .report-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
             .report-table th { background: #1B3A2D !important; color: #fff !important; padding: 8px 12px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; }
-            .report-table td { padding: 6px 12px; border-bottom: 1px solid #eee; font-size: 9pt; }
+            .report-table td { padding: 6px 12px; border-bottom: 1px solid #eee; font-size: pt; }
             .report-table tr:nth-child(even) td { background: #f9f9f9 !important; }
             .report-section { page-break-inside: avoid; margin-bottom: 20px; }
-            .report-section h3 { font-family: 'Playfair Display', serif; font-size: 13pt; color: #1B3A2D !important; border-bottom: 1px solid #C9A96E; padding-bottom: 5px; margin-bottom: 10px; }
+            .report-section h3 { font-family: 'Playfair Display', serif; font-size: 13pt; color: #1B3A2D !important; border-bottom: 2px solid #C9A96E; padding-bottom: 8px; margin-bottom: 12px; text-align: center; font-weight: 700; }
             .stat-box { display: inline-block; width: 23%; text-align: center; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 0 0.5%; }
             .stat-box .stat-val { font-size: 20pt; font-weight: 700; color: #1B3A2D !important; }
             .stat-box .stat-label { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: #999 !important; }
@@ -117,8 +117,8 @@ if (
             .report-table th { background: rgba(201,169,110,0.1); color: rgba(201,169,110,0.8); padding: 10px 14px; text-align: left; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; border-bottom: 1px solid rgba(201,169,110,0.15); }
             .report-table td { padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 0.8rem; }
             .report-table tr:hover td { background: rgba(255,255,255,0.02); }
-            .report-section h3 { font-family: 'Playfair Display', serif; color: rgba(255,255,255,0.7); font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
-                border-bottom: 1px solid rgba(201,169,110,0.15); padding-bottom: 8px; margin-bottom: 16px; }
+            .report-section h3 { font-family: 'Playfair Display', serif; color: #C9A96E; font-size: 1.1rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
+                border-bottom: 2px solid #C9A96E; border-image: linear-gradient(to right, rgba(201,169,110,0), rgba(201,169,110,1), rgba(201,169,110,0)) 1; padding-bottom: 12px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 10px rgba(201,169,110,0.2); }
             .stat-box { text-align: center; padding: 16px; background: rgba(245,235,224,0.06); border: 1px solid rgba(201,169,110,0.12); border-radius: 12px; }
             .stat-box .stat-val { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
             .stat-box .stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(201,169,110,0.6); font-weight: 600; }
@@ -486,7 +486,7 @@ if (
             if (data.purpose_breakdown && data.purpose_breakdown.length > 0) {
                 html += '<div class="report-section">';
                 html += '<h3>Purpose of Stay</h3>';
-                html += '<table class="report-table"><thead><tr><th>Purpose</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
+                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Purpose</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
                 var totalPurpose = 0;
                 data.purpose_breakdown.forEach(function(p) { totalPurpose += parseInt(p.count); });
                 data.purpose_breakdown.forEach(function(p) {
@@ -500,7 +500,7 @@ if (
             if (data.nationality_breakdown && data.nationality_breakdown.length > 0) {
                 html += '<div class="report-section">';
                 html += '<h3>Nationality Distribution</h3>';
-                html += '<table class="report-table"><thead><tr><th>Nationality</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
+                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Nationality</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
                 var totalNation = 0;
                 data.nationality_breakdown.forEach(function(n) { totalNation += parseInt(n.count); });
                 data.nationality_breakdown.forEach(function(n) {
@@ -514,9 +514,9 @@ if (
             if (data.first_stay && data.first_stay.length > 0) {
                 html += '<div class="report-section">';
                 html += '<h3>Guest Type</h3>';
-                html += '<table class="report-table"><thead><tr><th>Type</th><th style="text-align:center">Count</th></tr></thead><tbody>';
+                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Type</th><th style="text-align:center">Count</th><th></th></tr></thead><tbody>';
                 data.first_stay.forEach(function(fs) {
-                    html += '<tr><td>' + fs.type + '</td><td style="text-align:center">' + fs.count + '</td></tr>';
+                    html += '<tr><td>' + fs.type + '</td><td style="text-align:center">' + fs.count + '</td><td></td></tr>';
                 });
                 html += '</tbody></table></div>';
             }
@@ -525,7 +525,7 @@ if (
             if (data.daily_breakdown && data.daily_breakdown.length > 0) {
                 html += '<div class="report-section">';
                 html += '<h3>Daily Breakdown</h3>';
-                html += '<table class="report-table"><thead><tr><th>Date</th><th style="text-align:center">Responses</th><th style="text-align:center">Avg. Satisfaction</th></tr></thead><tbody>';
+                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Date</th><th style="text-align:center">Responses</th><th style="text-align:center">Avg. Satisfaction</th></tr></thead><tbody>';
                 data.daily_breakdown.forEach(function(d) {
                     var cls = scoreClass(parseFloat(d.avg_rating), 10);
                     html += '<tr><td>' + displayDate(d.date) + '</td><td style="text-align:center">' + d.count + '</td>';
