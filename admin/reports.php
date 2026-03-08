@@ -161,49 +161,54 @@ $_SESSION["admin_logged_in"] !== true
     <div class="max-w-7xl mx-auto px-6 py-8">
 
         <!-- ═══ CONTROLS PANEL ═══ -->
-        <div id="controlsPanel" class="no-print">
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-6 fade-up">
-                <div>
-                    <h2 class="font-serif text-[1.75rem] text-white/80 tracking-wide">Feedback Reports</h2>
-                    <p class="text-white/30 text-[1.125rem] mt-1">Generate and print daily, weekly, or monthly feedback summaries</p>
-                </div>
-            </div>
-
-            <!-- Quick Presets -->
-            <div class="glass-card rounded-xl p-5 mb-6 fade-up" style="animation-delay:0.1s">
-                <div class="flex flex-wrap items-end gap-4">
-                    <div>
-                        <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">Quick Presets</label>
-                        <div class="flex gap-2" id="presetBtns">
-                            <button class="preset-btn" data-preset="today">Daily (Today)</button>
-                            <button class="preset-btn" data-preset="yesterday">Yesterday</button>
-                            <button class="preset-btn" data-preset="week">Weekly (7 Days)</button>
-                            <button class="preset-btn" data-preset="month">Monthly (30 Days)</button>
-                        </div>
-                    </div>
-                    <div class="flex items-end gap-3 ml-auto">
-                        <div>
-                            <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">From</label>
-                            <input type="date" id="dateFrom" class="lodge-input">
-                        </div>
-                        <div>
-                            <label class="block text-[0.85rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-1.5">To</label>
-                            <input type="date" id="dateTo" class="lodge-input">
-                        </div>
-                        <button id="btnGenerate" class="px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
-                            Generate Report
-                        </button>
-                        <button id="btnPrint" class="px-5 py-2.5 rounded-lg font-semibold text-[1rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-2" style="visibility:hidden; opacity:0; pointer-events:none;">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
-                            </svg>
-                            Print Report
-                        </button>
-                    </div>
-                </div>
+      <div class="glass-card rounded-xl p-4 lg:p-5 mb-6 fade-up" style="animation-delay:0.1s">
+    <!-- 
+      1. flex-nowrap: Forces exactly one row
+      2. justify-between: Spreads everything nicely
+      3. items-end: Bottom aligns the buttons with the inputs
+      4. NO overflow-x-auto: No scrollbar
+    -->
+    <div class="flex flex-nowrap items-end justify-between w-full gap-2 lg:gap-3">
+        
+        <!-- 1. Quick Presets -->
+        <div class="flex flex-col flex-shrink min-w-0">
+            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">Quick Presets</label>
+            <div class="flex flex-nowrap gap-1 lg:gap-2" id="presetBtns">
+                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="today">Daily (Today)</button>
+                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="yesterday">Yesterday</button>
+                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="week">Weekly (7 Days)</button>
+                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="month">Monthly (30 Days)</button>
             </div>
         </div>
 
+        <!-- 2. Date From -->
+        <!-- flex-1 and w-full allows the input to squeeze dynamically rather than breaking layout -->
+        <div class="flex flex-col flex-1 min-w-[100px] max-w-[140px]">
+            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">From</label>
+            <input type="date" id="dateFrom" class="lodge-input w-full px-1.5 py-1.5 text-xs lg:text-sm">
+        </div>
+
+        <!-- 3. Date To -->
+        <div class="flex flex-col flex-1 min-w-[100px] max-w-[140px]">
+            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">To</label>
+            <input type="date" id="dateTo" class="lodge-input w-full px-1.5 py-1.5 text-xs lg:text-sm">
+        </div>
+
+        <!-- 4. Generate Button -->
+        <button id="btnGenerate" class="flex-shrink-0 whitespace-nowrap px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-semibold text-[0.8rem] lg:text-[0.85rem] uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
+            Generate Report
+        </button>
+
+        <!-- 5. Print Button -->
+        <button id="btnPrint" class="flex-shrink-0 whitespace-nowrap px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-semibold text-[0.8rem] lg:text-[0.85rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-1.5" style="visibility:hidden; opacity:0; pointer-events:none;">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            Print Report
+        </button>
+        
+    </div>
+</div>
         <!-- ═══ LOADING ═══ -->
         <div id="loadingReport" class="no-print text-center py-16" style="display:none">
             <div class="spinner mx-auto mb-4"></div>
