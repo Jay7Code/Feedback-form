@@ -272,7 +272,7 @@ function ratingLabel($val)
         <!-- ═══ FEEDBACK TABLE ═══ -->
         <div class="glass-card rounded-xl overflow-hidden">
             <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
-                <h2 class="font-serif text-white/70 text-[1.25rem] tracking-wider uppercase">Guest Feedback</h2>
+                <h2 class="font-serif text-gold-400/100 text-[1.25rem] tracking-wider uppercase">Guest Feedback</h2>
                 <span class="text-white/20 text-[1rem]"><?= $totalCount ?> entries</span>
             </div>
 
@@ -370,7 +370,7 @@ function ratingLabel($val)
 
     <!-- Footer -->
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8">
-        <p class="text-white/15 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
+        <p class="text-gold-400/100 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
 </body>

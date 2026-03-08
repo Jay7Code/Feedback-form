@@ -228,7 +228,7 @@ $_SESSION["admin_logged_in"] !== true
 
     <!-- Footer -->
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8 no-print">
-        <p class="text-white/15 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
+        <p class="text-gold-400/100 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
     <script>
