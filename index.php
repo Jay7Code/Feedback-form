@@ -464,7 +464,7 @@
                     <div class="px-6 py-6">
                         <!-- First stay question -->
                         <div class="mb-6">
-                            <p class="text-[0.65rem] font-semibold text-white uppercase tracking-[0.15em] mb-3">
+                            <p class="text-[0.65rem] font-semibold text-gold-400/100 uppercase tracking-[0.15em] mb-3">
                                 Was this your first stay at John Hay Hotels? <span class="text-red-400">*</span>
                             </p>
                             <div class="flex gap-8 justify-center md:justify-start">
