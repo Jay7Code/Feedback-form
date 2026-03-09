@@ -107,6 +107,13 @@ try {
         .scale-animated{animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
         @keyframes fadeUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
         .fade-up{opacity:0;animation:fadeUp .6s ease-out forwards}
+        /* ── GLASSMORPHISM CARDS ── */
+        .glass-card-warm {
+            background: rgba(245,235,224,0.10);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(201,169,110,0.15);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(201,169,110,0.10);
+        }
     </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col text-white relative">
@@ -122,23 +129,25 @@ try {
     <main class="flex-1 flex items-center justify-center px-4 py-16 relative z-10">
         <div class="max-w-lg w-full text-center">
         <?php if ($success): ?>
-            <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center scale-animated" style="background:linear-gradient(135deg,#C9A96E,#b5893a)">
-                <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
-                    <path class="check-animated" d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <div class="glass-card-warm rounded-2xl px-8 py-10 max-w-2xl mx-auto mb-10 fade-up">
+                <div class="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center scale-animated" style="background:linear-gradient(135deg,#C9A96E,#b5893a)">
+                    <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                        <path class="check-animated" d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">Thank You, <?= !empty(
+                    $data["guest_name"]
+                )
+                    ? $data["guest_name"]
+                    : "Valued Guest" ?>!</h2>
+               <p class="font-serif italic text-white/90 text-lg md:text-xl mb-10 drop-shadow-lg font-medium leading-relaxed" style="animation-delay:.5s">Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.</p>
+                <div class="flex items-center justify-center gap-3 mb-8 fade-up" style="animation-delay:.6s">
+                    <span class="w-12 h-px bg-gold-400/30"></span>
+                    <span class="w-2 h-2 rotate-45 bg-gold-400/40"></span>
+                    <span class="w-12 h-px bg-gold-400/30"></span>
+                </div>
+                <p class="font-serif italic text-white/90 text-lg md:text-xl mb-6 drop-shadow-lg font-medium leading-relaxed" style="animation-delay:.7s">We look forward to welcoming you again soon.</p>
             </div>
-            <h2 class="font-serif text-3xl md:text-4xl text-white/90 mb-4 fade-up" style="animation-delay:.3s">Thank You, <?= !empty(
-                $data["guest_name"]
-            )
-                ? $data["guest_name"]
-                : "Valued Guest" ?>!</h2>
-           <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium" style="animation-delay:.5s">Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.</p>
-            <div class="flex items-center justify-center gap-3 mb-8 fade-up" style="animation-delay:.6s">
-                <span class="w-12 h-px bg-gold-400/30"></span>
-                <span class="w-2 h-2 rotate-45 bg-gold-400/40"></span>
-                <span class="w-12 h-px bg-gold-400/30"></span>
-            </div>
-            <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium" style="animation-delay:.7s">We look forward to welcoming you again soon.</p>
             <a href="index.php" class="inline-flex items-center gap-2 text-sm font-semibold text-gold-400/70 uppercase tracking-wider hover:text-gold-400 transition-colors duration-300 fade-up" style="animation-delay:.8s">
                 <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>

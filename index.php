@@ -306,10 +306,10 @@
                             <!-- Column headers (desktop only) -->
                             <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-2">
                                 <span></span>
-                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">N/A</span>
                                 <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Poor</span>
                                 <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Good</span>
                                 <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Excellent</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">N/A</span>
                             </div>
 
                             <!-- Rating rows -->
@@ -319,10 +319,10 @@
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
                                             [
-                                                ["0", "N/A"],
                                                 ["1", "Poor"],
                                                 ["2", "Good"],
                                                 ["3", "Excellent"],
+                                                ["0", "N/A"],
                                             ]
                                             as $rating
                                         ): ?>
@@ -510,6 +510,8 @@
                                 <option value="British">British</option>
                                 <option value="Australian">Australian</option>
                                 <option value="Canadian">Canadian</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Indian">Indian</option>
                                 <option value="Other">Other</option>
                             </select>
                             <input type="text" id="other_nationality" name="other_nationality_text" placeholder="Please specify your nationality" class="lodge-input mt-3 hidden">
@@ -565,11 +567,13 @@
 
                 <!-- ═══ SUBMIT BUTTON ═══ -->
                 <div class="reveal-section text-center pt-6 pb-4">
-                    <p class="font-serif italic text-white text-lg md:text-2xl mb-10 drop-shadow-lg font-medium">
-                        Thank you for staying with us. We look forward to welcoming you again to John Hay Hotels.
-                    </p>
+                    <div class="glass-card-warm rounded-2xl px-8 py-6 max-w-2xl mx-auto mb-10">
+                        <p class="font-serif italic text-white/90 text-lg md:text-xl drop-shadow-lg font-medium leading-relaxed">
+                            Thank you for staying with us. We look forward to welcoming you again to John Hay Hotels.
+                        </p>
+                    </div>
                     <button type="submit" id="submitBtn"
-                            class="group relative inline-flex items-center justify-center gap-3 px-14 py-4 rounded-full font-semibold text-sm uppercase tracking-[0.2em] transition-all duration-500 w-full sm:w-auto sm:min-w-[320px] overflow-hidden"
+                            class="group relative inline-flex items-center justify-center gap-3 px-10 py-3.5 rounded-full font-semibold text-[0.8rem] uppercase tracking-[0.2em] transition-all duration-500 w-full sm:w-auto sm:min-w-[260px] overflow-hidden"
                             style="background:linear-gradient(135deg,#C9A96E 0%,#b5893a 50%,#C9A96E 100%);color:#0A1912;box-shadow:0 8px 32px rgba(201,169,110,0.25)">
                         <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
                         <div id="btnLoader" class="hidden relative z-10">
