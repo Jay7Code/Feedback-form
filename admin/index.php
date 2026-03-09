@@ -84,9 +84,15 @@ $latestStmt->execute($params);
 $latestDate = $latestStmt->fetchColumn();
 $latestFormatted = $latestDate ? date("M d, Y", strtotime($latestDate)) : "—";
 
+// ─── Pagination ───
+$limit = 10;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+$totalPages = ceil($totalCount / $limit);
+
 // ─── Feedback list ───
 $listStmt = $pdo->prepare(
-    "SELECT id, guest_name, room_no, overall_rating, purpose_of_stay, check_in, check_out, created_at FROM feedbacks $whereSQL ORDER BY created_at DESC LIMIT 200",
+    "SELECT id, guest_name, room_no, overall_rating, purpose_of_stay, check_in, check_out, created_at FROM feedbacks $whereSQL ORDER BY created_at DESC LIMIT $offset, $limit",
 );
 $listStmt->execute($params);
 $feedbacks = $listStmt->fetchAll();
@@ -397,6 +403,56 @@ function ratingLabel($val)
                         </tbody>
                     </table>
                 </div>
+                
+                <?php if ($totalPages > 1): ?>
+                    <div class="px-5 py-4 border-t border-white/[0.06] flex items-center justify-between no-print">
+                        <div class="text-[0.85rem] text-white/50">
+                            Showing <?= $offset + 1 ?> to <?= min($offset + $limit, $totalCount) ?> of <?= $totalCount ?> entries
+                        </div>
+                        <div class="flex gap-2">
+                            <?php
+                            // Preserve query string parameters for pagination links
+                            $qs = $_GET;
+                            unset($qs['page']);
+                            $queryString = http_build_query($qs);
+                            $queryString = $queryString ? '&' . $queryString : '';
+                            ?>
+                            
+                            <?php if ($page > 1): ?>
+                                <a href="?page=<?= $page - 1 ?><?= $queryString ?>" class="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/80 border border-white/10 transition-colors text-[0.85rem]">Previous</a>
+                            <?php else: ?>
+                                <span class="px-3 py-1.5 rounded-md bg-white/5 text-white/30 border border-white/[0.03] cursor-not-allowed text-[0.85rem]">Previous</span>
+                            <?php endif; ?>
+                            
+                            <?php
+                            $startPage = max(1, $page - 2);
+                            $endPage = min($totalPages, $page + 2);
+                            if ($startPage > 1) {
+                                echo '<a href="?page=1' . $queryString . '" class="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/80 border border-white/10 transition-colors text-[0.85rem]">1</a>';
+                                if ($startPage > 2) echo '<span class="px-2 text-white/30">...</span>';
+                            }
+                            for ($i = $startPage; $i <= $endPage; $i++):
+                            ?>
+                                <a href="?page=<?= $i ?><?= $queryString ?>" class="px-3 py-1.5 rounded-md <?= $i === $page ? 'bg-gold-400/20 text-gold-400 border border-gold-400/30' : 'bg-white/5 hover:bg-white/10 text-white/80 border border-white/10 transition-colors' ?> text-[0.85rem]">
+                                    <?= $i ?>
+                                </a>
+                            <?php endfor; ?>
+                            
+                            <?php
+                            if ($endPage < $totalPages) {
+                                if ($endPage < $totalPages - 1) echo '<span class="px-2 text-white/30">...</span>';
+                                echo '<a href="?page=' . $totalPages . $queryString . '" class="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/80 border border-white/10 transition-colors text-[0.85rem]">' . $totalPages . '</a>';
+                            }
+                            ?>
+                            
+                            <?php if ($page < $totalPages): ?>
+                                <a href="?page=<?= $page + 1 ?><?= $queryString ?>" class="px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white/80 border border-white/10 transition-colors text-[0.85rem]">Next</a>
+                            <?php else: ?>
+                                <span class="px-3 py-1.5 rounded-md bg-white/5 text-white/30 border border-white/[0.03] cursor-not-allowed text-[0.85rem]">Next</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
 
