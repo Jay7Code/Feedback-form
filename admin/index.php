@@ -154,33 +154,67 @@ function ratingLabel($val)
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(10,25,18,0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.3); border-radius: 99px; }
-        .nav-link { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
-        .nav-link:hover { background: rgba(201,169,110,0.08); color: rgba(255,255,255,0.7); }
-        .nav-link.active { background: rgba(201,169,110,0.12); color: #C9A96E; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; color: rgba(255,255,255,0.7); }
+        .nav-link:hover { background: rgba(201,169,110,0.1); color: #ffffff; }
+        .nav-link.active { color: #C9A96E; }
+        
+        /* Hover transitions matching the official website */
+        nav.group:hover .nav-link { color: #1B3A2D; opacity: 0.7; }
+        nav.group:hover .nav-link:hover { background: rgba(201,169,110,0.1); opacity: 1; color: #1B3A2D; }
+        nav.group:hover .nav-link.active { background: rgba(201,169,110,0.15); opacity: 1; color: #b5893a; }
+        
+        .logo-img { filter: brightness(0) invert(1); transition: all 0.3s ease; }
+        nav.group:hover .logo-img { filter: none; }
     </style>
 </head>
 <body class="font-sans text-white min-h-screen">
-    <!-- ═══ TOP NAV BAR ═══ -->
-    <nav class="border-b border-white/[0.06] px-6 py-4">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+    <?php if (isset($_SESSION['show_welcome_modal']) && $_SESSION['show_welcome_modal'] === true): ?>
+    <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWelcomeModal()"></div>
+        
+        <div class="relative w-full max-w-md transform overflow-hidden rounded-2xl p-8 text-center shadow-2xl transition-all" style="background: rgba(245,235,224,0.08); backdrop-filter: blur(24px); border: 1px solid rgba(201,169,110,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-400/10 mb-6">
+                <svg class="h-8 w-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
             </div>
-            <div class="flex items-center gap-2">
+            <h3 class="font-serif text-[1.75rem] text-white/90 tracking-wide mb-2">Welcome Back!</h3>
+            <p class="text-white/60 text-[1rem] leading-relaxed mb-8">
+                Hello, <span class="text-gold-400 font-semibold"><?= htmlspecialchars($_SESSION['admin_full_name'] ?? $_SESSION['admin_username'] ?? 'Admin') ?></span>. You have successfully logged into the John Hay Hotels Admin Panel.
+            </p>
+            <button onclick="closeWelcomeModal()" class="w-full py-3.5 rounded-full font-semibold text-[1.125rem] uppercase tracking-[0.15em] transition-all duration-300 hover:shadow-lg" style="background: linear-gradient(135deg, #C9A96E, #b5893a); color: #0A1912;">
+                Continue to Dashboard
+            </button>
+        </div>
+    </div>
+    <script>
+        function closeWelcomeModal() {
+            var modal = document.getElementById('welcomeModal');
+            if(modal) {
+                modal.style.opacity = '0';
+                setTimeout(function(){ modal.remove(); }, 300);
+            }
+        }
+    </script>
+    <?php unset($_SESSION['show_welcome_modal']); endif; ?>
+
+    <!-- ═══ TOP NAV BAR ═══ -->
+    <nav class="group bg-transparent hover:bg-white px-6 py-3 no-print relative z-10 border-b border-white/[0.06] hover:border-gold-400/20 transition-all duration-300 ease-in-out hover:shadow-md">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <img src="../img/logo.png" alt="John Hay Hotels Logo" class="logo-img h-16 sm:h-20 w-auto object-contain">
+                <span class="text-[0.8rem] font-bold text-white/70 group-hover:text-pine-900 uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-white/5 group-hover:bg-gold-400/20 border border-white/10 group-hover:border-gold-400/30 hidden sm:inline-block transition-colors duration-300">Admin Panel</span>
+            </div>
+            <div class="flex items-center gap-1 sm:gap-2">
                 <a href="index.php" class="nav-link active">Dashboard</a>
-                <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
-                <a href="reports.php" class="nav-link text-white/40">Reports</a>
-                <span class="text-white/10 mx-2">|</span>
-                <span class="text-white/30 text-[1.125rem]">Welcome, <span class="text-gold-400/90"><?= htmlspecialchars(
-                    $_SESSION["admin_username"] ?? "Admin",
-                ) ?></span></span>
-                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <a href="analytics.php" class="nav-link">Analytics</a>
+                <a href="reports.php" class="nav-link">Reports</a>
+                <span class="text-white/20 group-hover:text-pine-900/20 mx-1 sm:mx-2 transition-colors duration-300">|</span>
+                <a href="logout.php" class="text-[0.9rem] font-semibold text-white/50 hover:text-red-400 group-hover:text-red-600/80 group-hover:hover:text-red-700 group-hover:hover:bg-red-50 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    Logout
+                    <span class="hidden sm:inline">Logout</span>
                 </a>
             </div>
         </div>

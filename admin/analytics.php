@@ -76,32 +76,38 @@ if (
             border-top-color: #C9A96E; border-radius: 50%; animation: spin 0.8s linear infinite; }
         .stat-value { font-variant-numeric: tabular-nums; }
 
-        /* Nav link active state */
-        .nav-link { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
-        .nav-link:hover { background: rgba(201,169,110,0.08); color: rgba(255,255,255,0.7); }
-        .nav-link.active { background: rgba(201,169,110,0.12); color: #C9A96E; }
+        .nav-link { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; color: rgba(255,255,255,0.7); }
+        .nav-link:hover { background: rgba(201,169,110,0.1); color: #ffffff; }
+        .nav-link.active { color: #C9A96E; }
+        
+        /* Hover transitions matching the official website */
+        nav.group:hover .nav-link { color: #1B3A2D; opacity: 0.7; }
+        nav.group:hover .nav-link:hover { background: rgba(201,169,110,0.1); opacity: 1; color: #1B3A2D; }
+        nav.group:hover .nav-link.active { background: rgba(201,169,110,0.15); opacity: 1; color: #b5893a; }
+        
+        .logo-img { filter: brightness(0) invert(1); transition: all 0.3s ease; }
+        nav.group:hover .logo-img { filter: none; }
     </style>
 </head>
 <body class="font-sans text-white min-h-screen">
 
     <!-- ═══ TOP NAV BAR ═══ -->
-    <nav class="border-b border-white/[0.06] px-6 py-4">
+    <nav class="group bg-transparent hover:bg-white px-6 py-3 no-print relative z-10 border-b border-white/[0.06] hover:border-gold-400/20 transition-all duration-300 ease-in-out hover:shadow-md">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+            <div class="flex items-center gap-6">
+                <img src="../img/logo.png" alt="John Hay Hotels Logo" class="logo-img h-16 sm:h-20 w-auto object-contain">
+                <span class="text-[0.8rem] font-bold text-white/70 group-hover:text-pine-900 uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-white/5 group-hover:bg-gold-400/20 border border-white/10 group-hover:border-gold-400/30 hidden sm:inline-block transition-colors duration-300">Admin Panel</span>
             </div>
-            <div class="flex items-center gap-2">
-                <a href="index.php" class="nav-link text-white/40">Dashboard</a>
+            <div class="flex items-center gap-1 sm:gap-2">
+                <a href="index.php" class="nav-link">Dashboard</a>
                 <a href="analytics.php" class="nav-link active">Analytics</a>
-                <a href="reports.php" class="nav-link text-white/40">Reports</a>
-                <span class="text-white/10 mx-2">|</span>
-                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <a href="reports.php" class="nav-link">Reports</a>
+                <span class="text-white/20 group-hover:text-pine-900/20 mx-1 sm:mx-2 transition-colors duration-300">|</span>
+                <a href="logout.php" class="text-[0.9rem] font-semibold text-white/50 hover:text-red-400 group-hover:text-red-600/80 group-hover:hover:text-red-700 group-hover:hover:bg-red-50 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    Logout
+                    <span class="hidden sm:inline">Logout</span>
                 </a>
             </div>
         </div>
@@ -138,7 +144,7 @@ if (
                 </div>
                 <p class="text-[2.125rem] font-bold text-white/80 stat-value" id="statTotal">—</p>
             </div>
-            <!-- Average NPS -->
+            <!-- Average Rating -->
             <div class="glass-card rounded-xl p-5">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-10 h-10 rounded-lg bg-gold-400/10 flex items-center justify-center">
@@ -176,9 +182,9 @@ if (
             </div>
         </div>
 
-        <!-- ═══ CHARTS ROW 1: NPS Trend + NPS Distribution ═══ -->
+        <!-- ═══ CHARTS ROW 1: Rating Trend + Rating Distribution ═══ -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <!-- NPS Trend (large) -->
+            <!-- Rating Trend (large) -->
             <div class="lg:col-span-2 glass-card rounded-xl overflow-hidden fade-up" style="animation-delay:0.15s">
                 <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
@@ -193,7 +199,7 @@ if (
                     <canvas id="chartNpsTrend"></canvas>
                 </div>
             </div>
-            <!-- NPS Distribution -->
+            <!-- Rating Distribution -->
             <div class="glass-card rounded-xl overflow-hidden fade-up" style="animation-delay:0.2s">
                 <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
@@ -337,7 +343,7 @@ if (
             '#C9A96E', '#6ECFC9', '#C96E8A', '#6EC96E', '#8A6EC9',
             '#C9B96E', '#6E9FC9', '#C96EC9', '#9FC96E', '#6EC9A9'
         ];
-        const NPS_COLORS = [
+        const RATING_COLORS = [
             '#ef4444', '#f97316', '#f97316', '#eab308', '#eab308',
             '#84cc16', '#84cc16', '#22c55e', '#10b981', '#059669'
         ];
@@ -396,7 +402,7 @@ if (
             fnbItems.forEach(function(item) { if (item.avg > 0) { fnbSum += item.avg; fnbCount++; } });
             document.getElementById('statFnb').textContent = fnbCount > 0 ? (fnbSum / fnbCount).toFixed(1) : '—';
 
-            // ── 1. NPS TREND (Line Chart) ──
+            // ── 1. RATING TREND (Line Chart) ──
             var trendLabels = (data.nps_trend || []).map(function(d) { return d.date; });
             var trendValues = (data.nps_trend || []).map(function(d) { return parseFloat(d.avg_rating); });
             hideLoading('loadingTrend');
@@ -441,7 +447,7 @@ if (
                 }
             });
 
-            // ── 2. NPS DISTRIBUTION (Bar Chart) ──
+            // ── 2. RATING DISTRIBUTION (Bar Chart) ──
             var distLabels = Object.keys(data.nps_distribution || {});
             var distValues = Object.values(data.nps_distribution || {});
             hideLoading('loadingDist');
@@ -451,7 +457,7 @@ if (
                     labels: distLabels.map(function(l) { return l + '/10'; }),
                     datasets: [{
                         data: distValues,
-                        backgroundColor: NPS_COLORS,
+                        backgroundColor: RATING_COLORS,
                         borderRadius: 6,
                         borderSkipped: false,
                         barPercentage: 0.7,
@@ -525,7 +531,7 @@ if (
                             callbacks: {
                                 label: function(ctx) {
                                     var v = ctx.parsed.x;
-                                    var label = v >= 8 ? 'Excellent' : v >= 5 ? 'Good' : 'Poor';
+                                    var label = v >= 9 ? 'Excellent' : v >= 7 ? 'Good' : 'Poor';
                                     return v.toFixed(1) + '/10 (' + label + ')';
                                 }
                             }
@@ -580,7 +586,7 @@ if (
                             callbacks: {
                                 label: function(ctx) {
                                     var v = ctx.parsed.x;
-                                    var label = v >= 8 ? 'Excellent' : v >= 5 ? 'Good' : 'Poor';
+                                    var label = v >= 9 ? 'Excellent' : v >= 7 ? 'Good' : 'Poor';
                                     return v.toFixed(1) + '/10 (' + label + ')';
                                 }
                             }

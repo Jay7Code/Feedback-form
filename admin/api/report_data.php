@@ -74,11 +74,11 @@ try {
             $npsDist[(int) $row["rating"]] = (int) $row["count"];
         }
     }
-    $promoters = ($npsDist[9] ?? 0) + ($npsDist[10] ?? 0);
-    $passives = ($npsDist[7] ?? 0) + ($npsDist[8] ?? 0);
-    $detractors = 0;
+    $excellent = ($npsDist[9] ?? 0) + ($npsDist[10] ?? 0);
+    $good = ($npsDist[7] ?? 0) + ($npsDist[8] ?? 0);
+    $poor = 0;
     for ($i = 1; $i <= 6; $i++) {
-        $detractors += $npsDist[$i] ?? 0;
+        $poor += $npsDist[$i] ?? 0;
     }
 
     $stmt = $pdo->prepare(
@@ -149,9 +149,9 @@ try {
                 $summary["avg_nps"] !== null
                     ? (float) $summary["avg_nps"]
                     : null,
-            "promoters" => $promoters,
-            "passives" => $passives,
-            "detractors" => $detractors,
+            "poor" => $poor,
+            "good" => $good,
+            "excellent" => $excellent,
         ],
         "front_of_house" => [
             [

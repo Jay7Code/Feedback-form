@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($admin && password_verify($password, $admin["password"])) {
                 if ($admin["is_active"] == 1) {
                     $_SESSION["admin_logged_in"] = true;
+                    $_SESSION["show_welcome_modal"] = true;
                     $_SESSION["admin_id"] = $admin["id"];
                     $_SESSION["admin_username"] = $admin["username"];
                     $_SESSION["admin_full_name"] = $admin["full_name"];

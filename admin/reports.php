@@ -77,10 +77,18 @@ $_SESSION["admin_logged_in"] !== true
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { width: 32px; height: 32px; border: 3px solid rgba(201,169,110,0.2);
             border-top-color: #C9A96E; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        .nav-link { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
-        .nav-link:hover { background: rgba(201,169,110,0.08); color: rgba(255,255,255,0.7); }
-        .nav-link.active { background: rgba(201,169,110,0.12); color: #C9A96E; }
+        
+        .nav-link { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; color: rgba(255,255,255,0.7); }
+        .nav-link:hover { background: rgba(201,169,110,0.1); color: #ffffff; }
+        .nav-link.active { color: #C9A96E; }
+        
+        /* Hover transitions matching the official website */
+        nav.group:hover .nav-link { color: #1B3A2D; opacity: 0.7; }
+        nav.group:hover .nav-link:hover { background: rgba(201,169,110,0.1); opacity: 1; color: #1B3A2D; }
+        nav.group:hover .nav-link.active { background: rgba(201,169,110,0.15); opacity: 1; color: #b5893a; }
+        
+        .logo-img { filter: brightness(0) invert(1); transition: all 0.3s ease; }
+        nav.group:hover .logo-img { filter: none; }
 
         /* ═══ PRINT STYLES ═══ */
         @media print {
@@ -89,15 +97,16 @@ $_SESSION["admin_logged_in"] !== true
             nav, .no-print, footer, #controlsPanel { display: none !important; }
             .glass-card { border: 1px solid #ddd !important; backdrop-filter: none !important; box-shadow: none !important; }
             #reportContent { display: block !important; }
-            .print-header { display: block !important; text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #1B3A2D; }
-            .print-header h1 { font-family: 'Playfair Display', serif; font-size: 22pt; color: #1B3A2D !important; margin: 0; }
-            .print-header p { font-size: 9pt; color: #666 !important; margin: 4px 0; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 30px; border-bottom: none; }
+            .print-header img { height: 80px; margin: 0 auto 20px auto; display: block; }
+            .print-header h1 { font-family: 'Inter', sans-serif; font-size: 16pt; color: #1B3A2D !important; margin: 0 0 10px 0; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+            .print-header p { font-size: 10pt; color: #666 !important; margin: 4px 0; }
             .report-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
             .report-table th { background: #1B3A2D !important; color: #fff !important; padding: 8px 12px; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; }
             .report-table td { padding: 6px 12px; border-bottom: 1px solid #eee; font-size: pt; }
             .report-table tr:nth-child(even) td { background: #f9f9f9 !important; }
             .report-section { page-break-inside: avoid; margin-bottom: 20px; }
-            .report-section h3 { font-family: 'Playfair Display', serif; font-size: 13pt; color: #1B3A2D !important; border-bottom: 2px solid #C9A96E; padding-bottom: 8px; margin-bottom: 12px; text-align: center; font-weight: 700; }
+            .report-section h3 { font-family: 'Playfair Display', serif; font-size: 13pt; color: #1B3A2D !important; border-bottom: 2px solid #C9A96E; padding-bottom: 8px; margin-bottom: 12px; text-align: left; font-weight: 700; }
             .stat-box { display: inline-block; width: 23%; text-align: center; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 0 0.5%; }
             .stat-box .stat-val { font-size: 20pt; font-weight: 700; color: #1B3A2D !important; }
             .stat-box .stat-label { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: #999 !important; }
@@ -119,7 +128,7 @@ $_SESSION["admin_logged_in"] !== true
             .report-table td { padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 1rem; }
             .report-table tr:hover td { background: rgba(255,255,255,0.02); }
             .report-section h3 { font-family: 'Playfair Display', serif; color: #C9A96E; font-size: 1.3rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600;
-                border-bottom: 2px solid #C9A96E; border-image: linear-gradient(to right, rgba(201,169,110,0), rgba(201,169,110,1), rgba(201,169,110,0)) 1; padding-bottom: 12px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 10px rgba(201,169,110,0.2); }
+                border-bottom: 2px solid #C9A96E; border-image: linear-gradient(to right, rgba(201,169,110,1), rgba(201,169,110,0)) 1; padding-bottom: 12px; margin-bottom: 20px; text-align: left; text-shadow: 0 0 10px rgba(201,169,110,0.2); }
             .stat-box { text-align: center; padding: 16px; background: rgba(245,235,224,0.06); border: 1px solid rgba(201,169,110,0.12); border-radius: 12px; }
             .stat-box .stat-val { font-size: 1.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
             .stat-box .stat-label { font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(201,169,110,0.6); font-weight: 600; }
@@ -137,22 +146,22 @@ $_SESSION["admin_logged_in"] !== true
 <body class="font-sans text-white min-h-screen">
 
     <!-- ═══ TOP NAV BAR ═══ -->
-    <nav class="border-b border-white/[0.06] px-6 py-4 no-print">
+    <nav class="group bg-transparent hover:bg-white px-6 py-3 no-print relative z-10 border-b border-white/[0.06] hover:border-gold-400/20 transition-all duration-300 ease-in-out hover:shadow-md">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <h1 class="font-script text-[2.125rem] text-white/70">John Hay Hotels</h1>
-                <span class="text-[0.8rem] font-bold text-gold-400/80 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20">Admin</span>
+            <div class="flex items-center gap-6">
+                <img src="../img/logo.png" alt="John Hay Hotels Logo" class="logo-img h-16 sm:h-20 w-auto object-contain">
+                <span class="text-[0.8rem] font-bold text-white/70 group-hover:text-pine-900 uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-white/5 group-hover:bg-gold-400/20 border border-white/10 group-hover:border-gold-400/30 hidden sm:inline-block transition-colors duration-300">Admin Panel</span>
             </div>
-            <div class="flex items-center gap-2">
-                <a href="index.php" class="nav-link text-white/40">Dashboard</a>
-                <a href="analytics.php" class="nav-link text-white/40">Analytics</a>
+            <div class="flex items-center gap-1 sm:gap-2">
+                <a href="index.php" class="nav-link">Dashboard</a>
+                <a href="analytics.php" class="nav-link">Analytics</a>
                 <a href="reports.php" class="nav-link active">Reports</a>
-                <span class="text-white/10 mx-2">|</span>
-                <a href="logout.php" class="text-[1.125rem] text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5">
+                <span class="text-white/20 group-hover:text-pine-900/20 mx-1 sm:mx-2 transition-colors duration-300">|</span>
+                <a href="logout.php" class="text-[0.9rem] font-semibold text-white/50 hover:text-red-400 group-hover:text-red-600/80 group-hover:hover:text-red-700 group-hover:hover:bg-red-50 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                     </svg>
-                    Logout
+                    <span class="hidden sm:inline">Logout</span>
                 </a>
             </div>
         </div>
@@ -161,54 +170,61 @@ $_SESSION["admin_logged_in"] !== true
     <div class="max-w-7xl mx-auto px-6 py-8">
 
         <!-- ═══ CONTROLS PANEL ═══ -->
-      <div class="glass-card rounded-xl p-4 lg:p-5 mb-6 fade-up" style="animation-delay:0.1s">
-    <!-- 
-      1. flex-nowrap: Forces exactly one row
-      2. justify-between: Spreads everything nicely
-      3. items-end: Bottom aligns the buttons with the inputs
-      4. NO overflow-x-auto: No scrollbar
-    -->
-    <div class="flex flex-nowrap items-end justify-between w-full gap-2 lg:gap-3">
-        
-        <!-- 1. Quick Presets -->
-        <div class="flex flex-col flex-shrink min-w-0">
-            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">Quick Presets</label>
-            <div class="flex flex-nowrap gap-1 lg:gap-2" id="presetBtns">
-                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="today">Daily (Today)</button>
-                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="yesterday">Yesterday</button>
-                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="week">Weekly (7 Days)</button>
-                <button class="preset-btn whitespace-nowrap text-[0.7rem] lg:text-xs px-2 py-1.5 lg:px-3" data-preset="month">Monthly (30 Days)</button>
+      <div class="glass-card rounded-xl p-5 mb-6 fade-up" style="animation-delay:0.1s" id="controlsPanel">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+            
+            <!-- Left Side: Inputs -->
+            <div class="flex flex-wrap items-end gap-4">
+                <!-- 1. Quick Presets -->
+                <div class="flex flex-col" style="min-width: 150px;">
+                    <label class="block text-[0.7rem] font-bold text-gold-400/90 uppercase tracking-[0.1em] mb-2 whitespace-nowrap">Quick Presets</label>
+                    <div class="relative w-full">
+                        <select id="presetSelect" class="lodge-input w-full px-3 py-2 text-sm transition-colors cursor-pointer" style="appearance: none; padding-right: 2.5rem;">
+                            <option value="today" style="background: #0A1912; color: inherit;">Daily (Today)</option>
+                            <option value="yesterday" style="background: #0A1912; color: inherit;">Yesterday</option>
+                            <option value="week" style="background: #0A1912; color: inherit;">Weekly (7 Days)</option>
+                            <option value="month" style="background: #0A1912; color: inherit;">Monthly (30 Days)</option>
+                            <option value="custom" hidden style="background: #0A1912; color: inherit;">Custom Date</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gold-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Date From -->
+                <div class="flex flex-col" style="min-width: 140px;">
+                    <label class="block text-[0.7rem] font-bold text-gold-400/90 uppercase tracking-[0.1em] mb-2 whitespace-nowrap">From</label>
+                    <input type="date" id="dateFrom" class="lodge-input w-full px-3 py-2 text-sm transition-colors">
+                </div>
+
+                <!-- 3. Date To -->
+                <div class="flex flex-col" style="min-width: 140px;">
+                    <label class="block text-[0.7rem] font-bold text-gold-400/90 uppercase tracking-[0.1em] mb-2 whitespace-nowrap">To</label>
+                    <input type="date" id="dateTo" class="lodge-input w-full px-3 py-2 text-sm transition-colors">
+                </div>
             </div>
+
+            <!-- Right Side: Buttons -->
+            <div class="flex flex-wrap items-end gap-3 mt-2 lg:mt-0 lg:ml-auto">
+                <!-- 4. Generate Button -->
+                <button id="btnGenerate" class="px-5 py-2 rounded-lg font-bold text-[0.8rem] uppercase tracking-wider transition-all hover:scale-[1.02] active:scale-95" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912;box-shadow:0 4px 15px rgba(201,169,110,0.2);">
+                    Generate Report
+                </button>
+
+                <!-- 5. Print Button -->
+                <button id="btnPrint" class="px-5 py-2 rounded-lg font-bold text-[0.8rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/60 hover:bg-gold-400/10 transition-all flex items-center gap-2" style="visibility:hidden; opacity:0; pointer-events:none;">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                    </svg>
+                    Print Report
+                </button>
+            </div>
+            
         </div>
-
-        <!-- 2. Date From -->
-        <!-- flex-1 and w-full allows the input to squeeze dynamically rather than breaking layout -->
-        <div class="flex flex-col flex-1 min-w-[100px] max-w-[140px]">
-            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">From</label>
-            <input type="date" id="dateFrom" class="lodge-input w-full px-1.5 py-1.5 text-xs lg:text-sm">
-        </div>
-
-        <!-- 3. Date To -->
-        <div class="flex flex-col flex-1 min-w-[100px] max-w-[140px]">
-            <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.1em] mb-1.5 whitespace-nowrap">To</label>
-            <input type="date" id="dateTo" class="lodge-input w-full px-1.5 py-1.5 text-xs lg:text-sm">
-        </div>
-
-        <!-- 4. Generate Button -->
-        <button id="btnGenerate" class="flex-shrink-0 whitespace-nowrap px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-semibold text-[0.8rem] lg:text-[0.85rem] uppercase tracking-wider" style="background:linear-gradient(135deg,#C9A96E,#b5893a);color:#0A1912">
-            Generate Report
-        </button>
-
-        <!-- 5. Print Button -->
-        <button id="btnPrint" class="flex-shrink-0 whitespace-nowrap px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg font-semibold text-[0.8rem] lg:text-[0.85rem] uppercase tracking-wider border border-gold-400/30 text-gold-400/90 hover:text-gold-400 hover:border-gold-400/50 transition-colors flex items-center gap-1.5" style="visibility:hidden; opacity:0; pointer-events:none;">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
-            </svg>
-            Print Report
-        </button>
-        
     </div>
-</div>
         <!-- ═══ LOADING ═══ -->
         <div id="loadingReport" class="no-print text-center py-16" style="display:none">
             <div class="spinner mx-auto mb-4"></div>
@@ -307,15 +323,16 @@ $_SESSION["admin_logged_in"] !== true
             dateTo.value = to;
         }
 
-        // ─── Preset buttons ───
-        document.getElementById('presetBtns').addEventListener('click', function(e) {
-            var btn = e.target.closest('.preset-btn');
-            if (!btn) return;
-            document.querySelectorAll('.preset-btn').forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            setPreset(btn.dataset.preset);
+        // ─── Preset select ───
+        document.getElementById('presetSelect').addEventListener('change', function(e) {
+            var preset = e.target.value;
+            if (preset === 'custom') return;
+            setPreset(preset);
             generateReport(dateFrom.value, dateTo.value);
         });
+
+        dateFrom.addEventListener('change', function() { document.getElementById('presetSelect').value = 'custom'; });
+        dateTo.addEventListener('change', function() { document.getElementById('presetSelect').value = 'custom'; });
 
         // ─── Generate report ───
         btnGenerate.addEventListener('click', function() {
@@ -408,10 +425,10 @@ $_SESSION["admin_logged_in"] !== true
 
             // ── Print Header (visible only in print) ──
             html += '<div class="print-header">';
-            html += '<h1>John Hay Hotels — Forest Wing</h1>';
-            html += '<p>Guest Feedback Summary Report</p>';
-            html += '<p><strong>' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</strong></p>';
-            html += '<p style="font-size:7pt;color:#aaa">Generated: ' + generatedAt + '</p>';
+            html += '<img src="../img/logo.png" alt="John Hay Hotels Logo">';
+            html += '<h1>Guest Feedback Summary Report</h1>';
+            html += '<p>Report Generated on: ' + generatedAt + '</p>';
+            html += '<p>Period: ' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</p>';
             html += '</div>';
 
             // ── Screen title ──
@@ -419,7 +436,6 @@ $_SESSION["admin_logged_in"] !== true
             html += '<div class="flex items-center justify-between">';
             html += '<div>';
             html += '<h3 class="font-serif text-[1.5rem] text-white/80 tracking-wide">Report: ' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</h3>';
-            html += '<p class="text-white/20 text-[1rem] mt-1">Generated: ' + generatedAt + '</p>';
             html += '</div></div></div>';
 
             // ── Summary Stats ──
@@ -428,8 +444,9 @@ $_SESSION["admin_logged_in"] !== true
             html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">';
             html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val">' + (s.total_responses || 0) + '</div><div class="stat-label">Total Responses</div></div>';
             html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val">' + (s.avg_nps !== null ? s.avg_nps : '—') + '<span style="font-size:0.6em;opacity:0.4">/10</span></div><div class="stat-label">Avg. Satisfaction</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.promoters > 0 ? 'score-excellent' : '') + '">' + (s.promoters || 0) + '</div><div class="stat-label">Promoters (9-10)</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.detractors > 0 ? 'score-poor' : '') + '">' + (s.detractors || 0) + '</div><div class="stat-label">Detractors (1-6)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.poor > 0 ? 'score-poor' : '') + '">' + (s.poor || 0) + '</div><div class="stat-label">Poor (1-6)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.good > 0 ? 'score-good' : '') + '">' + (s.good || 0) + '</div><div class="stat-label">Good (7-8)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.excellent > 0 ? 'score-excellent' : '') + '">' + (s.excellent || 0) + '</div><div class="stat-label">Excellent (9-10)</div></div>';
             html += '</div></div>';
 
             // ── NPS Distribution ──
@@ -646,9 +663,11 @@ $_SESSION["admin_logged_in"] !== true
 
         // ─── Auto-load Daily Report on init ───
         document.addEventListener("DOMContentLoaded", function() {
-            var todayBtn = document.querySelector('.preset-btn[data-preset="today"]');
-            if (todayBtn) {
-                todayBtn.click();
+            var presetSelect = document.getElementById('presetSelect');
+            if (presetSelect) {
+                presetSelect.value = 'today';
+                setPreset('today');
+                generateReport(dateFrom.value, dateTo.value);
             }
         });
 
