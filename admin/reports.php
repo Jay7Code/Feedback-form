@@ -118,6 +118,8 @@ $_SESSION["admin_logged_in"] !== true
             .comment-card .comment-text { font-size: 9pt; font-style: italic; color: #333 !important; margin-top: 4px; }
             .comment-page { display: block !important; }
             .print-footer { text-align: center; font-size: 7pt; color: #aaa !important; margin-top: 30px; padding-top: 10px; border-top: 1px solid #eee; }
+            .print-only-table { display: block !important; margin-top: 10px; }
+            #reportModal { display: none !important; }
         }
 
         /* ═══ SCREEN-ONLY REPORT STYLES ═══ */
@@ -140,6 +142,15 @@ $_SESSION["admin_logged_in"] !== true
             .comment-card .guest-info { font-size: 0.65rem; color: rgba(201,169,110,0.5); }
             .comment-card .comment-text { font-size: 1rem; font-style: italic; color: rgba(255,255,255,0.5); margin-top: 4px; }
             .print-footer { display: none; }
+            .print-only-table { display: none; }
+            
+            /* Modal Styles */
+            .modal-backdrop { position: fixed; inset: 0; background: rgba(10,25,18,0.85); backdrop-filter: blur(5px); z-index: 9999; display: flex; justify-content: center; align-items: flex-start; opacity: 0; pointer-events: none; transition: all 0.3s ease; padding: 3rem 1rem; overflow-y: auto; }
+            .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+            .modal-container { background: #0A1912; border: 1px solid rgba(201,169,110,0.2); border-radius: 12px; width: 100%; max-width: 800px; transform: translateY(-20px) scale(0.95); transition: all 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); display: flex; flex-direction: column; }
+            .modal-backdrop.active .modal-container { transform: translateY(0) scale(1); }
+            .modal-header { padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; }
+            .modal-body { padding: 24px; }
         }
     </style>
 </head>
@@ -251,6 +262,21 @@ $_SESSION["admin_logged_in"] !== true
     <footer class="text-center py-6 border-t border-white/[0.04] mt-8 no-print">
         <p class="text-gold-400/100 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
+
+    <!-- ═══ DATA MODAL ═══ -->
+    <div id="reportModal" class="modal-backdrop no-print">
+        <div class="modal-container text-white">
+            <div class="modal-header">
+                <h3 id="modalTitle" class="font-serif text-[1.4rem] text-gold-400 tracking-wider">Details</h3>
+                <button type="button" id="closeModalBtn" class="text-white/40 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modalContent" class="modal-body overflow-x-auto">
+                <!-- Data injected here -->
+            </div>
+        </div>
+    </div>
 
     <script>
     (function() {
@@ -437,6 +463,19 @@ $_SESSION["admin_logged_in"] !== true
             html += '<div>';
             html += '<h3 class="font-serif text-[1.5rem] text-white/80 tracking-wide">Report: ' + displayDate(data.date_from) + ' — ' + displayDate(data.date_to) + '</h3>';
             html += '</div></div></div>';
+            
+            // ── Modal Section Helper ──
+            function buildModalSection(title, desc, tblHtml) {
+                var sHtml = '<div class="report-section">';
+                sHtml += '<h3>' + title + '</h3>';
+                sHtml += '<div class="no-print stat-box" style="padding:16px 20px; text-align:left; background: rgba(245,235,224,0.03); display:flex; justify-content:space-between; align-items:center;">';
+                sHtml += '<div><div style="font-size:1rem;color:rgba(255,255,255,0.85);font-weight:600;">Detailed Breakdown</div><div style="font-size:0.8rem;color:rgba(255,255,255,0.4); margin-top:2px;">' + desc + '</div></div>';
+                sHtml += '<button type="button" class="btn-open-modal px-4 py-2 rounded bg-gold-400/10 hover:bg-gold-400/20 border border-gold-400/20 text-gold-400 text-[0.75rem] uppercase tracking-wider font-bold transition-transform active:scale-95" data-title="' + escapeHtml(title) + '" data-content="' + encodeURIComponent(tblHtml) + '">View Details</button>';
+                sHtml += '</div>';
+                sHtml += '<div class="print-only-table">' + tblHtml + '</div>';
+                sHtml += '</div>';
+                return sHtml;
+            }
 
             // ── Summary Stats ──
             html += '<div class="report-section">';
@@ -483,66 +522,61 @@ $_SESSION["admin_logged_in"] !== true
 
 
             // ── Front of House ──
-            html += '<div class="report-section">';
-            html += '<h3>Front of House Ratings</h3>';
-            html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            var fohTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
             (data.front_of_house || []).forEach(function(item) {
                 var cls = scoreClass(item.avg, 10);
-                html += '<tr><td>' + item.label + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
+                fohTable += '<tr><td>' + item.label + '</td>';
+                fohTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
+                fohTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
             });
-            html += '</tbody></table></div>';
+            fohTable += '</tbody></table>';
+            html += buildModalSection('Front of House Ratings', 'Analyze scores for check-in process, receptionist friendliness, and bell service.', fohTable);
 
             // ── Food & Beverage ──
-            html += '<div class="report-section">';
-            html += '<h3>Food &amp; Beverage Ratings</h3>';
-            html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            var fnbTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
             (data.food_beverage || []).forEach(function(item) {
                 var cls = scoreClass(item.avg, 10);
-                html += '<tr><td>' + item.label + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
-                html += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
+                fnbTable += '<tr><td>' + item.label + '</td>';
+                fnbTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
+                fnbTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
             });
-            html += '</tbody></table></div>';
+            fnbTable += '</tbody></table>';
+            html += buildModalSection('Food &amp; Beverage Ratings', 'View guest ratings for restaurant quality, room service, and bar experience.', fnbTable);
 
             // ── Purpose of Stay ──
             if (data.purpose_breakdown && data.purpose_breakdown.length > 0) {
-                html += '<div class="report-section">';
-                html += '<h3>Purpose of Stay</h3>';
-                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Purpose</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
+                var purpTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Purpose</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
                 var totalPurpose = 0;
                 data.purpose_breakdown.forEach(function(p) { totalPurpose += parseInt(p.count); });
                 data.purpose_breakdown.forEach(function(p) {
                     var pct = totalPurpose > 0 ? ((parseInt(p.count) / totalPurpose) * 100).toFixed(1) : 0;
-                    html += '<tr><td>' + p.purpose + '</td><td style="text-align:center">' + p.count + '</td><td style="text-align:center">' + pct + '%</td></tr>';
+                    purpTable += '<tr><td>' + p.purpose + '</td><td style="text-align:center">' + p.count + '</td><td style="text-align:center">' + pct + '%</td></tr>';
                 });
-                html += '</tbody></table></div>';
+                purpTable += '</tbody></table>';
+                html += buildModalSection('Purpose of Stay', 'Explore why guests are visiting John Hay Hotels.', purpTable);
             }
 
             // ── Nationality Breakdown ──
             if (data.nationality_breakdown && data.nationality_breakdown.length > 0) {
-                html += '<div class="report-section">';
-                html += '<h3>Nationality Distribution</h3>';
-                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Nationality</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
+                var natTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Nationality</th><th style="text-align:center">Count</th><th style="text-align:center">Percentage</th></tr></thead><tbody>';
                 var totalNation = 0;
                 data.nationality_breakdown.forEach(function(n) { totalNation += parseInt(n.count); });
                 data.nationality_breakdown.forEach(function(n) {
                     var pct = totalNation > 0 ? ((parseInt(n.count) / totalNation) * 100).toFixed(1) : 0;
-                    html += '<tr><td>' + n.nation + '</td><td style="text-align:center">' + n.count + '</td><td style="text-align:center">' + pct + '%</td></tr>';
+                    natTable += '<tr><td>' + n.nation + '</td><td style="text-align:center">' + n.count + '</td><td style="text-align:center">' + pct + '%</td></tr>';
                 });
-                html += '</tbody></table></div>';
+                natTable += '</tbody></table>';
+                html += buildModalSection('Nationality Distribution', 'Analyze the demographic origins of the feedback respondents.', natTable);
             }
 
             // ── Guest Type ──
             if (data.first_stay && data.first_stay.length > 0) {
-                html += '<div class="report-section">';
-                html += '<h3>Guest Type</h3>';
-                html += '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Type</th><th style="text-align:center">Count</th><th></th></tr></thead><tbody>';
+                var gstTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Type</th><th style="text-align:center">Count</th><th></th></tr></thead><tbody>';
                 data.first_stay.forEach(function(fs) {
-                    html += '<tr><td>' + fs.type + '</td><td style="text-align:center">' + fs.count + '</td><td></td></tr>';
+                    gstTable += '<tr><td>' + fs.type + '</td><td style="text-align:center">' + fs.count + '</td><td></td></tr>';
                 });
-                html += '</tbody></table></div>';
+                gstTable += '</tbody></table>';
+                html += buildModalSection('Guest Type', 'See the ratio of first-time vs returning guests.', gstTable);
             }
 
             // ── Daily Breakdown ──
@@ -624,7 +658,38 @@ $_SESSION["admin_logged_in"] !== true
             html += '</div>';
 
             reportContent.innerHTML = html;
+            
+            // ── Bind Modal Events ──
+            var modal = document.getElementById('reportModal');
+            var modalTitle = document.getElementById('modalTitle');
+            var modalContent = document.getElementById('modalContent');
+            var closeBtn = document.getElementById('closeModalBtn');
+            
+            function openModal(title, content) {
+                modalTitle.innerHTML = title;
+                modalContent.innerHTML = content;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            closeBtn.onclick = closeModal;
+            modal.onclick = function(e) {
+                if (e.target === modal) closeModal();
+            };
+            
+            var openBtns = document.querySelectorAll('.btn-open-modal');
+            openBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    openModal(this.getAttribute('data-title'), decodeURIComponent(this.getAttribute('data-content')));
+                });
+            });
 
+            // ── Comments Pagination Logic ──
             if (typeof totalPages !== 'undefined' && totalPages > 1) {
                 var currentPage = 1;
                 var btnPrev = document.getElementById('btn-prev-comments');
