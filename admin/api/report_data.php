@@ -29,7 +29,7 @@ if (empty($dateFrom) || empty($dateTo)) {
 $dateFrom = preg_replace("/[^0-9\-]/", "", $dateFrom);
 $dateTo = preg_replace("/[^0-9\-]/", "", $dateTo);
 $dateFilter =
-    "WHERE DATE(created_at) >= :date_from AND DATE(created_at) <= :date_to";
+    "WHERE DATE(f.created_at) >= :date_from AND DATE(f.created_at) <= :date_to";
 $params = [":date_from" => $dateFrom, ":date_to" => $dateTo];
 
 function toTenScale($val)
@@ -40,29 +40,32 @@ function toTenScale($val)
 
 try {
     $stmt = $pdo->prepare("SELECT COUNT(*) as total_responses, ROUND(AVG(overall_rating),2) as avg_nps,
-        ROUND(AVG(CASE WHEN frontdesk>0 THEN frontdesk END),2) as avg_frontdesk,
-        ROUND(AVG(CASE WHEN reservations>0 THEN reservations END),2) as avg_reservations,
-        ROUND(AVG(CASE WHEN telephone_operator>0 THEN telephone_operator END),2) as avg_telephone,
-        ROUND(AVG(CASE WHEN valet>0 THEN valet END),2) as avg_valet,
-        ROUND(AVG(CASE WHEN housekeeping>0 THEN housekeeping END),2) as avg_housekeeping,
-        ROUND(AVG(CASE WHEN accommodation>0 THEN accommodation END),2) as avg_accommodation,
-        ROUND(AVG(CASE WHEN safety>0 THEN safety END),2) as avg_safety,
-        ROUND(AVG(CASE WHEN security>0 THEN security END),2) as avg_security,
-        ROUND(AVG(CASE WHEN overall_service>0 THEN overall_service END),2) as avg_overall_service,
-        ROUND(AVG(CASE WHEN food_quality>0 THEN food_quality END),2) as avg_food_quality,
-        ROUND(AVG(CASE WHEN serving_time>0 THEN serving_time END),2) as avg_serving_time,
-        ROUND(AVG(CASE WHEN wait_staff>0 THEN wait_staff END),2) as avg_wait_staff,
-        ROUND(AVG(CASE WHEN grooming>0 THEN grooming END),2) as avg_grooming,
-        ROUND(AVG(CASE WHEN behavior>0 THEN behavior END),2) as avg_behavior,
-        ROUND(AVG(CASE WHEN fnb_service>0 THEN fnb_service END),2) as avg_fnb_service,
-        ROUND(AVG(CASE WHEN bar>0 THEN bar END),2) as avg_bar,
-        ROUND(AVG(CASE WHEN bartender>0 THEN bartender END),2) as avg_bartender
-        FROM feedbacks $dateFilter");
+        ROUND(AVG(CASE WHEN foh.frontdesk>0 THEN foh.frontdesk END),2) as avg_frontdesk,
+        ROUND(AVG(CASE WHEN foh.reservations>0 THEN foh.reservations END),2) as avg_reservations,
+        ROUND(AVG(CASE WHEN foh.telephone_operator>0 THEN foh.telephone_operator END),2) as avg_telephone,
+        ROUND(AVG(CASE WHEN foh.valet>0 THEN foh.valet END),2) as avg_valet,
+        ROUND(AVG(CASE WHEN foh.housekeeping>0 THEN foh.housekeeping END),2) as avg_housekeeping,
+        ROUND(AVG(CASE WHEN foh.accommodation>0 THEN foh.accommodation END),2) as avg_accommodation,
+        ROUND(AVG(CASE WHEN foh.safety>0 THEN foh.safety END),2) as avg_safety,
+        ROUND(AVG(CASE WHEN foh.security>0 THEN foh.security END),2) as avg_security,
+        ROUND(AVG(CASE WHEN foh.overall_service>0 THEN foh.overall_service END),2) as avg_overall_service,
+        ROUND(AVG(CASE WHEN fnb.food_quality>0 THEN fnb.food_quality END),2) as avg_food_quality,
+        ROUND(AVG(CASE WHEN fnb.serving_time>0 THEN fnb.serving_time END),2) as avg_serving_time,
+        ROUND(AVG(CASE WHEN fnb.wait_staff>0 THEN fnb.wait_staff END),2) as avg_wait_staff,
+        ROUND(AVG(CASE WHEN fnb.grooming>0 THEN fnb.grooming END),2) as avg_grooming,
+        ROUND(AVG(CASE WHEN fnb.behavior>0 THEN fnb.behavior END),2) as avg_behavior,
+        ROUND(AVG(CASE WHEN fnb.fnb_service>0 THEN fnb.fnb_service END),2) as avg_fnb_service,
+        ROUND(AVG(CASE WHEN fnb.bar>0 THEN fnb.bar END),2) as avg_bar,
+        ROUND(AVG(CASE WHEN fnb.bartender>0 THEN fnb.bartender END),2) as avg_bartender
+        FROM feedbacks f 
+        LEFT JOIN feedback_foh foh ON f.id=foh.feedback_id 
+        LEFT JOIN feedback_fnb fnb ON f.id=fnb.feedback_id 
+        $dateFilter");
     $stmt->execute($params);
     $summary = $stmt->fetch();
 
     $stmt = $pdo->prepare(
-        "SELECT overall_rating as rating, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY overall_rating ORDER BY overall_rating",
+        "SELECT f.overall_rating as rating, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY f.overall_rating ORDER BY f.overall_rating",
     );
     $stmt->execute($params);
     $npsDist = [];
@@ -82,60 +85,37 @@ try {
     }
 
     $stmt = $pdo->prepare(
-        "SELECT CASE WHEN purpose_of_stay='' OR purpose_of_stay IS NULL THEN 'Not Specified' ELSE purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY purpose ORDER BY count DESC",
+        "SELECT CASE WHEN s.purpose_of_stay='' OR s.purpose_of_stay IS NULL THEN 'Not Specified' ELSE s.purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY purpose ORDER BY count DESC",
     );
     $stmt->execute($params);
     $purposeBreakdown = $stmt->fetchAll();
 
     $stmt = $pdo->prepare(
-        "SELECT CASE WHEN first_stay='Yes' THEN 'First Stay' WHEN first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY type ORDER BY count DESC",
+        "SELECT CASE WHEN s.first_stay='Yes' THEN 'First Stay' WHEN s.first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY type ORDER BY count DESC",
     );
     $stmt->execute($params);
     $firstStayData = $stmt->fetchAll();
 
     $stmt = $pdo->prepare(
-        "SELECT CASE WHEN nationality='' OR nationality IS NULL THEN 'Not Specified' ELSE nationality END as nation, COUNT(*) as count FROM feedbacks $dateFilter GROUP BY nation ORDER BY count DESC",
+        "SELECT CASE WHEN g.nationality='' OR g.nationality IS NULL THEN 'Not Specified' ELSE g.nationality END as nation, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id JOIN guests g ON s.guest_id=g.id $dateFilter GROUP BY nation ORDER BY count DESC",
     );
     $stmt->execute($params);
     $nationalityBreakdown = $stmt->fetchAll();
 
     $stmt = $pdo->prepare(
-        "SELECT guest_name, room_no, overall_rating, frontdesk_comments, fnb_comments, suggestions_future, other_comments, helpful_staff_names, created_at FROM feedbacks $dateFilter ORDER BY created_at DESC LIMIT 20",
+        "SELECT g.guest_name, s.room_no, f.overall_rating, foh.frontdesk_comments, fnb.fnb_comments, f.suggestions_future, f.other_comments, (SELECT GROUP_CONCAT(staff_name SEPARATOR ', ') FROM feedback_helpful_staff WHERE feedback_id=f.id) as helpful_staff_names, f.created_at FROM feedbacks f JOIN stays s ON f.stay_id=s.id JOIN guests g ON s.guest_id=g.id LEFT JOIN feedback_foh foh ON f.id=foh.feedback_id LEFT JOIN feedback_fnb fnb ON f.id=fnb.feedback_id $dateFilter ORDER BY f.created_at DESC LIMIT 20",
     );
     $stmt->execute($params);
     $comments = $stmt->fetchAll();
 
     $stmt = $pdo->prepare(
-        "SELECT helpful_staff_names FROM feedbacks $dateFilter",
+        "SELECT h.staff_name as name, COUNT(*) as count FROM feedback_helpful_staff h JOIN feedbacks f ON h.feedback_id=f.id $dateFilter GROUP BY h.staff_name ORDER BY count DESC LIMIT 10",
     );
     $stmt->execute($params);
-    $staffCounts = [];
-    while ($row = $stmt->fetch()) {
-        $raw = trim($row["helpful_staff_names"] ?? "");
-        if ($raw !== "") {
-            $parts = preg_split("/(,|\band\b|&)/i", $raw);
-            foreach ($parts as $part) {
-                $part = trim($part);
-                if ($part !== "") {
-                    $key = strtolower($part);
-                    if (!isset($staffCounts[$key])) {
-                        $staffCounts[$key] = [
-                            "name" => ucwords($part),
-                            "count" => 0,
-                        ];
-                    }
-                    $staffCounts[$key]["count"]++;
-                }
-            }
-        }
-    }
-    usort($staffCounts, function ($a, $b) {
-        return $b["count"] <=> $a["count"];
-    });
-    $recognizedStaff = array_slice($staffCounts, 0, 10);
+    $recognizedStaff = $stmt->fetchAll();
 
     $stmt = $pdo->prepare(
-        "SELECT DATE(created_at) as date, COUNT(*) as count, ROUND(AVG(overall_rating),1) as avg_rating FROM feedbacks $dateFilter GROUP BY DATE(created_at) ORDER BY date",
+        "SELECT DATE(f.created_at) as date, COUNT(*) as count, ROUND(AVG(f.overall_rating),1) as avg_rating FROM feedbacks f $dateFilter GROUP BY DATE(f.created_at) ORDER BY date",
     );
     $stmt->execute($params);
     $dailyBreakdown = $stmt->fetchAll();

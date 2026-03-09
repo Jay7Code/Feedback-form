@@ -21,15 +21,26 @@ $pdo = getDBConnection();
 
 // ─── Handle CSV Export ───
 if (isset($_GET["export"]) && $_GET["export"] === "csv") {
-    $stmt = $pdo->query("SELECT * FROM feedbacks ORDER BY created_at DESC");
-    $rows = $stmt->fetchAll();
+    $csvQuery = "SELECT 
+        f.id AS Feedback_ID, f.created_at AS Date_Submitted,
+        g.guest_name AS Guest_Name, g.email AS Email, g.contact_no AS Contact, g.address AS Address, g.nationality AS Nationality,
+        s.room_no AS Room, s.check_in AS Check_In, s.check_out AS Check_Out, s.first_stay AS First_Stay, s.purpose_of_stay AS Purpose,
+        f.overall_rating AS Overall_Rating,
+        foh.frontdesk AS FOH_Frontdesk, foh.reservations AS FOH_Reservations, foh.telephone_operator AS FOH_Telephone, foh.valet AS FOH_Valet, foh.housekeeping AS FOH_Housekeeping, foh.accommodation AS FOH_Accommodation, foh.safety AS FOH_Safety, foh.security AS FOH_Security, foh.overall_service AS FOH_Service, foh.frontdesk_comments AS FOH_Comments,
+        fnb.food_quality AS FNB_Food, fnb.serving_time AS FNB_Serving, fnb.wait_staff AS FNB_Staff, fnb.grooming AS FNB_Grooming, fnb.behavior AS FNB_Behavior, fnb.fnb_service AS FNB_Service, fnb.bar AS FNB_Bar, fnb.bartender AS FNB_Bartender, fnb.fnb_comments AS FNB_Comments,
+        f.suggestions_future AS Suggestions, f.other_comments AS Comments
+    FROM feedbacks f
+    JOIN stays s ON f.stay_id = s.id
+    JOIN guests g ON s.guest_id = g.id
+    LEFT JOIN feedback_foh foh ON f.id = foh.feedback_id
+    LEFT JOIN feedback_fnb fnb ON f.id = fnb.feedback_id
+    ORDER BY f.created_at DESC";
+    
+    $stmt = $pdo->query($csvQuery);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Ensure associative array
 
     header("Content-Type: text/csv");
-    header(
-        'Content-Disposition: attachment; filename="feedback_export_' .
-            date("Y-m-d") .
-            '.csv"',
-    );
+    header('Content-Disposition: attachment; filename="feedback_export_' . date("Y-m-d") . '.csv"');
 
     $output = fopen("php://output", "w");
     if (!empty($rows)) {
@@ -47,20 +58,19 @@ $where = [];
 $params = [];
 
 if (!empty($_GET["date_from"])) {
-    $where[] = "DATE(created_at) >= :date_from";
+    $where[] = "DATE(f.created_at) >= :date_from";
     $params[":date_from"] = $_GET["date_from"];
 }
 if (!empty($_GET["date_to"])) {
-    $where[] = "DATE(created_at) <= :date_to";
+    $where[] = "DATE(f.created_at) <= :date_to";
     $params[":date_to"] = $_GET["date_to"];
 }
 if (!empty($_GET["room"])) {
-    $where[] = "room_no = :room";
+    $where[] = "s.room_no = :room";
     $params[":room"] = $_GET["room"];
 }
 if (!empty($_GET["search"])) {
-    $where[] =
-        "(guest_name LIKE :search OR email LIKE :search2 OR room_no LIKE :search3)";
+    $where[] = "(g.guest_name LIKE :search OR g.email LIKE :search2 OR s.room_no LIKE :search3)";
     $params[":search"] = "%" . $_GET["search"] . "%";
     $params[":search2"] = "%" . $_GET["search"] . "%";
     $params[":search3"] = "%" . $_GET["search"] . "%";
@@ -68,18 +78,20 @@ if (!empty($_GET["search"])) {
 
 $whereSQL = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
 
+$joinSQL = "FROM feedbacks f JOIN stays s ON f.stay_id = s.id JOIN guests g ON s.guest_id = g.id";
+
 // ─── Stats ───
-$totalStmt = $pdo->prepare("SELECT COUNT(*) FROM feedbacks $whereSQL");
+$totalStmt = $pdo->prepare("SELECT COUNT(f.id) $joinSQL $whereSQL");
 $totalStmt->execute($params);
 $totalCount = $totalStmt->fetchColumn();
 
 $avgStmt = $pdo->prepare(
-    "SELECT ROUND(AVG(overall_rating), 1) FROM feedbacks $whereSQL",
+    "SELECT ROUND(AVG(f.overall_rating), 1) $joinSQL $whereSQL",
 );
 $avgStmt->execute($params);
 $avgRating = $avgStmt->fetchColumn() ?: "—";
 
-$latestStmt = $pdo->prepare("SELECT MAX(created_at) FROM feedbacks $whereSQL");
+$latestStmt = $pdo->prepare("SELECT MAX(f.created_at) $joinSQL $whereSQL");
 $latestStmt->execute($params);
 $latestDate = $latestStmt->fetchColumn();
 $latestFormatted = $latestDate ? date("M d, Y", strtotime($latestDate)) : "—";
@@ -92,7 +104,9 @@ $totalPages = ceil($totalCount / $limit);
 
 // ─── Feedback list ───
 $listStmt = $pdo->prepare(
-    "SELECT id, guest_name, room_no, overall_rating, purpose_of_stay, check_in, check_out, created_at FROM feedbacks $whereSQL ORDER BY created_at DESC LIMIT $offset, $limit",
+    "SELECT f.id, g.guest_name, s.room_no, f.overall_rating, s.purpose_of_stay, s.check_in, s.check_out, f.created_at 
+     $joinSQL $whereSQL 
+     ORDER BY f.created_at DESC LIMIT $offset, $limit",
 );
 $listStmt->execute($params);
 $feedbacks = $listStmt->fetchAll();

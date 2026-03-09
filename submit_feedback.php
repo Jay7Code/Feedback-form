@@ -69,22 +69,106 @@ $data = [
 $success = false;
 
 try {
-    $sql = "INSERT INTO feedbacks (
-        frontdesk, reservations, telephone_operator, valet, housekeeping, accommodation, safety, security, overall_service, frontdesk_comments,
-        food_quality, serving_time, wait_staff, grooming, behavior, fnb_service, bar, bartender, fnb_comments, helpful_staff_names,
-        overall_rating, suggestions_future, other_comments,
-        first_stay, purpose_of_stay, other_purpose_text, nationality, other_nationality_text, guest_name, email, address, contact_no, room_no, check_in, check_out
-    ) VALUES (
-        :frontdesk, :reservations, :telephone_operator, :valet, :housekeeping, :accommodation, :safety, :security, :overall_service, :frontdesk_comments,
-        :food_quality, :serving_time, :wait_staff, :grooming, :behavior, :fnb_service, :bar, :bartender, :fnb_comments, :helpful_staff_names,
-        :overall_rating, :suggestions_future, :other_comments,
-        :first_stay, :purpose_of_stay, :other_purpose_text, :nationality, :other_nationality_text, :guest_name, :email, :address, :contact_no, :room_no, :check_in, :check_out
-    )";
+    $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare($sql);
-    $success = $stmt->execute($data);
+    // 1. Insert into guests table
+    $sqlGuest = "INSERT INTO guests (guest_name, email, address, contact_no, nationality, other_nationality_text)
+                 VALUES (:guest_name, :email, :address, :contact_no, :nationality, :other_nationality_text)";
+    $stmtGuest = $pdo->prepare($sqlGuest);
+    $stmtGuest->execute([
+        ":guest_name" => $data["guest_name"],
+        ":email" => $data["email"],
+        ":address" => $data["address"],
+        ":contact_no" => $data["contact_no"],
+        ":nationality" => $data["nationality"],
+        ":other_nationality_text" => $data["other_nationality_text"],
+    ]);
+    $guest_id = $pdo->lastInsertId();
+
+    // 2. Insert into stays table
+    $sqlStay = "INSERT INTO stays (guest_id, room_no, check_in, check_out, first_stay, purpose_of_stay, other_purpose_text)
+                VALUES (:guest_id, :room_no, :check_in, :check_out, :first_stay, :purpose_of_stay, :other_purpose_text)";
+    $stmtStay = $pdo->prepare($sqlStay);
+    $stmtStay->execute([
+        ":guest_id" => $guest_id,
+        ":room_no" => $data["room_no"],
+        ":check_in" => $data["check_in"],
+        ":check_out" => $data["check_out"],
+        ":first_stay" => $data["first_stay"],
+        ":purpose_of_stay" => $data["purpose_of_stay"],
+        ":other_purpose_text" => $data["other_purpose_text"],
+    ]);
+    $stay_id = $pdo->lastInsertId();
+
+    // 3. Insert into feedbacks table
+    $sqlFeedback = "INSERT INTO feedbacks (stay_id, overall_rating, suggestions_future, other_comments)
+                    VALUES (:stay_id, :overall_rating, :suggestions_future, :other_comments)";
+    $stmtFeedback = $pdo->prepare($sqlFeedback);
+    $stmtFeedback->execute([
+        ":stay_id" => $stay_id,
+        ":overall_rating" => $data["overall_rating"],
+        ":suggestions_future" => $data["suggestions_future"],
+        ":other_comments" => $data["other_comments"],
+    ]);
+    $feedback_id = $pdo->lastInsertId();
+
+    // 4. Insert into feedback_foh
+    $sqlFOH = "INSERT INTO feedback_foh (feedback_id, frontdesk, reservations, telephone_operator, valet, housekeeping, accommodation, safety, security, overall_service, frontdesk_comments)
+               VALUES (:feedback_id, :frontdesk, :reservations, :telephone_operator, :valet, :housekeeping, :accommodation, :safety, :security, :overall_service, :frontdesk_comments)";
+    $stmtFOH = $pdo->prepare($sqlFOH);
+    $stmtFOH->execute([
+        ":feedback_id" => $feedback_id,
+        ":frontdesk" => $data["frontdesk"],
+        ":reservations" => $data["reservations"],
+        ":telephone_operator" => $data["telephone_operator"],
+        ":valet" => $data["valet"],
+        ":housekeeping" => $data["housekeeping"],
+        ":accommodation" => $data["accommodation"],
+        ":safety" => $data["safety"],
+        ":security" => $data["security"],
+        ":overall_service" => $data["overall_service"],
+        ":frontdesk_comments" => $data["frontdesk_comments"],
+    ]);
+
+    // 5. Insert into feedback_fnb
+    $sqlFNB = "INSERT INTO feedback_fnb (feedback_id, food_quality, serving_time, wait_staff, grooming, behavior, fnb_service, bar, bartender, fnb_comments)
+               VALUES (:feedback_id, :food_quality, :serving_time, :wait_staff, :grooming, :behavior, :fnb_service, :bar, :bartender, :fnb_comments)";
+    $stmtFNB = $pdo->prepare($sqlFNB);
+    $stmtFNB->execute([
+        ":feedback_id" => $feedback_id,
+        ":food_quality" => $data["food_quality"],
+        ":serving_time" => $data["serving_time"],
+        ":wait_staff" => $data["wait_staff"],
+        ":grooming" => $data["grooming"],
+        ":behavior" => $data["behavior"],
+        ":fnb_service" => $data["fnb_service"],
+        ":bar" => $data["bar"],
+        ":bartender" => $data["bartender"],
+        ":fnb_comments" => $data["fnb_comments"],
+    ]);
+
+    // 6. Handle helpful staff names (1NF normalization)
+    if (!empty($data["helpful_staff_names"])) {
+        $staffNames = array_map('trim', explode(",", $data["helpful_staff_names"]));
+        $sqlStaff = "INSERT INTO feedback_helpful_staff (feedback_id, staff_name) VALUES (:feedback_id, :staff_name)";
+        $stmtStaff = $pdo->prepare($sqlStaff);
+        foreach ($staffNames as $name) {
+            if (!empty($name)) {
+                $stmtStaff->execute([
+                    ":feedback_id" => $feedback_id,
+                    ":staff_name" => $name,
+                ]);
+            }
+        }
+    }
+
+    $pdo->commit();
+    $success = true;
 } catch (PDOException $e) {
-    error_log("Failed to insert feedback: " . $e->getMessage());
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    error_log("Failed to insert normalized feedback: " . $e->getMessage());
 }
 ?>
 <!DOCTYPE html>

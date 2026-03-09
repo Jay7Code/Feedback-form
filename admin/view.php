@@ -26,7 +26,18 @@ if ($id <= 0) {
 
 // Fetch feedback
 $pdo = getDBConnection();
-$stmt = $pdo->prepare("SELECT * FROM feedbacks WHERE id = :id");
+$stmt = $pdo->prepare("SELECT 
+        f.id, f.created_at, f.overall_rating, f.suggestions_future, f.other_comments,
+        s.room_no, s.check_in, s.check_out, s.first_stay, s.purpose_of_stay, s.other_purpose_text,
+        g.guest_name, g.email, g.address, g.contact_no, g.nationality, g.other_nationality_text,
+        foh.frontdesk, foh.reservations, foh.telephone_operator, foh.valet, foh.housekeeping, foh.accommodation, foh.safety, foh.security, foh.overall_service, foh.frontdesk_comments,
+        fnb.food_quality, fnb.serving_time, fnb.wait_staff, fnb.grooming, fnb.behavior, fnb.fnb_service, fnb.bar, fnb.bartender, fnb.fnb_comments
+    FROM feedbacks f
+    JOIN stays s ON f.stay_id = s.id
+    JOIN guests g ON s.guest_id = g.id
+    LEFT JOIN feedback_foh foh ON f.id = foh.feedback_id
+    LEFT JOIN feedback_fnb fnb ON f.id = fnb.feedback_id
+    WHERE f.id = :id");
 $stmt->execute([":id" => $id]);
 $fb = $stmt->fetch();
 
@@ -34,6 +45,12 @@ if (!$fb) {
     header("Location: index.php");
     exit();
 }
+
+// Fetch helpful staff
+$staffStmt = $pdo->prepare("SELECT staff_name FROM feedback_helpful_staff WHERE feedback_id = :id");
+$staffStmt->execute([":id" => $id]);
+$staffRows = $staffStmt->fetchAll(PDO::FETCH_COLUMN);
+$fb["helpful_staff_names"] = implode(", ", $staffRows);
 
 // Helper to display rating as text
 function ratingText($val)
