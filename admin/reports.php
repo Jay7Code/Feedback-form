@@ -512,7 +512,7 @@ $_SESSION["admin_logged_in"] !== true
                 html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">';
                 data.recognized_staff.forEach(function(staff) {
                     html += '<div class="stat-box" style="flex:1;min-width:140px; border-color: rgba(201,169,110,0.3); background: rgba(201,169,110,0.05); padding: 12px; display:flex; flex-direction:column; justify-content:center;">';
-                    html += '<div class="stat-val" style="color: #C9A96E; font-size: 1.25rem; margin-bottom: 2px;">' + escapeHtml(staff.name) + '</div>';
+                    html += '<div class="stat-val" style="color: text-white/70; font-size: 1.25rem; margin-bottom: 2px;">' + escapeHtml(staff.name) + '</div>';
                     html += '<div class="stat-label" style="font-size: 0.5rem; text-transform: uppercase;">Mentioned ' + staff.count + ' time' + (staff.count > 1 ? 's' : '') + '</div>';
                     html += '</div>';
                 });
