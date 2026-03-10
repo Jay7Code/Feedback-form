@@ -499,9 +499,9 @@
                         <!-- Nationality -->
                         <div class="mb-6">
                             <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
-                                Nationality
+                                Nationality <span class="text-red-400">*</span>
                             </label>
-                            <select name="nationality" id="nationality_dropdown" onchange="toggleOtherNationality()" class="lodge-input">
+                            <select name="nationality" id="nationality_dropdown" onchange="toggleOtherNationality()" required class="lodge-input">
                                 <option value="Filipino" selected>Filipino</option>
                                 <option value="American">American</option>
                                 <option value="Chinese">Chinese</option>
@@ -520,27 +520,27 @@
                         <!-- Divider -->
                         <div class="flex items-center gap-4 my-8">
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/40 to-transparent"></span>
-                            <span class="text-[0.6rem] font-bold text-gold-400/50 uppercase tracking-[0.25em]">Your Details (Optional)</span>
+                            <span class="text-[0.6rem] font-bold text-gold-400/50 uppercase tracking-[0.25em]">Your Details</span>
                             <span class="flex-1 h-px bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></span>
                         </div>
 
                         <!-- Guest details grid -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Name</label>
-                                <input type="text" name="guest_name" placeholder="Your full name" class="lodge-input">
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Name <span class="text-red-400">*</span></label>
+                                <input type="text" name="guest_name" placeholder="Your full name" required class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Email</label>
-                                <input type="text" name="email" placeholder="your.email@example.com" class="lodge-input">
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Email  <span class="text-red-400">*</span></label>
+                                <input type="text" name="email" placeholder="your.email@example.com" required class="lodge-input">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Address</label>
-                                <input type="text" name="address" placeholder="Your complete address" class="lodge-input">
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Address <span class="text-red-400">*</span></label>
+                                <input type="text" name="address" placeholder="Your complete address" required class="lodge-input">
                             </div>
                             <div>
-                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Contact No.</label>
-                                <input type="tel" name="contact_no" placeholder="+63 917 123 4567" class="lodge-input">
+                                <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Contact No. <span class="text-red-400">*</span> </label>
+                                <input type="tel" name="contact_no" placeholder="+63 917 123 4567" required class="lodge-input">
                             </div>
                             <div>
                                 <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Room No. <span class="text-red-400">*</span></label>
@@ -599,7 +599,7 @@
     </p>
     
     <p class="text-white/60 text-[0.7rem] font-medium uppercase tracking-[0.5em]">
-        Forest Wing - Camp John Hay - Baguio City
+        Forest Wing - Camp John Hay - Baguio City, 2600
     </p>
 </footer>
     </div>
