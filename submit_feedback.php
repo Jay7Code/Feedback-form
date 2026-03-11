@@ -36,59 +36,107 @@ function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUs
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Thank You - John Hay Hotels</title>
+        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <style>
-            @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap");
+            @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
         </style>
     </head>
-    <body style="margin: 0; padding: 0; background-color: #0A1410; font-family: \'Inter\', sans-serif;">
-        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0A1410; padding: 40px 0;">
+    <body style="margin: 0; padding: 0; background-color: #0A1912; font-family: \'Inter\', Arial, sans-serif;">
+        <!-- Outer wrapper with embedded background image -->
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0A1912;">
             <tr>
-                <td align="center">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="width: 100%; max-width: 600px; background-color: #12221A; border-radius: 12px; border-top: 4px solid #C4A777; border-bottom: 4px solid #C4A777;">
+                <td align="center" background="cid:forestbg" style="background-image: url(cid:forestbg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                    <!-- Dark overlay layer -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: linear-gradient(180deg, rgba(10,25,18,0.6) 0%, rgba(10,25,18,0.4) 50%, rgba(10,25,18,0.7) 100%);">
                         <tr>
-                            <td align="center" style="padding: 60px 40px 40px 40px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 25px;">
-                                    <tr><td style="width: 120px; border-top: 1px solid rgba(196, 167, 119, 0.4);"></td></tr>
-                                </table>
-                                <h1 style="margin: 0 0 25px 0; font-family: \'Playfair Display\', serif; font-size: 42px; font-weight: 500; color: #FFFFFF; letter-spacing: 1px;">
+                            <td align="center" style="padding: 30px 0;">
+
+                    <!-- Header: Hotel Name + Forest Wing -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="width: 100%; max-width: 600px;">
+                        <tr>
+                            <td align="center" style="padding: 20px 40px 10px 40px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <h1 style="margin: 0 0 6px 0; font-family: \'Great Vibes\', cursive; font-size: 36px; font-weight: normal; color: rgba(255,255,255,0.8);">
                                     John Hay Hotels
                                 </h1>
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="width: 40px; border-top: 1px solid rgba(196, 167, 119, 0.3);"></td>
-                                        <td style="padding: 0 15px;">
-                                            <span style="font-family: \'Inter\', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #C4A777;">FOREST WING</span>
+                                        <td style="width: 30px; border-top: 1px solid #8D7A55;"></td>
+                                        <td style="padding: 0 12px;">
+                                            <span style="font-family: \'Inter\', Arial, sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(201,169,110,0.8);">Forest Wing</span>
                                         </td>
-                                        <td style="width: 40px; border-top: 1px solid rgba(196, 167, 119, 0.3);"></td>
+                                        <td style="width: 30px; border-top: 1px solid #8D7A55;"></td>
                                     </tr>
                                 </table>
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Main Content Card -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="width: 100%; max-width: 600px;">
+                        <tr>
+                            <td align="center" style="padding: 40px 40px 20px 40px;">
+                                <!-- Gold Checkmark Circle -->
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="width: 60px; border-top: 1px solid rgba(196, 167, 119, 0.3);"></td>
-                                        <td style="padding: 0 15px;"><span style="color: #C4A777; font-size: 10px; line-height: 1;">&#9670;</span></td>
-                                        <td style="width: 60px; border-top: 1px solid rgba(196, 167, 119, 0.3);"></td>
+                                        <td align="center" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #C9A96E, #b5893a);">
+                                            <span style="font-size: 36px; color: #ffffff; line-height: 1;">&#10003;</span>
+                                        </td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td align="center" style="padding: 0 40px 40px 40px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #162B21; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                            <td align="center" style="padding: 0 40px;">
+                                <!-- Glassmorphism-style card -->
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: rgba(245,235,224,0.10); border-radius: 16px; border: 1px solid rgba(201,169,110,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.25);">
                                     <tr>
-                                        <td align="center" style="padding: 40px;">
-                                            <h2 style="margin: 0 0 25px 0; font-family: \'Playfair Display\', serif; font-size: 24px; font-weight: 600; color: #FFFFFF;">
+                                        <td align="center" style="padding: 36px 30px;">
+                                            <!-- Greeting -->
+                                            <h2 style="margin: 0 0 20px 0; font-family: \'Playfair Display\', Georgia, serif; font-size: 28px; font-weight: 400; color: rgba(255,255,255,0.9);">
                                                 Thank You, ' . $displayName . '!
                                             </h2>
-                                            <p style="margin: 0 0 40px 0; font-family: \'Playfair Display\', serif; font-size: 17px; line-height: 1.8; color: #D1D5DB; font-style: italic; text-align: center;">
-                                                We are committed to provide a guest experience that exceeds your expectations. Through your comments we can build on our strengths and, where necessary, improve our weaknesses.
+
+                                            <!-- Main message -->
+                                            <p style="margin: 0 0 28px 0; font-family: \'Playfair Display\', Georgia, serif; font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.9); font-style: italic; text-align: center;">
+                                                Your feedback is invaluable to us. It helps us continue delivering the exceptional experience you deserve at John Hay Hotels.
                                             </p>
-                                            <p style="margin: 0; font-family: \'Inter\', sans-serif; font-size: 13px; font-weight: 700; color: #C4A777; text-transform: uppercase; letter-spacing: 2px;">
-                                                WARM REGARDS,<br/>
-                                                <span style="font-size: 11px; color: #9CA3AF; letter-spacing: 1px; display: inline-block; margin-top: 8px;">FOREST WING TEAM</span>
+
+                                            <!-- Diamond divider -->
+                                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                                <tr>
+                                                    <td style="width: 40px; border-top: 1px solid rgba(201,169,110,0.3);"></td>
+                                                    <td style="padding: 0 12px;">
+                                                        <span style="color: rgba(201,169,110,0.4); font-size: 8px; line-height: 1;">&#9670;</span>
+                                                    </td>
+                                                    <td style="width: 40px; border-top: 1px solid rgba(201,169,110,0.3);"></td>
+                                                </tr>
+                                            </table>
+
+                                            <!-- Closing message -->
+                                            <p style="margin: 0; font-family: \'Playfair Display\', Georgia, serif; font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.9); font-style: italic; text-align: center;">
+                                                We look forward to welcoming you again soon.
                                             </p>
                                         </td>
                                     </tr>
                                 </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Footer -->
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="width: 100%; max-width: 600px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.06);">
+                        <tr>
+                            <td align="center" style="padding: 24px 40px;">
+                                <p style="margin: 0 0 6px 0; font-family: \'Great Vibes\', cursive; font-size: 28px; color: rgba(201,169,110,0.9);">
+                                    John Hay Hotels
+                                </p>
+                                <p style="margin: 0; font-family: \'Inter\', Arial, sans-serif; font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 4px;">
+                                    Forest Wing &ndash; Camp John Hay &ndash; Baguio City, 2600
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+
                             </td>
                         </tr>
                     </table>
@@ -111,6 +159,11 @@ function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUs
         $mail->addAddress($guestEmail);
         $mail->isHTML(true);
         $mail->Subject = 'Thank You for Your Feedback';
+        // Embed the forest background image
+        $bgImagePath = __DIR__ . '/img/forest-bg.jpg';
+        if (file_exists($bgImagePath)) {
+            $mail->addEmbeddedImage($bgImagePath, 'forestbg', 'forest-bg.jpg');
+        }
         $mail->Body = $htmlBody;
         $mail->send();
         return true;
