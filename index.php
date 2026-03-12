@@ -329,9 +329,9 @@
                             <!-- Column headers (desktop only) -->
                             <div class="hidden md:grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 mb-3 px-2">
                                 <span></span>
-                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Poor</span>
-                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Good</span>
                                 <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Excellent</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Good</span>
+                                <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">Poor</span>
                                 <span class="text-center text-[0.6rem] font-bold text-white uppercase tracking-[0.15em]">N/A</span>
                             </div>
 
@@ -342,9 +342,9 @@
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
                                         <?php foreach (
                                             [
-                                                ["1", "Poor"],
+                                                ["3", "Poor"],
                                                 ["2", "Good"],
-                                                ["3", "Excellent"],
+                                                ["1", "Excellent"],
                                                 ["0", "N/A"],
                                             ]
                                             as $rating
