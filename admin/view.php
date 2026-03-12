@@ -114,7 +114,7 @@ function ratingText($val)
                     Back to Dashboard
                 </a>
             </div>
-            <span class="text-white/15 text-[1rem]">Feedback #<?= $id ?></span>
+           
         </div>
     </nav>
 

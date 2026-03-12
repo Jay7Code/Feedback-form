@@ -197,6 +197,29 @@
         select.lodge-input option { background: #1B3A2D; color: #fff; }
         textarea.lodge-input { resize: none; }
 
+        /* ── DATE INPUT SPECIFICS ── */
+        input[type="date"].lodge-input {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px; /* Better touch target */
+        }
+        
+        /* Remove default iOS date styling that might cause "merging" look */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: rgba(201,169,110,0.2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C9A96E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat center;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Ensure the date text is centered on mobile Safari */
+        input[type="date"] {
+            -webkit-appearance: none;
+            position: relative;
+        }
+
         /* ── SCROLL REVEAL: Sections fade up on viewport entry ── */
         .reveal-section { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
         .reveal-section.visible { opacity: 1; transform: translateY(0); }
@@ -550,13 +573,13 @@
                                 <label class="block text-[0.65rem] font-semibold text-white uppercase tracking-[0.15em] mb-3">
                                     Date(s) of Stay <span class="text-red-400">*</span>
                                 </label>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-in</span>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider pl-1">Check-in</span>
                                         <input type="date" name="check_in" id="check_in" onchange="setMinCheckout()" required class="lodge-input">
                                     </div>
-                                    <div>
-                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider mb-1">Check-out</span>
+                                    <div class="space-y-1">
+                                        <span class="block text-[0.6rem] text-gold-500/90 font-bold uppercase tracking-wider pl-1">Check-out</span>
                                         <input type="date" name="check_out" id="check_out" required class="lodge-input">
                                     </div>
                                 </div>

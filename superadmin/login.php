@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <button type="submit" class="w-full py-3.5 rounded-full font-semibold text-sm uppercase tracking-[0.15em] transition-all duration-300 hover:shadow-lg" style="background: linear-gradient(135deg, #C9A96E, #b5893a); color: #0A1912;">Sign In</button>
             </form>
         </div>
-        <p class="text-center text-white/15 text-[0.6rem] uppercase tracking-[0.3em] mt-8 fade-up" style="animation-delay: 0.4s;">Forest Wing - Camp John Hay - Baguio City</p>
+        <p class="text-center text-white/15 text-[0.6rem] uppercase tracking-[0.3em] mt-8 fade-up" style="animation-delay: 0.4s;">Forest Wing - Camp John Hay - Baguio City, 2600</p>
     </div>
 </body>
 </html>
