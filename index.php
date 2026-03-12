@@ -62,7 +62,7 @@
 
         /* ── IMMERSIVE BACKGROUND: Fixed forest lodge photo + overlays ── */
         .scene-bg {
-            position: fixed; inset: 0; z-index: 0;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0;
             background: url('img/forest-bg.jpg') center/cover no-repeat;
         }
         .scene-bg::after {
@@ -76,7 +76,7 @@
 
         /* ── WARM VIGNETTE: Subtle golden glow from above ── */
         .warm-vignette {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none;
             background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.04) 0%, transparent 50%);
         }
 
