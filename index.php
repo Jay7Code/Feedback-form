@@ -216,6 +216,7 @@
         
         /* Ensure the date text is centered on mobile Safari */
         input[type="date"] {
+            appearance: none;
             -webkit-appearance: none;
             position: relative;
         }
@@ -340,15 +341,16 @@
                                <div class="grid grid-cols-1 md:grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center py-3 border-b border-gold-400/60 last:border-b-0 hover:bg-white/10 active:bg-white/10 rounded-lg px-2 transition-colors duration-300">
                                     <span class="font-medium text-sm text-gold-400/100 text-center md:text-left"><?= $label ?></span>
                                     <div class="flex md:contents justify-center gap-8 md:gap-0">
-                                        <?php foreach (
-                                            [
-                                                ["3", "Poor"],
-                                                ["2", "Good"],
-                                                ["1", "Excellent"],
-                                                ["0", "N/A"],
-                                            ]
-                                            as $rating
-                                        ): ?>
+                                       <?php foreach (
+    [
+        ["3", "Excellent"],
+        ["2", "Good"],
+        ["1", "Poor"],
+        ["0", "N/A"],
+    ]
+    as $rating
+): ?>
+
                                             <div class="flex flex-col items-center gap-1">
                                                 <span class="text-[0.55rem] text-white font-semibold uppercase md:hidden tracking-wider"><?= $rating[1] ?></span>
                                                 <label class="custom-radio">
