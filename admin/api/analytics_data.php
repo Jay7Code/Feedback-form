@@ -51,25 +51,32 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) as total_responses, ROUND(AVG(f.overall_rating),1) as avg_nps,
         ROUND(AVG(CASE WHEN foh.frontdesk>0 THEN foh.frontdesk END),2) as avg_frontdesk,
         ROUND(AVG(CASE WHEN foh.reservations>0 THEN foh.reservations END),2) as avg_reservations,
+        ROUND(AVG(CASE WHEN foh.check_in_rating>0 THEN foh.check_in_rating END),2) as avg_check_in_rating,
+        ROUND(AVG(CASE WHEN foh.check_out_rating>0 THEN foh.check_out_rating END),2) as avg_check_out_rating,
         ROUND(AVG(CASE WHEN foh.telephone_operator>0 THEN foh.telephone_operator END),2) as avg_telephone,
         ROUND(AVG(CASE WHEN foh.valet>0 THEN foh.valet END),2) as avg_valet,
         ROUND(AVG(CASE WHEN foh.housekeeping>0 THEN foh.housekeeping END),2) as avg_housekeeping,
         ROUND(AVG(CASE WHEN foh.accommodation>0 THEN foh.accommodation END),2) as avg_accommodation,
         ROUND(AVG(CASE WHEN foh.safety>0 THEN foh.safety END),2) as avg_safety,
         ROUND(AVG(CASE WHEN foh.security>0 THEN foh.security END),2) as avg_security,
-        ROUND(AVG(CASE WHEN foh.overall_service>0 THEN foh.overall_service END),2) as avg_overall_service,
+        ROUND(AVG(CASE WHEN foh.friendliness>0 THEN foh.friendliness END),2) as avg_friendliness,
+        ROUND(AVG(CASE WHEN foh.attentiveness>0 THEN foh.attentiveness END),2) as avg_attentiveness,
+        ROUND(AVG(CASE WHEN foh.courteousness>0 THEN foh.courteousness END),2) as avg_courteousness,
         ROUND(AVG(CASE WHEN fnb.food_quality>0 THEN fnb.food_quality END),2) as avg_food_quality,
         ROUND(AVG(CASE WHEN fnb.serving_time>0 THEN fnb.serving_time END),2) as avg_serving_time,
-        ROUND(AVG(CASE WHEN fnb.wait_staff>0 THEN fnb.wait_staff END),2) as avg_wait_staff,
         ROUND(AVG(CASE WHEN fnb.grooming>0 THEN fnb.grooming END),2) as avg_grooming,
         ROUND(AVG(CASE WHEN fnb.behavior>0 THEN fnb.behavior END),2) as avg_behavior,
         ROUND(AVG(CASE WHEN fnb.fnb_service>0 THEN fnb.fnb_service END),2) as avg_fnb_service,
         ROUND(AVG(CASE WHEN fnb.bar>0 THEN fnb.bar END),2) as avg_bar,
-        ROUND(AVG(CASE WHEN fnb.bartender>0 THEN fnb.bartender END),2) as avg_bartender,
+        ROUND(AVG(CASE WHEN fg.cleanliness>0 THEN fg.cleanliness END),2) as avg_cleanliness,
+        ROUND(AVG(CASE WHEN fg.ambiance>0 THEN fg.ambiance END),2) as avg_ambiance,
+        ROUND(AVG(CASE WHEN fg.comfort>0 THEN fg.comfort END),2) as avg_comfort,
+        ROUND(AVG(CASE WHEN fg.bathroom>0 THEN fg.bathroom END),2) as avg_bathroom,
         MIN(f.created_at) as earliest, MAX(f.created_at) as latest
         FROM feedbacks f 
         LEFT JOIN feedback_foh foh ON f.id=foh.feedback_id 
         LEFT JOIN feedback_fnb fnb ON f.id=fnb.feedback_id 
+        LEFT JOIN feedback_guestroom fg ON f.id=fg.feedback_id 
         $dateFilter");
     $summary = $stmt->fetch();
 
@@ -131,6 +138,14 @@ try {
                 "avg" => toTenScale($summary["avg_reservations"] ?? 0),
             ],
             [
+                "label" => "Check-in",
+                "avg" => toTenScale($summary["avg_check_in_rating"] ?? 0),
+            ],
+            [
+                "label" => "Check-out",
+                "avg" => toTenScale($summary["avg_check_out_rating"] ?? 0),
+            ],
+            [
                 "label" => "Telephone",
                 "avg" => toTenScale($summary["avg_telephone"] ?? 0),
             ],
@@ -155,8 +170,32 @@ try {
                 "avg" => toTenScale($summary["avg_security"] ?? 0),
             ],
             [
-                "label" => "Overall Service",
-                "avg" => toTenScale($summary["avg_overall_service"] ?? 0),
+                "label" => "Friendliness",
+                "avg" => toTenScale($summary["avg_friendliness"] ?? 0),
+            ],
+            [
+                "label" => "Attentiveness",
+                "avg" => toTenScale($summary["avg_attentiveness"] ?? 0),
+            ],
+            [
+                "label" => "Courteousness",
+                "avg" => toTenScale($summary["avg_courteousness"] ?? 0),
+            ],
+            [
+                "label" => "Cleanliness",
+                "avg" => toTenScale($summary["avg_cleanliness"] ?? 0),
+            ],
+            [
+                "label" => "Ambiance",
+                "avg" => toTenScale($summary["avg_ambiance"] ?? 0),
+            ],
+            [
+                "label" => "Comfort",
+                "avg" => toTenScale($summary["avg_comfort"] ?? 0),
+            ],
+            [
+                "label" => "Bathroom",
+                "avg" => toTenScale($summary["avg_bathroom"] ?? 0),
             ],
         ],
         "food_beverage" => [
@@ -167,10 +206,6 @@ try {
             [
                 "label" => "Serving Time",
                 "avg" => toTenScale($summary["avg_serving_time"] ?? 0),
-            ],
-            [
-                "label" => "Wait Staff",
-                "avg" => toTenScale($summary["avg_wait_staff"] ?? 0),
             ],
             [
                 "label" => "Grooming",
@@ -185,10 +220,6 @@ try {
                 "avg" => toTenScale($summary["avg_fnb_service"] ?? 0),
             ],
             ["label" => "Bar", "avg" => toTenScale($summary["avg_bar"] ?? 0)],
-            [
-                "label" => "Bartender",
-                "avg" => toTenScale($summary["avg_bartender"] ?? 0),
-            ],
         ],
         "nps_distribution" => $npsDistribution,
         "daily_volume" => $dailyVolume,

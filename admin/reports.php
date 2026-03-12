@@ -521,16 +521,38 @@ $_SESSION["admin_logged_in"] !== true
 
 
 
-            // ── Front of House ──
-            var fohTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
-            (data.front_of_house || []).forEach(function(item) {
+            // ── Hotel Process & Associates ──
+            var processTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            (data.hotel_process || []).forEach(function(item) {
                 var cls = scoreClass(item.avg, 10);
-                fohTable += '<tr><td>' + item.label + '</td>';
-                fohTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
-                fohTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
+                processTable += '<tr><td>' + item.label + '</td>';
+                processTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
+                processTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
             });
-            fohTable += '</tbody></table>';
-            html += buildModalSection('Front of House Ratings', 'Analyze scores for check-in process, receptionist friendliness, and bell service.', fohTable);
+            processTable += '</tbody></table>';
+            html += buildModalSection('Our Hotel Process & Associates', 'Analyze scores for reservations, check-in, check-out, and associate services.', processTable);
+
+            // ── Forest Wing Hospitality ──
+            var hospitalityTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            (data.forest_wing || []).forEach(function(item) {
+                var cls = scoreClass(item.avg, 10);
+                hospitalityTable += '<tr><td>' + item.label + '</td>';
+                hospitalityTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
+                hospitalityTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
+            });
+            hospitalityTable += '</tbody></table>';
+            html += buildModalSection('Forest Wing Hospitality', 'Analyze scores for friendliness, attentiveness, and courteousness.', hospitalityTable);
+
+            // ── Guestroom Ratings ──
+            var guestroomTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
+            (data.guestroom || []).forEach(function(item) {
+                var cls = scoreClass(item.avg, 10);
+                guestroomTable += '<tr><td>' + item.label + '</td>';
+                guestroomTable += '<td style="text-align:center" class="' + cls + '">' + (item.avg > 0 ? item.avg.toFixed(1) + '/10' : 'N/A') + '</td>';
+                guestroomTable += '<td style="text-align:center" class="' + cls + '">' + scoreLabel(item.avg) + '</td></tr>';
+            });
+            guestroomTable += '</tbody></table>';
+            html += buildModalSection('Our Guestroom', 'View guest ratings for cleanliness, ambiance, comfort, and bathroom.', guestroomTable);
 
             // ── Food & Beverage ──
             var fnbTable = '<table class="report-table" style="table-layout:fixed;width:100%"><colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup><thead><tr><th>Category</th><th style="text-align:center">Avg. Score</th><th style="text-align:center">Rating</th></tr></thead><tbody>';
@@ -595,7 +617,7 @@ $_SESSION["admin_logged_in"] !== true
             // ── Guest Comments ──
             var validComments = [];
             (data.comments || []).forEach(function(c) {
-                if (c.frontdesk_comments || c.fnb_comments || c.suggestions_future || c.other_comments || c.helpful_staff_names) {
+                if (c.general_comments || c.helpful_staff_names) {
                     validComments.push(c);
                 }
             });
@@ -619,10 +641,7 @@ $_SESSION["admin_logged_in"] !== true
                     for (var i = startIdx; i < endIdx; i++) {
                         var c = validComments[i];
                         var allComments = [];
-                        if (c.frontdesk_comments) allComments.push('<strong>Front of House:</strong> ' + c.frontdesk_comments);
-                        if (c.fnb_comments) allComments.push('<strong>F&B:</strong> ' + c.fnb_comments);
-                        if (c.suggestions_future) allComments.push('<strong>Suggestions:</strong> ' + c.suggestions_future);
-                        if (c.other_comments) allComments.push('<strong>Other:</strong> ' + c.other_comments);
+                        if (c.general_comments) allComments.push('<strong>Comments & Suggestions:</strong><br>' + String(c.general_comments).replace(/\n/g, '<br>'));
 
                         html += '<div class="comment-card">';
                         html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/10 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';

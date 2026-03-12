@@ -24,16 +24,20 @@ if (isset($_GET["export"]) && $_GET["export"] === "csv") {
     $csvQuery = "SELECT 
         f.id AS Feedback_ID, f.created_at AS Date_Submitted,
         g.guest_name AS Guest_Name, g.email AS Email, g.contact_no AS Contact, g.address AS Address, g.nationality AS Nationality,
-        s.room_no AS Room, s.check_in AS Check_In, s.check_out AS Check_Out, s.first_stay AS First_Stay, s.purpose_of_stay AS Purpose,
-        f.overall_rating AS Overall_Rating,
-        foh.frontdesk AS FOH_Frontdesk, foh.reservations AS FOH_Reservations, foh.telephone_operator AS FOH_Telephone, foh.valet AS FOH_Valet, foh.housekeeping AS FOH_Housekeeping, foh.accommodation AS FOH_Accommodation, foh.safety AS FOH_Safety, foh.security AS FOH_Security, foh.overall_service AS FOH_Service, foh.frontdesk_comments AS FOH_Comments,
-        fnb.food_quality AS FNB_Food, fnb.serving_time AS FNB_Serving, fnb.wait_staff AS FNB_Staff, fnb.grooming AS FNB_Grooming, fnb.behavior AS FNB_Behavior, fnb.fnb_service AS FNB_Service, fnb.bar AS FNB_Bar, fnb.bartender AS FNB_Bartender, fnb.fnb_comments AS FNB_Comments,
-        f.suggestions_future AS Suggestions, f.other_comments AS Comments
+        s.room_no AS Room, s.check_in AS Check_In, s.check_out AS Check_Out, s.first_stay AS First_Stay, s.purpose_of_stay AS Purpose, s.find_out_about_us AS Find_Out, s.mode_of_reservation AS Mode_Reservation,
+        f.overall_rating AS Overall_Rating, f.repeat_visit AS Repeat_Visit,
+        foh.reservations AS FOH_Reservations, foh.check_in_rating AS FOH_CheckIn, foh.check_out_rating AS FOH_CheckOut, foh.accommodation AS FOH_Accommodation, foh.telephone_operator AS FOH_Telephone, foh.frontdesk AS FOH_Frontdesk, foh.housekeeping AS FOH_Housekeeping, foh.security AS FOH_Security,
+        foh.friendliness AS FOH_Friendliness, foh.attentiveness AS FOH_Attentiveness, foh.courteousness AS FOH_Courteousness,
+        foh.safety AS FOH_Safety, foh.valet AS FOH_Valet,
+        fg.cleanliness AS Guestroom_Cleanliness, fg.ambiance AS Guestroom_Ambiance, fg.comfort AS Guestroom_Comfort, fg.bathroom AS Guestroom_Bathroom,
+        fnb.food_quality AS FNB_Food, fnb.serving_time AS FNB_Serving, fnb.grooming AS FNB_Grooming, fnb.behavior AS FNB_Behavior, fnb.fnb_service AS FNB_Service, fnb.bar AS FNB_Bar,
+        f.general_comments AS Comments
     FROM feedbacks f
     JOIN stays s ON f.stay_id = s.id
     JOIN guests g ON s.guest_id = g.id
     LEFT JOIN feedback_foh foh ON f.id = foh.feedback_id
     LEFT JOIN feedback_fnb fnb ON f.id = fnb.feedback_id
+    LEFT JOIN feedback_guestroom fg ON f.id = fg.feedback_id
     ORDER BY f.created_at DESC";
     
     $stmt = $pdo->query($csvQuery);

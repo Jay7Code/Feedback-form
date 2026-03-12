@@ -109,19 +109,37 @@
         }
 
         /* ── GLASSMORPHISM CARDS ── */
-        .glass-card {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
-        }
-        .glass-card-warm {
-            background: rgba(245,235,224,0.10);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(201,169,110,0.15);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(201,169,110,0.10);
-        }
+       .glass-card {
+    /* Increased opacity from 0.08 to 0.15 for a denser, heavier look */
+    background: rgba(255, 255, 255, 0.15);
+    
+    /* Increased blur to 45px for a thicker frosted effect */
+    backdrop-filter: blur(45px); 
+    -webkit-backdrop-filter: blur(45px);
+    
+    /* Slightly more visible border */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    
+    /* Deepened the drop shadow and added a thicker 2px inset highlight for a 3D edge */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 
+                inset 0 2px 2px rgba(255, 255, 255, 0.15);
+}
 
+.glass-card-warm {
+    /* Increased opacity from 0.10 to 0.18 */
+    background: rgba(245, 235, 224, 0.18);
+    
+    /* Increased blur from 24px to 36px */
+    backdrop-filter: blur(36px); 
+    -webkit-backdrop-filter: blur(36px);
+    
+    /* Slightly more visible warm border */
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    
+    /* Deeper drop shadow and stronger inset edge */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.30), 
+                inset 0 2px 2px rgba(201, 169, 110, 0.20);
+}
         /* ── CUSTOM SCROLLBAR ── */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(10,25,18,0.5); }
@@ -366,11 +384,13 @@
                                 </div>
                             <?php endforeach; ?>
 
-                            <!-- Comments textarea -->
+                            <?php if ($commentName !== ""): ?>
+                            <!-- Comments textarea (if enabled) -->
                             <div class="mt-6">
                                 <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Comments &amp; Suggestions</label>
                                 <textarea name="<?= $commentName ?>" rows="3" placeholder="<?= $commentPH ?>" class="lodge-input"></textarea>
                             </div>
+                            <?php endif; ?>
 
                             <?php if ($extraFields) {
                                 echo $extraFields;
@@ -380,45 +400,136 @@
                 <?php
                 }
 
-                // ═══ SECTION 1: FRONT OF HOUSE ═══
+                // ═══ SECTION 1: HOW DID YOU FIND OUT & MODE OF RESERVATION ═══
+                ?>
+                <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase">We would also like to know you...</h2>
+                    </div>
+                    <div class="px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <!-- How did you find out about us? -->
+                        <div>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-4 drop-shadow-sm">
+                                How did you find out about us? <span class="text-red-400">*</span>
+                            </label>
+                            <div class="space-y-3">
+                                <?php
+                                $findOutOptions = ['Print Advertisement', 'Radio', 'Internet', 'Hotel Website', 'Travel Agency'];
+                                foreach ($findOutOptions as $option):
+                                ?>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="find_out_about_us" value="<?= $option ?>" required onchange="toggleOtherFindOut()"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors"><?= $option ?></span>
+                                </label>
+                                <?php endforeach; ?>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="find_out_about_us" value="Others" id="find_out_others_radio" onchange="toggleOtherFindOut()"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors">Others, Please specify</span>
+                                </label>
+                                <input type="text" id="other_find_out" name="other_find_out_text" placeholder="Specify here..." class="lodge-input mt-2 hidden">
+                            </div>
+                        </div>
+
+                        <!-- Mode of reservation -->
+                        <div>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-4 drop-shadow-sm">
+                                Mode of reservation <span class="text-red-400">*</span>
+                            </label>
+                            <div class="space-y-3">
+                                <?php
+                                $reservationOptions = ['Phone', 'Walk-in', 'Hotel Website', 'Email', 'Travel Agency'];
+                                foreach ($reservationOptions as $option):
+                                ?>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="mode_of_reservation" value="<?= $option ?>" required><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors"><?= $option ?></span>
+                                </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <?php
+
+                // ═══ SECTION 2: OUR HOTEL PROCESS ═══
                 ratingSection(
-                    "Front of House",
+                    "Our Hotel Process",
                     '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
                     [
-                        "frontdesk" => "Front Desk",
-                        "reservations" => "Reservations",
-                        "telephone_operator" => "Telephone Operator",
-                        "valet" => "Valet",
-                        "housekeeping" => "Housekeeping",
-                        "accommodation" => "Accommodation",
-                        "safety" => "Safety",
-                        "security" => "Security",
-                        "overall_service" => "Overall Service",
+                        "reservations" => "Reservation",
+                        "check_in_rating" => "Check-In",
+                        "check_out_rating" => "Check-Out",
+                        "accommodation" => "Accommodation"
                     ],
-                    "frontdesk_comments",
-                    "Share your thoughts about our front of house service...",
+                    "",
+                    "",
                 );
 
-                // ═══ SECTION 2: FOOD & BEVERAGE ═══
+                // ═══ SECTION 3: OUR ASSOCIATES ═══
                 ratingSection(
-                    "Food &amp; Beverage",
+                    "Our Associates",
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />',
+                    [
+                        "telephone_operator" => "Telephone Operator",
+                        "reservations_associate" => "Reservations Associate", // Mapped to frontdesk for now in db, but renaming frontdesk to fit
+                        "frontdesk" => "Front Office Agents",
+                        "housekeeping" => "Housekeeping",
+                        "security" => "Security",
+                    ],
+                    "",
+                    "",
+                );
+
+                // ═══ SECTION 4: OUR GUESTROOM ═══
+                ratingSection(
+                    "Our Guestroom",
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />',
+                    [
+                        "cleanliness" => "Cleanliness",
+                        "ambiance" => "Ambiance",
+                        "comfort" => "Comfort",
+                        "bathroom" => "Bathroom",
+                    ],
+                    "",
+                    "",
+                );
+
+                // ═══ SECTION 5: FOOD & BEVERAGE FACILITIES ═══
+                ratingSection(
+                    "Our Food and Beverage Facilities",
                     '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
                     [
                         "food_quality" => "Food Quality",
                         "serving_time" => "Serving Time",
-                        "wait_staff" => "Wait Staff",
-                        "grooming" => "Grooming",
-                        "behavior" => "Behavior",
-                        "fnb_service" => "Service",
+                        "grooming" => "Waiter/s Grooming",
+                        "behavior" => "Waiter/s Behavior",
+                        "fnb_service" => "Waiter/s Service",
                         "bar" => "Bar",
-                        "bartender" => "Bartender",
                     ],
-                    "fnb_comments",
-                    "Share your thoughts about our food and beverage service...",
-                    '<div class="mt-4"><label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Especially Helpful Staff</label><input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input"></div>',
+                    "",
+                    "",
+                );
+
+                // ═══ SECTION 6: FOREST WING HOSPITALITY ═══
+                ratingSection(
+                    "Forest Wing Hospitality",
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />',
+                    [
+                        "friendliness" => "Friendliness",
+                        "attentiveness" => "Attentiveness",
+                        "courteousness" => "Courteousness",
+                    ],
+                    "",
+                    "",
                 );
                 ?>
-                <!-- ═══ SECTION 3: OVERALL EXPERIENCE (NPS 1-10) ═══ -->
+                <!-- ═══ OVERALL EXPERIENCE (NPS 1-10) ═══ -->
                 <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
@@ -427,7 +538,7 @@
                                       d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                             </svg>
                         </div>
-                        <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase">Overall Experience</h2>
+                        <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase">Overall Service Rating</h2>
                     </div>
                     <div class="px-6 py-8">
                         <p class="text-sm font-medium text-white/60 mb-8 text-center">
@@ -452,7 +563,7 @@
                     </div>
                 </section>
 
-                <!-- ═══ SECTION 4: ADDITIONAL COMMENTS ═══ -->
+                <!-- ═══ COMMENTS & SUGGESTIONS ═══ -->
                 <section class="reveal-section glass-card-warm rounded-2xl overflow-hidden">
                     <div class="px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                         <div class="w-8 h-8 rounded-lg bg-gold-400/10 flex items-center justify-center flex-shrink-0">
@@ -461,17 +572,35 @@
                                       d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
                             </svg>
                         </div>
-                        <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase">Additional Comments</h2>
+                        <h2 class="font-serif text-white/80 text-lg tracking-wider uppercase">Comments / Suggestions</h2>
                     </div>
-                    <div class="px-6 py-6 space-y-5">
+                    <div class="px-6 py-6 space-y-8">
                         <div>
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Suggestions for the Future</label>
-                            <textarea name="suggestions_future" rows="3" placeholder="How can we make your next visit even better?" class="lodge-input"></textarea>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Please let us know the name/s of any of our hotel staff who were especially helpful.</label>
+                            <input type="text" name="helpful_staff_names" placeholder="Name(s) of staff members" class="lodge-input">
                         </div>
                         <div>
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Other Comments</label>
-                            <textarea name="other_comments" rows="3" placeholder="Any additional thoughts..." class="lodge-input"></textarea>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">Do you have any other suggestions or comments which would help us make your next visit more enjoyable?</label>
+                            <textarea name="general_comments" rows="4" placeholder="Share your thoughts here..." class="lodge-input"></textarea>
                         </div>
+                        
+                        <!-- Repeat Visit -->
+                        <div class="border-t border-gold-400/20 pt-6">
+                            <p class="text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-4">
+                                Will you stay with us again?
+                            </p>
+                            <div class="flex gap-8 justify-start">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="repeat_visit" value="Yes"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors">Yes</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="repeat_visit" value="No"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors">No</span>
+                                </label>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
@@ -506,19 +635,25 @@
 
                         <!-- Purpose of stay -->
                         <div class="mb-6">
-                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-2 drop-shadow-sm">
-                                What was the purpose of your stay? <span class="text-red-400">*</span>
+                            <label class="block text-[0.75rem] font-bold text-gold-400 uppercase tracking-[0.15em] mb-4 drop-shadow-sm">
+                                Purpose of visit <span class="text-red-400">*</span>
                             </label>
-                            <select name="purpose_of_stay" id="purpose_dropdown" onchange="toggleOtherPurpose()" required class="lodge-input">
-                                <option value="" disabled selected>Select a purpose...</option>
-                                <option value="Leisure / Vacation">Leisure / Vacation</option>
-                                <option value="Business / Work">Business / Work</option>
-                                <option value="Conference / Event">Conference / Event</option>
-                                <option value="Wedding / Celebration">Wedding / Celebration</option>
-                                <option value="Staycation">Staycation</option>
-                                <option value="Other">Other (Please specify)</option>
-                            </select>
-                            <input type="text" id="other_purpose" name="other_purpose_text" placeholder="Please specify your purpose" class="lodge-input mt-3 hidden">
+                            <div class="space-y-3">
+                                <?php
+                                $purposeOptions = ['Business', 'Holiday'];
+                                foreach ($purposeOptions as $option):
+                                ?>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="purpose_of_stay" value="<?= $option ?>" required onchange="toggleOtherPurpose()"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors"><?= $option ?></span>
+                                </label>
+                                <?php endforeach; ?>
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <div class="custom-radio"><input type="radio" name="purpose_of_stay" value="Others" id="purpose_others_radio" onchange="toggleOtherPurpose()"><span class="radio-mark"></span></div>
+                                    <span class="text-sm text-white/70 group-hover:text-gold-400 transition-colors">Others, Please specify</span>
+                                </label>
+                                <input type="text" id="other_purpose" name="other_purpose_text" placeholder="Specify here..." class="lodge-input mt-2 hidden">
+                            </div>
                         </div>
 
                         <!-- Nationality -->
@@ -633,9 +768,20 @@
     <script>
         /** Toggle "Other" purpose text field visibility */
         function toggleOtherPurpose() {
-            var d = document.getElementById("purpose_dropdown");
+            var r = document.getElementById("purpose_others_radio");
             var o = document.getElementById("other_purpose");
-            if (d.value === "Other") {
+            if (r.checked) {
+                o.classList.remove("hidden"); o.required = true; o.focus();
+            } else {
+                o.classList.add("hidden"); o.required = false; o.value = "";
+            }
+        }
+        
+        /** Toggle "Other" find out text field visibility */
+        function toggleOtherFindOut() {
+            var r = document.getElementById("find_out_others_radio");
+            var o = document.getElementById("other_find_out");
+            if (r.checked) {
                 o.classList.remove("hidden"); o.required = true; o.focus();
             } else {
                 o.classList.add("hidden"); o.required = false; o.value = "";

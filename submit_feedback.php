@@ -181,35 +181,53 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $pdo = getDBConnection();
 
 $data = [
-    "frontdesk" => intval($_POST["frontdesk"] ?? 0),
+    // Our Hotel Process & Associates (mapped to FOH table)
     "reservations" => intval($_POST["reservations"] ?? 0),
-    "telephone_operator" => intval($_POST["telephone_operator"] ?? 0),
-    "valet" => intval($_POST["valet"] ?? 0),
-    "housekeeping" => intval($_POST["housekeeping"] ?? 0),
+    "check_in_rating" => intval($_POST["check_in_rating"] ?? 0),
+    "check_out_rating" => intval($_POST["check_out_rating"] ?? 0),
     "accommodation" => intval($_POST["accommodation"] ?? 0),
-    "safety" => intval($_POST["safety"] ?? 0),
+    
+    "telephone_operator" => intval($_POST["telephone_operator"] ?? 0),
+    "frontdesk" => intval($_POST["frontdesk"] ?? 0), // Acts as Front Office Agents
+    "housekeeping" => intval($_POST["housekeeping"] ?? 0),
     "security" => intval($_POST["security"] ?? 0),
-    "overall_service" => intval($_POST["overall_service"] ?? 0),
-    "frontdesk_comments" => htmlspecialchars(
-        trim($_POST["frontdesk_comments"] ?? ""),
-    ),
+    
+    // Forest Wing Hospitality
+    "friendliness" => intval($_POST["friendliness"] ?? 0),
+    "attentiveness" => intval($_POST["attentiveness"] ?? 0),
+    "courteousness" => intval($_POST["courteousness"] ?? 0),
+    
+    // Safety & Valet aren't on the paper form but are in DB schemas previously. Default to 0 if absent
+    "safety" => intval($_POST["safety"] ?? 0),
+    "valet" => intval($_POST["valet"] ?? 0),
+
+    // Our Guestroom
+    "cleanliness" => intval($_POST["cleanliness"] ?? 0),
+    "ambiance" => intval($_POST["ambiance"] ?? 0),
+    "comfort" => intval($_POST["comfort"] ?? 0),
+    "bathroom" => intval($_POST["bathroom"] ?? 0),
+
+    // Food & Beverage
     "food_quality" => intval($_POST["food_quality"] ?? 0),
     "serving_time" => intval($_POST["serving_time"] ?? 0),
-    "wait_staff" => intval($_POST["wait_staff"] ?? 0),
     "grooming" => intval($_POST["grooming"] ?? 0),
     "behavior" => intval($_POST["behavior"] ?? 0),
     "fnb_service" => intval($_POST["fnb_service"] ?? 0),
     "bar" => intval($_POST["bar"] ?? 0),
-    "bartender" => intval($_POST["bartender"] ?? 0),
-    "fnb_comments" => htmlspecialchars(trim($_POST["fnb_comments"] ?? "")),
+
     "helpful_staff_names" => htmlspecialchars(
         trim($_POST["helpful_staff_names"] ?? ""),
     ),
     "overall_rating" => intval($_POST["overall_rating"] ?? 0),
-    "suggestions_future" => htmlspecialchars(
-        trim($_POST["suggestions_future"] ?? ""),
+    
+    "general_comments" => htmlspecialchars(
+        trim($_POST["general_comments"] ?? ""),
     ),
-    "other_comments" => htmlspecialchars(trim($_POST["other_comments"] ?? "")),
+    "repeat_visit" => htmlspecialchars(trim($_POST["repeat_visit"] ?? "")),
+
+    "find_out_about_us" => htmlspecialchars(trim($_POST["find_out_about_us"] ?? "")),
+    "other_find_out_text" => htmlspecialchars(trim($_POST["other_find_out_text"] ?? "")),
+    "mode_of_reservation" => htmlspecialchars(trim($_POST["mode_of_reservation"] ?? "")),
     "first_stay" => htmlspecialchars(trim($_POST["first_stay"] ?? "")),
     "purpose_of_stay" => htmlspecialchars(
         trim($_POST["purpose_of_stay"] ?? ""),
@@ -250,8 +268,8 @@ try {
     $guest_id = $pdo->lastInsertId();
 
     // 2. Insert into stays table
-    $sqlStay = "INSERT INTO stays (guest_id, room_no, check_in, check_out, first_stay, purpose_of_stay, other_purpose_text)
-                VALUES (:guest_id, :room_no, :check_in, :check_out, :first_stay, :purpose_of_stay, :other_purpose_text)";
+    $sqlStay = "INSERT INTO stays (guest_id, room_no, check_in, check_out, first_stay, purpose_of_stay, other_purpose_text, find_out_about_us, other_find_out_text, mode_of_reservation)
+                VALUES (:guest_id, :room_no, :check_in, :check_out, :first_stay, :purpose_of_stay, :other_purpose_text, :find_out_about_us, :other_find_out_text, :mode_of_reservation)";
     $stmtStay = $pdo->prepare($sqlStay);
     $stmtStay->execute([
         ":guest_id" => $guest_id,
@@ -261,54 +279,77 @@ try {
         ":first_stay" => $data["first_stay"],
         ":purpose_of_stay" => $data["purpose_of_stay"],
         ":other_purpose_text" => $data["other_purpose_text"],
+        ":find_out_about_us" => $data["find_out_about_us"],
+        ":other_find_out_text" => $data["other_find_out_text"],
+        ":mode_of_reservation" => $data["mode_of_reservation"],
     ]);
     $stay_id = $pdo->lastInsertId();
 
     // 3. Insert into feedbacks table
-    $sqlFeedback = "INSERT INTO feedbacks (stay_id, overall_rating, suggestions_future, other_comments)
-                    VALUES (:stay_id, :overall_rating, :suggestions_future, :other_comments)";
+    $sqlFeedback = "INSERT INTO feedbacks (stay_id, overall_rating, general_comments, repeat_visit)
+                    VALUES (:stay_id, :overall_rating, :general_comments, :repeat_visit)";
     $stmtFeedback = $pdo->prepare($sqlFeedback);
     $stmtFeedback->execute([
         ":stay_id" => $stay_id,
         ":overall_rating" => $data["overall_rating"],
-        ":suggestions_future" => $data["suggestions_future"],
-        ":other_comments" => $data["other_comments"],
+        ":general_comments" => $data["general_comments"],
+        ":repeat_visit" => $data["repeat_visit"],
     ]);
     $feedback_id = $pdo->lastInsertId();
 
     // 4. Insert into feedback_foh
-    $sqlFOH = "INSERT INTO feedback_foh (feedback_id, frontdesk, reservations, telephone_operator, valet, housekeeping, accommodation, safety, security, overall_service, frontdesk_comments)
-               VALUES (:feedback_id, :frontdesk, :reservations, :telephone_operator, :valet, :housekeeping, :accommodation, :safety, :security, :overall_service, :frontdesk_comments)";
+    $sqlFOH = "INSERT INTO feedback_foh (
+                    feedback_id, frontdesk, reservations, check_in_rating, check_out_rating, 
+                    telephone_operator, valet, housekeeping, accommodation, safety, security, 
+                    friendliness, attentiveness, courteousness
+               )
+               VALUES (
+                    :feedback_id, :frontdesk, :reservations, :check_in_rating, :check_out_rating, 
+                    :telephone_operator, :valet, :housekeeping, :accommodation, :safety, :security, 
+                    :friendliness, :attentiveness, :courteousness
+               )";
     $stmtFOH = $pdo->prepare($sqlFOH);
     $stmtFOH->execute([
         ":feedback_id" => $feedback_id,
         ":frontdesk" => $data["frontdesk"],
         ":reservations" => $data["reservations"],
+        ":check_in_rating" => $data["check_in_rating"],
+        ":check_out_rating" => $data["check_out_rating"],
         ":telephone_operator" => $data["telephone_operator"],
         ":valet" => $data["valet"],
         ":housekeeping" => $data["housekeeping"],
         ":accommodation" => $data["accommodation"],
         ":safety" => $data["safety"],
         ":security" => $data["security"],
-        ":overall_service" => $data["overall_service"],
-        ":frontdesk_comments" => $data["frontdesk_comments"],
+        ":friendliness" => $data["friendliness"],
+        ":attentiveness" => $data["attentiveness"],
+        ":courteousness" => $data["courteousness"],
     ]);
 
     // 5. Insert into feedback_fnb
-    $sqlFNB = "INSERT INTO feedback_fnb (feedback_id, food_quality, serving_time, wait_staff, grooming, behavior, fnb_service, bar, bartender, fnb_comments)
-               VALUES (:feedback_id, :food_quality, :serving_time, :wait_staff, :grooming, :behavior, :fnb_service, :bar, :bartender, :fnb_comments)";
+    $sqlFNB = "INSERT INTO feedback_fnb (feedback_id, food_quality, serving_time, grooming, behavior, fnb_service, bar)
+               VALUES (:feedback_id, :food_quality, :serving_time, :grooming, :behavior, :fnb_service, :bar)";
     $stmtFNB = $pdo->prepare($sqlFNB);
     $stmtFNB->execute([
         ":feedback_id" => $feedback_id,
         ":food_quality" => $data["food_quality"],
         ":serving_time" => $data["serving_time"],
-        ":wait_staff" => $data["wait_staff"],
         ":grooming" => $data["grooming"],
         ":behavior" => $data["behavior"],
         ":fnb_service" => $data["fnb_service"],
         ":bar" => $data["bar"],
-        ":bartender" => $data["bartender"],
-        ":fnb_comments" => $data["fnb_comments"],
+    ]);
+
+    // Insert into new feedback_guestroom
+    $sqlGuestroom = "INSERT INTO feedback_guestroom (feedback_id, cleanliness, ambiance, comfort, bathroom)
+                     VALUES (:feedback_id, :cleanliness, :ambiance, :comfort, :bathroom)";
+    $stmtGuestroom = $pdo->prepare($sqlGuestroom);
+    $stmtGuestroom->execute([
+        ":feedback_id" => $feedback_id,
+        ":cleanliness" => $data["cleanliness"],
+        ":ambiance" => $data["ambiance"],
+        ":comfort" => $data["comfort"],
+        ":bathroom" => $data["bathroom"],
     ]);
 
     // 6. Handle helpful staff names (1NF normalization)
