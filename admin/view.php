@@ -152,7 +152,7 @@ function ratingText($val)
                         <span class="text-[2.5rem] font-bold text-gold-400"><?= $fb[
                             "overall_rating"
                         ] ?></span>
-                        <span class="text-white/60 text-[1.375rem]">/10</span>
+                        <span class="text-white/60 text-[1.375rem]">/5</span>
                     </div>
                     <span class="text-[0.85rem] font-bold text-gold-400/80 uppercase tracking-[0.2em]">Overall Rating</span>
                 </div>

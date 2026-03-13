@@ -243,54 +243,39 @@ if (
                 background: rgba(239, 68, 68, 0.9);
                 color: #fff
             }
+
+            .nav-link { padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; color: rgba(255,255,255,0.7); }
+            .nav-link:hover { background: rgba(201,169,110,0.1); color: #ffffff; }
+            .nav-link.active { color: #C9A96E; }
+
+            /* Hover transitions matching the official website */
+            nav.group:hover .nav-link { color: #1B3A2D; opacity: 0.7; }
+            nav.group:hover .nav-link:hover { background: rgba(201,169,110,0.1); opacity: 1; color: #1B3A2D; }
+            nav.group:hover .nav-link.active { background: rgba(201,169,110,0.15); opacity: 1; color: #b5893a; }
+
+            .logo-img { filter: brightness(0) invert(1); transition: all 0.3s ease; }
+            nav.group:hover .logo-img { filter: none; }
         </style>
     </head>
 
     <body class="font-sans text-white min-h-screen">
-        <nav class="border-b border-white/[0.06] px-6 py-4">
-            <div class="max-w-6xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <h1 class="font-script text-3xl text-white/70">John Hay
-                        Hotels</h1><span
-                        class="text-[0.55rem] font-bold text-gold-400/50 uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-gold-400/20 flex items-center gap-1.5"
-                    ><svg
-                            class="w-3 h-3"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                            />
-                        </svg>Super Admin</span>
+        <!-- ═══ TOP NAV BAR ═══ -->
+        <nav class="group bg-transparent hover:bg-white px-6 py-3 no-print relative z-10 border-b border-white/[0.06] hover:border-gold-400/20 transition-all duration-300 ease-in-out hover:shadow-md">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                    <img src="../img/logo.png" alt="John Hay Hotels Logo" class="logo-img h-16 sm:h-20 w-auto object-contain">
+                    <span class="text-[0.8rem] font-bold text-white/70 group-hover:text-pine-900 uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-white/5 group-hover:bg-gold-400/20 border border-white/10 group-hover:border-gold-400/30 hidden sm:inline-block transition-colors duration-300">Super Admin</span>
                 </div>
-                <div class="flex items-center gap-2"><a
-                        href="index.php"
-                        class="nav-link active"
-                    >Manage Admins</a><span
-                        class="text-white/10 mx-2">|</span><span
-                        class="text-white/30 text-sm"
-                    >Welcome, <span class="text-gold-400/70"><?= htmlspecialchars(
-                        $_SESSION["superadmin_username"] ?? "Super Admin",
-                    ) ?></span></span><a
-                        href="logout.php"
-                        class="text-sm text-white/30 hover:text-red-400/70 transition-colors flex items-center gap-1.5"
-                    ><svg
-                            class="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                            />
-                        </svg>Logout</a></div>
+                <div class="flex items-center gap-1 sm:gap-2">
+                    <a href="index.php" class="nav-link active">Manage Admins</a>
+                    <span class="text-white/20 group-hover:text-pine-900/20 mx-1 sm:mx-2 transition-colors duration-300">|</span>
+                    <a href="logout.php" class="text-[0.9rem] font-semibold text-white/50 hover:text-red-400 group-hover:text-red-600/80 group-hover:hover:text-red-700 group-hover:hover:bg-red-50 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        <span class="hidden sm:inline">Logout</span>
+                    </a>
+                </div>
             </div>
         </nav>
         <div class="max-w-6xl mx-auto px-6 py-8">

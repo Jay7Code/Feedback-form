@@ -306,15 +306,15 @@ $_SESSION["admin_logged_in"] !== true
 
         // ─── Helper: score class ───
         function scoreClass(val, max) {
-            if (val >= 8) return 'score-excellent';
-            if (val >= 5) return 'score-good';
+            if (val >= 4) return 'score-excellent';
+            if (val >= 3) return 'score-good';
             return 'score-poor';
         }
 
         // ─── Helper: score label ───
         function scoreLabel(val) {
-            if (val >= 8) return 'Excellent';
-            if (val >= 5) return 'Good';
+            if (val >= 4) return 'Excellent';
+            if (val >= 3) return 'Good';
             if (val > 0) return 'Poor';
             return 'N/A';
         }
@@ -482,10 +482,10 @@ $_SESSION["admin_logged_in"] !== true
             html += '<h3>Summary Overview</h3>';
             html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">';
             html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val">' + (s.total_responses || 0) + '</div><div class="stat-label">Total Responses</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val">' + (s.avg_nps !== null ? s.avg_nps : '—') + '<span style="font-size:0.6em;opacity:0.4">/10</span></div><div class="stat-label">Avg. Satisfaction</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.poor > 0 ? 'score-poor' : '') + '">' + (s.poor || 0) + '</div><div class="stat-label">Poor (1-6)</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.good > 0 ? 'score-good' : '') + '">' + (s.good || 0) + '</div><div class="stat-label">Good (7-8)</div></div>';
-            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.excellent > 0 ? 'score-excellent' : '') + '">' + (s.excellent || 0) + '</div><div class="stat-label">Excellent (9-10)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val">' + (s.avg_nps !== null ? s.avg_nps : '—') + '<span style="font-size:0.6em;opacity:0.4">/5</span></div><div class="stat-label">Avg. Satisfaction</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.poor > 0 ? 'score-poor' : '') + '">' + (s.poor || 0) + '</div><div class="stat-label">Poor (1-2)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.good > 0 ? 'score-good' : '') + '">' + (s.good || 0) + '</div><div class="stat-label">Good (3)</div></div>';
+            html += '<div class="stat-box" style="flex:1;min-width:120px"><div class="stat-val ' + (s.excellent > 0 ? 'score-excellent' : '') + '">' + (s.excellent || 0) + '</div><div class="stat-label">Excellent (4-5)</div></div>';
             html += '</div></div>';
 
             // ── NPS Distribution ──
@@ -493,11 +493,11 @@ $_SESSION["admin_logged_in"] !== true
             html += '<h3>Satisfaction Score Distribution</h3>';
             html += '<table class="report-table"><thead><tr>';
             html += '<th>Score</th>';
-            for (var i = 1; i <= 10; i++) html += '<th style="text-align:center">' + i + '</th>';
+            for (var i = 1; i <= 5; i++) html += '<th style="text-align:center">' + i + '</th>';
             html += '<th style="text-align:center">Total</th></tr></thead><tbody><tr>';
             html += '<td><strong>Responses</strong></td>';
             var totalDist = 0;
-            for (var i = 1; i <= 10; i++) {
+            for (var i = 1; i <= 5; i++) {
                 var val = data.nps_distribution[i] || 0;
                 totalDist += val;
                 html += '<td style="text-align:center">' + val + '</td>';
@@ -609,7 +609,7 @@ $_SESSION["admin_logged_in"] !== true
                 data.daily_breakdown.forEach(function(d) {
                     var cls = scoreClass(parseFloat(d.avg_rating), 10);
                     html += '<tr><td>' + displayDate(d.date) + '</td><td style="text-align:center">' + d.count + '</td>';
-                    html += '<td style="text-align:center" class="' + cls + '">' + d.avg_rating + '/10</td></tr>';
+                    html += '<td style="text-align:center" class="' + cls + '">' + d.avg_rating + '/5</td></tr>';
                 });
                 html += '</tbody></table></div>';
             }
@@ -644,7 +644,7 @@ $_SESSION["admin_logged_in"] !== true
                         if (c.general_comments) allComments.push('<strong>Comments & Suggestions:</strong><br>' + String(c.general_comments).replace(/\n/g, '<br>'));
 
                         html += '<div class="comment-card">';
-                        html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/10 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';
+                        html += '<div class="guest-info">' + (c.guest_name || 'Anonymous') + ' — Room ' + (c.room_no || '—') + ' — Rating: ' + (c.overall_rating || '—') + '/5 — ' + displayDate(c.created_at ? c.created_at.substring(0, 10) : '') + '</div>';
                         
                         if (c.helpful_staff_names) {
                             html += '<div style="margin-top: 8px; margin-bottom: 4px;"><span style="display:inline-block; background:rgba(201,169,110,0.15); color:#C9A96E; border:1px solid rgba(201,169,110,0.3); padding:4px 8px; border-radius:6px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">⭐ Recognized: <span style="color:#fff; text-transform:none; font-style:italic;">' + escapeHtml(c.helpful_staff_names) + '</span></span></div>';

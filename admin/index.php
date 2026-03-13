@@ -118,16 +118,16 @@ $feedbacks = $listStmt->fetchAll();
 // Rating label helper
 function ratingLabel($val)
 {
-    if ($val >= 9) {
+    if ($val >= 5) {
         return ["Excellent", "text-emerald-400"];
     }
-    if ($val >= 7) {
+    if ($val >= 4) {
         return ["Good", "text-green-400"];
     }
-    if ($val >= 5) {
+    if ($val >= 3) {
         return ["Average", "text-yellow-400"];
     }
-    if ($val >= 3) {
+    if ($val >= 2) {
         return ["Below Avg", "text-orange-400"];
     }
     return ["Poor", "text-red-400"];
@@ -271,7 +271,7 @@ function ratingLabel($val)
                     </div>
                     <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
                 </div>
-                <p class="text-[2.125rem] font-bold text-white/80"><?= $avgRating ?><span class="text-[1.375rem] text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80"><?= $avgRating ?><span class="text-[1.375rem] text-white/30">/5</span></p>
             </div>
 
             <!-- Latest Submission -->

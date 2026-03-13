@@ -826,7 +826,7 @@
                         </p>
                         <!-- NPS numbered circles -->
                         <div class="flex justify-center gap-2 sm:gap-3 flex-wrap">
-                            <?php for ($i = 1; $i <= 10; $i++): ?>
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="overall_rating" value="<?= $i ?>" <?= $i ===
                                           1

@@ -84,11 +84,11 @@ try {
         "SELECT f.overall_rating as rating, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY f.overall_rating ORDER BY f.overall_rating",
     );
     $npsDistribution = [];
-    for ($i = 1; $i <= 10; $i++) {
+    for ($i = 1; $i <= 5; $i++) {
         $npsDistribution[$i] = 0;
     }
     while ($row = $stmt->fetch()) {
-        if ($row["rating"] >= 1 && $row["rating"] <= 10) {
+        if ($row["rating"] >= 1 && $row["rating"] <= 5) {
             $npsDistribution[(int) $row["rating"]] = (int) $row["count"];
         }
     }

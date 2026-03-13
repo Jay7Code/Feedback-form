@@ -154,7 +154,7 @@ if (
                     </div>
                     <span class="text-[0.9rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em]">Avg. Satisfaction</span>
                 </div>
-                <p class="text-[2.125rem] font-bold text-white/80 stat-value"><span id="statNps">—</span><span class="text-[1.375rem] text-white/30">/10</span></p>
+                <p class="text-[2.125rem] font-bold text-white/80 stat-value"><span id="statNps">—</span><span class="text-[1.375rem] text-white/30">/5</span></p>
             </div>
             <!-- FOH Score -->
             <div class="glass-card rounded-xl p-5">
@@ -344,8 +344,7 @@ if (
             '#C9B96E', '#6E9FC9', '#C96EC9', '#9FC96E', '#6EC9A9'
         ];
         const RATING_COLORS = [
-            '#ef4444', '#f97316', '#f97316', '#eab308', '#eab308',
-            '#84cc16', '#84cc16', '#22c55e', '#10b981', '#059669'
+            '#ef4444', '#f97316', '#eab308', '#22c55e', '#059669'
         ];
 
         // ─── Chart.js Global Defaults ───
@@ -429,8 +428,8 @@ if (
                     responsive: true, maintainAspectRatio: false,
                     scales: {
                         x: { grid: { color: COLORS.grid }, ticks: { maxTicksLimit: 12 } },
-                        y: { min: 0, max: 10, grid: { color: COLORS.grid },
-                            ticks: { stepSize: 2 } }
+                        y: { min: 0, max: 5, grid: { color: COLORS.grid },
+                            ticks: { stepSize: 1 } }
                     },
                     plugins: {
                         legend: { display: false },
@@ -454,7 +453,7 @@ if (
             charts.dist = new Chart(document.getElementById('chartNpsDist'), {
                 type: 'bar',
                 data: {
-                    labels: distLabels.map(function(l) { return l + '/10'; }),
+                    labels: distLabels.map(function(l) { return l + '/5'; }),
                     datasets: [{
                         data: distValues,
                         backgroundColor: RATING_COLORS,
