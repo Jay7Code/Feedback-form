@@ -17,7 +17,7 @@ if (
     exit();
 }
 
-$pdo = getDBConnection();
+$mysqli = getDBConnection();
 
 // ─── Handle CSV Export ───
 if (isset($_GET["export"]) && $_GET["export"] === "csv") {
@@ -40,8 +40,11 @@ if (isset($_GET["export"]) && $_GET["export"] === "csv") {
     LEFT JOIN feedback_guestroom fg ON f.id = fg.feedback_id
     ORDER BY f.created_at DESC";
     
-    $stmt = $pdo->query($csvQuery);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Ensure associative array
+    $result = $mysqli->query($csvQuery);
+    $rows = [];
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
 
     header("Content-Type: text/csv");
     header('Content-Disposition: attachment; filename="feedback_export_' . date("Y-m-d") . '.csv"');
@@ -60,24 +63,30 @@ if (isset($_GET["export"]) && $_GET["export"] === "csv") {
 // ─── Filters ───
 $where = [];
 $params = [];
+$types = "";
 
 if (!empty($_GET["date_from"])) {
-    $where[] = "DATE(f.created_at) >= :date_from";
-    $params[":date_from"] = $_GET["date_from"];
+    $where[] = "DATE(f.created_at) >= ?";
+    $params[] = $_GET["date_from"];
+    $types .= "s";
 }
 if (!empty($_GET["date_to"])) {
-    $where[] = "DATE(f.created_at) <= :date_to";
-    $params[":date_to"] = $_GET["date_to"];
+    $where[] = "DATE(f.created_at) <= ?";
+    $params[] = $_GET["date_to"];
+    $types .= "s";
 }
 if (!empty($_GET["room"])) {
-    $where[] = "s.room_no = :room";
-    $params[":room"] = $_GET["room"];
+    $where[] = "s.room_no = ?";
+    $params[] = $_GET["room"];
+    $types .= "s";
 }
 if (!empty($_GET["search"])) {
-    $where[] = "(g.guest_name LIKE :search OR g.email LIKE :search2 OR s.room_no LIKE :search3)";
-    $params[":search"] = "%" . $_GET["search"] . "%";
-    $params[":search2"] = "%" . $_GET["search"] . "%";
-    $params[":search3"] = "%" . $_GET["search"] . "%";
+    $where[] = "(g.guest_name LIKE ? OR g.email LIKE ? OR s.room_no LIKE ?)";
+    $searchKey = "%" . $_GET["search"] . "%";
+    $params[] = $searchKey;
+    $params[] = $searchKey;
+    $params[] = $searchKey;
+    $types .= "sss";
 }
 
 $whereSQL = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
@@ -85,19 +94,34 @@ $whereSQL = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
 $joinSQL = "FROM feedbacks f JOIN stays s ON f.stay_id = s.id JOIN guests g ON s.guest_id = g.id";
 
 // ─── Stats ───
-$totalStmt = $pdo->prepare("SELECT COUNT(f.id) $joinSQL $whereSQL");
-$totalStmt->execute($params);
-$totalCount = $totalStmt->fetchColumn();
+$totalStmt = $mysqli->prepare("SELECT COUNT(f.id) $joinSQL $whereSQL");
+if (!empty($params)) {
+    $totalStmt->bind_param($types, ...$params);
+}
+$totalStmt->execute();
+$totalResult = $totalStmt->get_result();
+$row = $totalResult->fetch_row();
+$totalCount = $row[0];
 
-$avgStmt = $pdo->prepare(
+$avgStmt = $mysqli->prepare(
     "SELECT ROUND(AVG(f.overall_rating), 1) $joinSQL $whereSQL",
 );
-$avgStmt->execute($params);
-$avgRating = $avgStmt->fetchColumn() ?: "—";
+if (!empty($params)) {
+    $avgStmt->bind_param($types, ...$params);
+}
+$avgStmt->execute();
+$avgResult = $avgStmt->get_result();
+$row = $avgResult->fetch_row();
+$avgRating = $row[0] ?: "—";
 
-$latestStmt = $pdo->prepare("SELECT MAX(f.created_at) $joinSQL $whereSQL");
-$latestStmt->execute($params);
-$latestDate = $latestStmt->fetchColumn();
+$latestStmt = $mysqli->prepare("SELECT MAX(f.created_at) $joinSQL $whereSQL");
+if (!empty($params)) {
+    $latestStmt->bind_param($types, ...$params);
+}
+$latestStmt->execute();
+$latestResult = $latestStmt->get_result();
+$row = $latestResult->fetch_row();
+$latestDate = $row[0];
 $latestFormatted = $latestDate ? date("M d, Y", strtotime($latestDate)) : "—";
 
 // ─── Pagination ───
@@ -107,13 +131,20 @@ $offset = ($page - 1) * $limit;
 $totalPages = ceil($totalCount / $limit);
 
 // ─── Feedback list ───
-$listStmt = $pdo->prepare(
+$listStmt = $mysqli->prepare(
     "SELECT f.id, g.guest_name, s.room_no, f.overall_rating, s.purpose_of_stay, s.check_in, s.check_out, f.created_at 
      $joinSQL $whereSQL 
      ORDER BY f.created_at DESC LIMIT $offset, $limit",
 );
-$listStmt->execute($params);
-$feedbacks = $listStmt->fetchAll();
+if (!empty($params)) {
+    $listStmt->bind_param($types, ...$params);
+}
+$listStmt->execute();
+$listResult = $listStmt->get_result();
+$feedbacks = [];
+while ($row = $listResult->fetch_assoc()) {
+    $feedbacks[] = $row;
+}
 
 // Rating label helper
 function ratingLabel($val)

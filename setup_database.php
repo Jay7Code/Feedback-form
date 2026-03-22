@@ -17,19 +17,19 @@ $pass = "";
 $dbName = "feedback_form_db";
 
 try {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     // Connect without database selected
-    $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
+    $mysqli = new mysqli($host, $user, $pass);
+    $mysqli->set_charset("utf8mb4");
 
     // Create database if it doesn't exist
-    $pdo->exec(
+    $mysqli->query(
         "CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci",
     );
-    $pdo->exec("USE `$dbName`");
+    $mysqli->select_db($dbName);
 
     // Create feedbacks table
-    $pdo->exec("
+    $mysqli->query("
         CREATE TABLE IF NOT EXISTS `feedbacks` (
             `id`                    INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -88,7 +88,7 @@ try {
     ");
 
     // Create admins table
-    $pdo->exec("
+    $mysqli->query("
         CREATE TABLE IF NOT EXISTS `admins` (
             `id`            INT AUTO_INCREMENT PRIMARY KEY,
             `username`      VARCHAR(50) NOT NULL UNIQUE,
@@ -101,19 +101,19 @@ try {
     ");
 
     // Insert default admin user if not already present
-    $checkAdmin = $pdo->query(
+    $checkAdmin = $mysqli->query(
         "SELECT COUNT(*) FROM `admins` WHERE `username` = 'admin'",
     );
-    if ($checkAdmin->fetchColumn() == 0) {
+    $row = $checkAdmin->fetch_row();
+    if ($row[0] == 0) {
         $hashedPassword = password_hash("admin123", PASSWORD_DEFAULT);
-        $insertAdmin = $pdo->prepare(
-            "INSERT INTO `admins` (`username`, `password`, `full_name`, `is_active`) VALUES (:username, :password, :full_name, 1)",
+        $insertAdmin = $mysqli->prepare(
+            "INSERT INTO `admins` (`username`, `password`, `full_name`, `is_active`) VALUES (?, ?, ?, 1)",
         );
-        $insertAdmin->execute([
-            ":username" => "admin",
-            ":password" => $hashedPassword,
-            ":full_name" => "System Administrator",
-        ]);
+        $adminUsername = "admin";
+        $adminFullName = "System Administrator";
+        $insertAdmin->bind_param("sss", $adminUsername, $hashedPassword, $adminFullName);
+        $insertAdmin->execute();
     }
 
     echo "<!DOCTYPE html><html><head><title>Setup Complete</title>";
@@ -130,7 +130,7 @@ try {
     echo "<a href='admin/login.php' class='block px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wider border border-[#C9A96E]/30 text-[#C9A96E]/70 hover:text-[#C9A96E]'>Go to Admin Panel</a>";
     echo "<a href='superadmin/login.php' class='block px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wider border border-[#C9A96E]/30 text-[#C9A96E]/70 hover:text-[#C9A96E]'>Go to Super Admin Panel</a>";
     echo "</div></div></body></html>";
-} catch (PDOException $e) {
+} catch (mysqli_sql_exception $e) {
     echo "<!DOCTYPE html><html><head><title>Setup Error</title>";
     echo "<script src='https://cdn.tailwindcss.com'></script>";
     echo "</head><body class='bg-[#0A1912] text-white flex items-center justify-center min-h-screen'>";

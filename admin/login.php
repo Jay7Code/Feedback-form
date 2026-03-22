@@ -22,12 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($username) && !empty($password)) {
         try {
-            $pdo = getDBConnection();
-            $stmt = $pdo->prepare(
-                "SELECT id, username, password, full_name, is_active FROM admins WHERE username = :username LIMIT 1",
+            $mysqli = getDBConnection();
+            $stmt = $mysqli->prepare(
+                "SELECT id, username, password, full_name, is_active FROM admins WHERE username = ? LIMIT 1",
             );
-            $stmt->execute([":username" => $username]);
-            $admin = $stmt->fetch();
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $admin = $result->fetch_assoc();
 
             if ($admin && password_verify($password, $admin["password"])) {
                 if ($admin["is_active"] == 1) {
@@ -45,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
                 $error = "Invalid username or password.";
             }
-        } catch (PDOException $e) {
+        } catch (mysqli_sql_exception $e) {
             error_log("Login error: " . $e->getMessage());
             $error = "A system error occurred. Please try again.";
         }

@@ -18,7 +18,7 @@ if (
     echo json_encode(["error" => "Unauthorized"]);
     exit();
 }
-$pdo = getDBConnection();
+$mysqli = getDBConnection();
 $period = $_GET["period"] ?? "all";
 $dateFilter = "";
 switch ($period) {
@@ -48,7 +48,7 @@ function toTenScale($val)
 }
 
 try {
-    $stmt = $pdo->query("SELECT COUNT(*) as total_responses, ROUND(AVG(f.overall_rating),1) as avg_nps,
+    $stmt = $mysqli->query("SELECT COUNT(*) as total_responses, ROUND(AVG(f.overall_rating),1) as avg_nps,
         ROUND(AVG(CASE WHEN foh.frontdesk>0 THEN foh.frontdesk END),2) as avg_frontdesk,
         ROUND(AVG(CASE WHEN foh.reservations>0 THEN foh.reservations END),2) as avg_reservations,
         ROUND(AVG(CASE WHEN foh.check_in_rating>0 THEN foh.check_in_rating END),2) as avg_check_in_rating,
@@ -78,45 +78,45 @@ try {
         LEFT JOIN feedback_fnb fnb ON f.id=fnb.feedback_id 
         LEFT JOIN feedback_guestroom fg ON f.id=fg.feedback_id 
         $dateFilter");
-    $summary = $stmt->fetch();
+    $summary = $stmt->fetch_assoc();
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT f.overall_rating as rating, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY f.overall_rating ORDER BY f.overall_rating",
     );
     $npsDistribution = [];
     for ($i = 1; $i <= 5; $i++) {
         $npsDistribution[$i] = 0;
     }
-    while ($row = $stmt->fetch()) {
+    while ($row = $stmt->fetch_assoc()) {
         if ($row["rating"] >= 1 && $row["rating"] <= 5) {
             $npsDistribution[(int) $row["rating"]] = (int) $row["count"];
         }
     }
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT DATE(f.created_at) as date, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY DATE(f.created_at) ORDER BY date",
     );
-    $dailyVolume = $stmt->fetchAll();
+    $dailyVolume = $stmt->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT CASE WHEN s.purpose_of_stay='' OR s.purpose_of_stay IS NULL THEN 'Not Specified' ELSE s.purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY purpose ORDER BY count DESC",
     );
-    $purposeBreakdown = $stmt->fetchAll();
+    $purposeBreakdown = $stmt->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT CASE WHEN s.first_stay='Yes' THEN 'First Stay' WHEN s.first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY type ORDER BY count DESC",
     );
-    $firstStayData = $stmt->fetchAll();
+    $firstStayData = $stmt->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT CASE WHEN g.nationality='' OR g.nationality IS NULL THEN 'Not Specified' ELSE g.nationality END as nation, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id JOIN guests g ON s.guest_id=g.id $dateFilter GROUP BY nation ORDER BY count DESC",
     );
-    $nationalityData = $stmt->fetchAll();
+    $nationalityData = $stmt->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->query(
+    $stmt = $mysqli->query(
         "SELECT DATE(f.created_at) as date, ROUND(AVG(f.overall_rating),1) as avg_rating, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY DATE(f.created_at) ORDER BY date",
     );
-    $npsTrend = $stmt->fetchAll();
+    $npsTrend = $stmt->fetch_all(MYSQLI_ASSOC);
 
     $response = [
         "summary" => [
@@ -229,7 +229,7 @@ try {
         "nps_trend" => $npsTrend,
     ];
     echo json_encode($response);
-} catch (PDOException $e) {
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => "Database error: " . $e->getMessage()]);
 }

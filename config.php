@@ -17,26 +17,19 @@ define("SUPERADMIN_USERNAME", "superadmin");
 define("SUPERADMIN_PASSWORD", "superadmin123");
 
 /**
- * Get a PDO database connection.
- * Uses UTF-8 encoding and throws exceptions on errors.
+ * Get a mysqli database connection.
+ * Uses UTF-8 encoding.
  *
- * @return PDO
+ * @return mysqli
  */
 function getDBConnection()
 {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     try {
-        $pdo = new PDO(
-            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
-            DB_USER,
-            DB_PASS,
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ],
-        );
-        return $pdo;
-    } catch (PDOException $e) {
+        $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $mysqli->set_charset("utf8mb4");
+        return $mysqli;
+    } catch (mysqli_sql_exception $e) {
         error_log("Database connection failed: " . $e->getMessage());
         die("Database connection failed. Please contact the administrator.");
     }

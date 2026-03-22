@@ -14,11 +14,9 @@ require_once __DIR__ . "/../config.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+require_once __DIR__ . "/email/config.php";
 
-$smtpUsername = 'noreply.johnhayhotels@theforestwing.com';
-$smtpPassword = 'ENTER_YOUR_PASSWORD_HERE';
-
-function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUser, string $smtpPass): bool
+function sendThankYouEmail(string $guestName, string $guestEmail): bool
 {
     $displayName = !empty($guestName) ? htmlspecialchars($guestName) : 'Valued Guest';
 
@@ -142,13 +140,13 @@ function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUs
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host = 'cpanel10wh.jpt1.cloud.z.com';
+        $mail->Host = SMTP_HOST;
         $mail->SMTPAuth = true;
-        $mail->Username = $smtpUser;
-        $mail->Password = $smtpPass;
+        $mail->Username = SMTP_USERNAME;
+        $mail->Password = SMTP_PASSWORD;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = 465;
-        $mail->setFrom($smtpUser, 'John Hay Hotels - Forest Wing');
+        $mail->Port = SMTP_PORT;
+        $mail->setFrom(SMTP_USERNAME, SMTP_FROM_NAME);
         $mail->addAddress($guestEmail);
         $mail->isHTML(true);
         $mail->Subject = 'Thank You for Your Feedback';
@@ -171,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
-$pdo = getDBConnection();
+$mysqli = getDBConnection();
 
 $data = [
     // Our Hotel Process & Associates (mapped to FOH table)
@@ -244,51 +242,51 @@ $data = [
 $success = false;
 
 try {
-    $pdo->beginTransaction();
+    $mysqli->begin_transaction();
 
     // 1. Insert into guests table
     $sqlGuest = "INSERT INTO guests (guest_name, email, address, contact_no, nationality, other_nationality_text)
-                 VALUES (:guest_name, :email, :address, :contact_no, :nationality, :other_nationality_text)";
-    $stmtGuest = $pdo->prepare($sqlGuest);
-    $stmtGuest->execute([
-        ":guest_name" => $data["guest_name"],
-        ":email" => $data["email"],
-        ":address" => $data["address"],
-        ":contact_no" => $data["contact_no"],
-        ":nationality" => $data["nationality"],
-        ":other_nationality_text" => $data["other_nationality_text"],
-    ]);
-    $guest_id = $pdo->lastInsertId();
+                 VALUES (?, ?, ?, ?, ?, ?)";
+    $stmtGuest = $mysqli->prepare($sqlGuest);
+    $stmtGuest->bind_param("ssssss", 
+        $data["guest_name"],
+        $data["email"],
+        $data["address"],
+        $data["contact_no"],
+        $data["nationality"],
+        $data["other_nationality_text"]);
+    $stmtGuest->execute();
+    $guest_id = $mysqli->insert_id;
 
     // 2. Insert into stays table
     $sqlStay = "INSERT INTO stays (guest_id, room_no, check_in, check_out, first_stay, purpose_of_stay, other_purpose_text, find_out_about_us, other_find_out_text, mode_of_reservation)
-                VALUES (:guest_id, :room_no, :check_in, :check_out, :first_stay, :purpose_of_stay, :other_purpose_text, :find_out_about_us, :other_find_out_text, :mode_of_reservation)";
-    $stmtStay = $pdo->prepare($sqlStay);
-    $stmtStay->execute([
-        ":guest_id" => $guest_id,
-        ":room_no" => $data["room_no"],
-        ":check_in" => $data["check_in"],
-        ":check_out" => $data["check_out"],
-        ":first_stay" => $data["first_stay"],
-        ":purpose_of_stay" => $data["purpose_of_stay"],
-        ":other_purpose_text" => $data["other_purpose_text"],
-        ":find_out_about_us" => $data["find_out_about_us"],
-        ":other_find_out_text" => $data["other_find_out_text"],
-        ":mode_of_reservation" => $data["mode_of_reservation"],
-    ]);
-    $stay_id = $pdo->lastInsertId();
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmtStay = $mysqli->prepare($sqlStay);
+    $stmtStay->bind_param("isssssssss", 
+        $guest_id,
+        $data["room_no"],
+        $data["check_in"],
+        $data["check_out"],
+        $data["first_stay"],
+        $data["purpose_of_stay"],
+        $data["other_purpose_text"],
+        $data["find_out_about_us"],
+        $data["other_find_out_text"],
+        $data["mode_of_reservation"]);
+    $stmtStay->execute();
+    $stay_id = $mysqli->insert_id;
 
     // 3. Insert into feedbacks table
     $sqlFeedback = "INSERT INTO feedbacks (stay_id, overall_rating, general_comments, repeat_visit)
-                    VALUES (:stay_id, :overall_rating, :general_comments, :repeat_visit)";
-    $stmtFeedback = $pdo->prepare($sqlFeedback);
-    $stmtFeedback->execute([
-        ":stay_id" => $stay_id,
-        ":overall_rating" => $data["overall_rating"],
-        ":general_comments" => $data["general_comments"],
-        ":repeat_visit" => $data["repeat_visit"],
-    ]);
-    $feedback_id = $pdo->lastInsertId();
+                    VALUES (?, ?, ?, ?)";
+    $stmtFeedback = $mysqli->prepare($sqlFeedback);
+    $stmtFeedback->bind_param("iiss", 
+        $stay_id,
+        $data["overall_rating"],
+        $data["general_comments"],
+        $data["repeat_visit"]);
+    $stmtFeedback->execute();
+    $feedback_id = $mysqli->insert_id;
 
     // 4. Insert into feedback_foh
     $sqlFOH = "INSERT INTO feedback_foh (
@@ -297,76 +295,70 @@ try {
                     friendliness, attentiveness, courteousness
                )
                VALUES (
-                    :feedback_id, :frontdesk, :reservations, :check_in_rating, :check_out_rating, 
-                    :telephone_operator, :valet, :housekeeping, :accommodation, :safety, :security, 
-                    :friendliness, :attentiveness, :courteousness
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                )";
-    $stmtFOH = $pdo->prepare($sqlFOH);
-    $stmtFOH->execute([
-        ":feedback_id" => $feedback_id,
-        ":frontdesk" => $data["frontdesk"],
-        ":reservations" => $data["reservations"],
-        ":check_in_rating" => $data["check_in_rating"],
-        ":check_out_rating" => $data["check_out_rating"],
-        ":telephone_operator" => $data["telephone_operator"],
-        ":valet" => $data["valet"],
-        ":housekeeping" => $data["housekeeping"],
-        ":accommodation" => $data["accommodation"],
-        ":safety" => $data["safety"],
-        ":security" => $data["security"],
-        ":friendliness" => $data["friendliness"],
-        ":attentiveness" => $data["attentiveness"],
-        ":courteousness" => $data["courteousness"],
-    ]);
+    $stmtFOH = $mysqli->prepare($sqlFOH);
+    $stmtFOH->bind_param("iiiiiiiiiiiiii", 
+        $feedback_id,
+        $data["frontdesk"],
+        $data["reservations"],
+        $data["check_in_rating"],
+        $data["check_out_rating"],
+        $data["telephone_operator"],
+        $data["valet"],
+        $data["housekeeping"],
+        $data["accommodation"],
+        $data["safety"],
+        $data["security"],
+        $data["friendliness"],
+        $data["attentiveness"],
+        $data["courteousness"]);
+    $stmtFOH->execute();
 
     // 5. Insert into feedback_fnb
     $sqlFNB = "INSERT INTO feedback_fnb (feedback_id, food_quality, serving_time, grooming, behavior, fnb_service, bar)
-               VALUES (:feedback_id, :food_quality, :serving_time, :grooming, :behavior, :fnb_service, :bar)";
-    $stmtFNB = $pdo->prepare($sqlFNB);
-    $stmtFNB->execute([
-        ":feedback_id" => $feedback_id,
-        ":food_quality" => $data["food_quality"],
-        ":serving_time" => $data["serving_time"],
-        ":grooming" => $data["grooming"],
-        ":behavior" => $data["behavior"],
-        ":fnb_service" => $data["fnb_service"],
-        ":bar" => $data["bar"],
-    ]);
+               VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmtFNB = $mysqli->prepare($sqlFNB);
+    $stmtFNB->bind_param("iiiiiii", 
+        $feedback_id,
+        $data["food_quality"],
+        $data["serving_time"],
+        $data["grooming"],
+        $data["behavior"],
+        $data["fnb_service"],
+        $data["bar"]);
+    $stmtFNB->execute();
 
     // Insert into new feedback_guestroom
     $sqlGuestroom = "INSERT INTO feedback_guestroom (feedback_id, cleanliness, ambiance, comfort, bathroom)
-                     VALUES (:feedback_id, :cleanliness, :ambiance, :comfort, :bathroom)";
-    $stmtGuestroom = $pdo->prepare($sqlGuestroom);
-    $stmtGuestroom->execute([
-        ":feedback_id" => $feedback_id,
-        ":cleanliness" => $data["cleanliness"],
-        ":ambiance" => $data["ambiance"],
-        ":comfort" => $data["comfort"],
-        ":bathroom" => $data["bathroom"],
-    ]);
+                     VALUES (?, ?, ?, ?, ?)";
+    $stmtGuestroom = $mysqli->prepare($sqlGuestroom);
+    $stmtGuestroom->bind_param("iiiii", 
+        $feedback_id,
+        $data["cleanliness"],
+        $data["ambiance"],
+        $data["comfort"],
+        $data["bathroom"]);
+    $stmtGuestroom->execute();
 
     // 6. Handle helpful staff names (1NF normalization)
     if (!empty($data["helpful_staff_names"])) {
         $staffNames = array_map('trim', explode(",", $data["helpful_staff_names"]));
-        $sqlStaff = "INSERT INTO feedback_helpful_staff (feedback_id, staff_name) VALUES (:feedback_id, :staff_name)";
-        $stmtStaff = $pdo->prepare($sqlStaff);
+        $sqlStaff = "INSERT INTO feedback_helpful_staff (feedback_id, staff_name) VALUES (?, ?)";
+        $stmtStaff = $mysqli->prepare($sqlStaff);
         foreach ($staffNames as $name) {
             if (!empty($name)) {
-                $stmtStaff->execute([
-                    ":feedback_id" => $feedback_id,
-                    ":staff_name" => $name,
-                ]);
+                $stmtStaff->bind_param("is", $feedback_id, $name);
+                $stmtStaff->execute();
             }
         }
     }
 
-    $pdo->commit();
+    $mysqli->commit();
     $success = true;
-    if (!empty($data['email'])) sendThankYouEmail($data['guest_name'], $data['email'], $smtpUsername, $smtpPassword);
-} catch (PDOException $e) {
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
+    if (!empty($data['email'])) sendThankYouEmail($data['guest_name'], $data['email']);
+} catch (mysqli_sql_exception $e) {
+    $mysqli->rollback();
     error_log("Failed to insert normalized feedback: " . $e->getMessage());
 }
 ?>

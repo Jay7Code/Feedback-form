@@ -18,7 +18,7 @@ if (
     echo json_encode(["error" => "Unauthorized"]);
     exit();
 }
-$pdo = getDBConnection();
+$mysqli = getDBConnection();
 $dateFrom = $_GET["date_from"] ?? "";
 $dateTo = $_GET["date_to"] ?? "";
 if (empty($dateFrom) || empty($dateTo)) {
@@ -29,8 +29,7 @@ if (empty($dateFrom) || empty($dateTo)) {
 $dateFrom = preg_replace("/[^0-9\-]/", "", $dateFrom);
 $dateTo = preg_replace("/[^0-9\-]/", "", $dateTo);
 $dateFilter =
-    "WHERE DATE(f.created_at) >= :date_from AND DATE(f.created_at) <= :date_to";
-$params = [":date_from" => $dateFrom, ":date_to" => $dateTo];
+    "WHERE DATE(f.created_at) >= ? AND DATE(f.created_at) <= ?";
 
 function toTenScale($val)
 {
@@ -39,7 +38,7 @@ function toTenScale($val)
 }
 
 try {
-    $stmt = $pdo->prepare("SELECT COUNT(*) as total_responses, ROUND(AVG(overall_rating),2) as avg_nps,
+    $stmt = $mysqli->prepare("SELECT COUNT(*) as total_responses, ROUND(AVG(overall_rating),2) as avg_nps,
         ROUND(AVG(CASE WHEN foh.frontdesk>0 THEN foh.frontdesk END),2) as avg_frontdesk,
         ROUND(AVG(CASE WHEN foh.reservations>0 THEN foh.reservations END),2) as avg_reservations,
         ROUND(AVG(CASE WHEN foh.check_in_rating>0 THEN foh.check_in_rating END),2) as avg_check_in_rating,
@@ -68,18 +67,22 @@ try {
         LEFT JOIN feedback_fnb fnb ON f.id=fnb.feedback_id 
         LEFT JOIN feedback_guestroom fg ON f.id=fg.feedback_id 
         $dateFilter");
-    $stmt->execute($params);
-    $summary = $stmt->fetch();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $summary = $result->fetch_assoc();
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT f.overall_rating as rating, COUNT(*) as count FROM feedbacks f $dateFilter GROUP BY f.overall_rating ORDER BY f.overall_rating",
     );
-    $stmt->execute($params);
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $npsDist = [];
     for ($i = 1; $i <= 5; $i++) {
         $npsDist[$i] = 0;
     }
-    while ($row = $stmt->fetch()) {
+    while ($row = $result->fetch_assoc()) {
         if ($row["rating"] >= 1 && $row["rating"] <= 5) {
             $npsDist[(int) $row["rating"]] = (int) $row["count"];
         }
@@ -88,41 +91,53 @@ try {
     $good = ($npsDist[3] ?? 0);
     $poor = ($npsDist[1] ?? 0) + ($npsDist[2] ?? 0);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT CASE WHEN s.purpose_of_stay='' OR s.purpose_of_stay IS NULL THEN 'Not Specified' ELSE s.purpose_of_stay END as purpose, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY purpose ORDER BY count DESC",
     );
-    $stmt->execute($params);
-    $purposeBreakdown = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $purposeBreakdown = $result->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT CASE WHEN s.first_stay='Yes' THEN 'First Stay' WHEN s.first_stay='No' THEN 'Returning' ELSE 'Not Specified' END as type, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id $dateFilter GROUP BY type ORDER BY count DESC",
     );
-    $stmt->execute($params);
-    $firstStayData = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $firstStayData = $result->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT CASE WHEN g.nationality='' OR g.nationality IS NULL THEN 'Not Specified' ELSE g.nationality END as nation, COUNT(*) as count FROM feedbacks f JOIN stays s ON f.stay_id=s.id JOIN guests g ON s.guest_id=g.id $dateFilter GROUP BY nation ORDER BY count DESC",
     );
-    $stmt->execute($params);
-    $nationalityBreakdown = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $nationalityBreakdown = $result->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT g.guest_name, s.room_no, f.overall_rating, f.general_comments, (SELECT GROUP_CONCAT(staff_name SEPARATOR ', ') FROM feedback_helpful_staff WHERE feedback_id=f.id) as helpful_staff_names, f.created_at FROM feedbacks f JOIN stays s ON f.stay_id=s.id JOIN guests g ON s.guest_id=g.id $dateFilter ORDER BY f.created_at DESC LIMIT 20",
     );
-    $stmt->execute($params);
-    $comments = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $comments = $result->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT h.staff_name as name, COUNT(*) as count FROM feedback_helpful_staff h JOIN feedbacks f ON h.feedback_id=f.id $dateFilter GROUP BY h.staff_name ORDER BY count DESC LIMIT 10",
     );
-    $stmt->execute($params);
-    $recognizedStaff = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $recognizedStaff = $result->fetch_all(MYSQLI_ASSOC);
 
-    $stmt = $pdo->prepare(
+    $stmt = $mysqli->prepare(
         "SELECT DATE(f.created_at) as date, COUNT(*) as count, ROUND(AVG(f.overall_rating),1) as avg_rating FROM feedbacks f $dateFilter GROUP BY DATE(f.created_at) ORDER BY date",
     );
-    $stmt->execute($params);
-    $dailyBreakdown = $stmt->fetchAll();
+    $stmt->bind_param("ss", $dateFrom, $dateTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $dailyBreakdown = $result->fetch_all(MYSQLI_ASSOC);
 
     $response = [
         "date_from" => $dateFrom,
@@ -235,7 +250,7 @@ try {
         "daily_breakdown" => $dailyBreakdown,
     ];
     echo json_encode($response);
-} catch (PDOException $e) {
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => "Database error: " . $e->getMessage()]);
 }

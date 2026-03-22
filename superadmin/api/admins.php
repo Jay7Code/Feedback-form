@@ -25,17 +25,17 @@ if (
     exit();
 }
 
-$pdo = getDBConnection();
+$mysqli = getDBConnection();
 
 // ─── GET: List all admins ───
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     try {
-        $stmt = $pdo->query(
+        $stmt = $mysqli->query(
             "SELECT id, username, full_name, is_active, created_at, updated_at FROM admins ORDER BY created_at DESC",
         );
-        $admins = $stmt->fetchAll();
+        $admins = $stmt->fetch_all(MYSQLI_ASSOC);
         echo json_encode(["success" => true, "admins" => $admins]);
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         error_log("API error: " . $e->getMessage());
         echo json_encode(["error" => "Failed to fetch admins"]);
     }
@@ -73,30 +73,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             // Check if username already exists
-            $check = $pdo->prepare(
-                "SELECT COUNT(*) FROM admins WHERE username = :username",
+            $check = $mysqli->prepare(
+                "SELECT COUNT(*) FROM admins WHERE username = ?",
             );
-            $check->execute([":username" => $username]);
-            if ($check->fetchColumn() > 0) {
+            $check->bind_param("s", $username);
+            $check->execute();
+            $result = $check->get_result();
+            if ($result->fetch_row()[0] > 0) {
                 echo json_encode(["error" => "Username already exists."]);
                 exit();
             }
 
             try {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare(
-                    "INSERT INTO admins (username, password, full_name, is_active) VALUES (:username, :password, :full_name, 1)",
+                $stmt = $mysqli->prepare(
+                    "INSERT INTO admins (username, password, full_name, is_active) VALUES (?, ?, ?, 1)",
                 );
-                $stmt->execute([
-                    ":username" => $username,
-                    ":password" => $hashedPassword,
-                    ":full_name" => $full_name ?: $username,
-                ]);
+                $fullNameToUse = $full_name ?: $username;
+                $stmt->bind_param("sss", $username, $hashedPassword, $fullNameToUse);
+                $stmt->execute();
                 echo json_encode([
                     "success" => true,
                     "message" => "Admin account created successfully.",
                 ]);
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 error_log("Create admin error: " . $e->getMessage());
                 echo json_encode([
                     "error" => "Failed to create admin account.",
@@ -114,11 +114,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             try {
                 // Get current status
-                $stmt = $pdo->prepare(
-                    "SELECT is_active FROM admins WHERE id = :id",
+                $stmt = $mysqli->prepare(
+                    "SELECT is_active FROM admins WHERE id = ?",
                 );
-                $stmt->execute([":id" => $adminId]);
-                $admin = $stmt->fetch();
+                $stmt->bind_param("i", $adminId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $admin = $result->fetch_assoc();
 
                 if (!$admin) {
                     echo json_encode(["error" => "Admin not found."]);
@@ -126,10 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
 
                 $newStatus = $admin["is_active"] == 1 ? 0 : 1;
-                $update = $pdo->prepare(
-                    "UPDATE admins SET is_active = :status WHERE id = :id",
+                $update = $mysqli->prepare(
+                    "UPDATE admins SET is_active = ? WHERE id = ?",
                 );
-                $update->execute([":status" => $newStatus, ":id" => $adminId]);
+                $update->bind_param("ii", $newStatus, $adminId);
+                $update->execute();
 
                 $statusText = $newStatus == 1 ? "activated" : "deactivated";
                 echo json_encode([
@@ -137,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "message" => "Admin account $statusText.",
                     "new_status" => $newStatus,
                 ]);
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 error_log("Toggle status error: " . $e->getMessage());
                 echo json_encode(["error" => "Failed to update admin status."]);
             }
@@ -161,15 +164,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             try {
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare(
-                    "UPDATE admins SET password = :password WHERE id = :id",
+                $stmt = $mysqli->prepare(
+                    "UPDATE admins SET password = ? WHERE id = ?",
                 );
-                $stmt->execute([
-                    ":password" => $hashedPassword,
-                    ":id" => $adminId,
-                ]);
+                $stmt->bind_param("si", $hashedPassword, $adminId);
+                $stmt->execute();
 
-                if ($stmt->rowCount() === 0) {
+                if ($stmt->affected_rows === 0) {
                     echo json_encode(["error" => "Admin not found."]);
                 } else {
                     echo json_encode([
@@ -177,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         "message" => "Password reset successfully.",
                     ]);
                 }
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 error_log("Reset password error: " . $e->getMessage());
                 echo json_encode(["error" => "Failed to reset password."]);
             }
