@@ -8,22 +8,15 @@
  * Sends an automated "Thank You" email via PHPMailer on success.
  * ═══════════════════════════════════════════════════════════════
  */
-require_once "config.php";
+require_once __DIR__ . "/../config.php";
 
 // ── PHPMailer ────────────────────────────────────────────────
-require_once __DIR__ . '/phpmailer/PHPMailer.php';
-require_once __DIR__ . '/phpmailer/SMTP.php';
-require_once __DIR__ . '/phpmailer/Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
-// ═════════════════════════════════════════════════════════════
-// GMAIL SMTP CREDENTIALS
-// ═════════════════════════════════════════════════════════════
-$gmailUsername    = 'noreply.johnhayhotelsforestwing@gmail.com';
-$gmailAppPassword = 'ammq zyno kyts cfbf';
+
+$smtpUsername = 'noreply.johnhayhotels@theforestwing.com';
+$smtpPassword = 'ENTER_YOUR_PASSWORD_HERE';
 
 function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUser, string $smtpPass): bool
 {
@@ -149,12 +142,12 @@ function sendThankYouEmail(string $guestName, string $guestEmail, string $smtpUs
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'cpanel10wh.jpt1.cloud.z.com';
         $mail->SMTPAuth = true;
         $mail->Username = $smtpUser;
         $mail->Password = $smtpPass;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465;
         $mail->setFrom($smtpUser, 'John Hay Hotels - Forest Wing');
         $mail->addAddress($guestEmail);
         $mail->isHTML(true);
@@ -369,7 +362,7 @@ try {
 
     $pdo->commit();
     $success = true;
-    if (!empty($data['email'])) sendThankYouEmail($data['guest_name'], $data['email'], $gmailUsername, $gmailAppPassword);
+    if (!empty($data['email'])) sendThankYouEmail($data['guest_name'], $data['email'], $smtpUsername, $smtpPassword);
 } catch (PDOException $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

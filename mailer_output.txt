@@ -1,0 +1,55 @@
+2026-03-21 01:31:08	SERVER -> CLIENT: 220-cpanel10wh.jpt1.cloud.z.com ESMTP Exim 4.99.1 #2 Sat, 21 Mar 2026 09:31:06 +0800 
+                   	                  220-We do not authorize the use of this system to transport unsolicited, 
+                   	                  220 and/or bulk e-mail.
+2026-03-21 01:31:08	CLIENT -> SERVER: EHLO LAPTOP-1K6EP452
+2026-03-21 01:31:08	SERVER -> CLIENT: 250-cpanel10wh.jpt1.cloud.z.com Hello LAPTOP-1K6EP452 [180.232.43.179]
+                   	                  250-SIZE 20971520
+                   	                  250-LIMITS MAILMAX=1000 RCPTMAX=50000
+                   	                  250-8BITMIME
+                   	                  250-PIPELINING
+                   	                  250-PIPECONNECT
+                   	                  250-AUTH PLAIN LOGIN
+                   	                  250 HELP
+2026-03-21 01:31:08	CLIENT -> SERVER: AUTH LOGIN
+2026-03-21 01:31:08	SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2026-03-21 01:31:08	CLIENT -> SERVER: [credentials hidden]
+2026-03-21 01:31:08	SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2026-03-21 01:31:08	CLIENT -> SERVER: [credentials hidden]
+2026-03-21 01:31:08	SERVER -> CLIENT: 235 Authentication succeeded
+2026-03-21 01:31:08	CLIENT -> SERVER: MAIL FROM:<noreply.johnhayhotels@theforestwing.com>
+2026-03-21 01:31:08	SERVER -> CLIENT: 250 OK
+2026-03-21 01:31:08	CLIENT -> SERVER: RCPT TO:<noreply.johnhayhotels@theforestwing.com>
+2026-03-21 01:31:08	SERVER -> CLIENT: 250 Accepted
+2026-03-21 01:31:08	CLIENT -> SERVER: DATA
+2026-03-21 01:31:08	SERVER -> CLIENT: 354 Enter message, ending with "." on a line by itself
+2026-03-21 01:31:08	CLIENT -> SERVER: Date: Sat, 21 Mar 2026 02:31:07 +0100
+2026-03-21 01:31:08	CLIENT -> SERVER: To: Test User <noreply.johnhayhotels@theforestwing.com>
+2026-03-21 01:31:08	CLIENT -> SERVER: From: Mailer Test <noreply.johnhayhotels@theforestwing.com>
+2026-03-21 01:31:08	CLIENT -> SERVER: Subject: SMTP Test Message
+2026-03-21 01:31:08	CLIENT -> SERVER: Message-ID: <S81xSeWl0174IA3kway1oEfiHTc44qOaloBAIgDc5A4@LAPTOP-1K6EP452>
+2026-03-21 01:31:08	CLIENT -> SERVER: X-Mailer: PHPMailer 7.0.2 (https://github.com/PHPMailer/PHPMailer)
+2026-03-21 01:31:08	CLIENT -> SERVER: MIME-Version: 1.0
+2026-03-21 01:31:08	CLIENT -> SERVER: Content-Type: multipart/alternative;
+2026-03-21 01:31:08	CLIENT -> SERVER:  boundary="b1=_S81xSeWl0174IA3kway1oEfiHTc44qOaloBAIgDc5A4"
+2026-03-21 01:31:08	CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: --b1=_S81xSeWl0174IA3kway1oEfiHTc44qOaloBAIgDc5A4
+2026-03-21 01:31:08	CLIENT -> SERVER: Content-Type: text/plain; charset=us-ascii
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: This is a test message to verify SMTP settings.
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: --b1=_S81xSeWl0174IA3kway1oEfiHTc44qOaloBAIgDc5A4
+2026-03-21 01:31:08	CLIENT -> SERVER: Content-Type: text/html; charset=us-ascii
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: This is a test message to verify SMTP settings.
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: --b1=_S81xSeWl0174IA3kway1oEfiHTc44qOaloBAIgDc5A4--
+2026-03-21 01:31:08	CLIENT -> SERVER:
+2026-03-21 01:31:08	CLIENT -> SERVER: .
+2026-03-21 01:31:08	SERVER -> CLIENT: 250 OK id=1w3lBD-0000000BMsJ-1S6q
+2026-03-21 01:31:08	CLIENT -> SERVER: QUIT
+2026-03-21 01:31:08	SERVER -> CLIENT: 221 cpanel10wh.jpt1.cloud.z.com closing connection
+
+
+Message has been sent successfully!
