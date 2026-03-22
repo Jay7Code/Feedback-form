@@ -8,11 +8,17 @@
  * Sends an automated "Thank You" email via PHPMailer on success.
  * ═══════════════════════════════════════════════════════════════
  */
-require_once __DIR__ . "/../config.php";
+require_once __DIR__ . "/config.php";
 
 // ── PHPMailer ────────────────────────────────────────────────
 
+require_once __DIR__ . '/phpmailer/src/PHPMailer.php';
+require_once __DIR__ . '/phpmailer/src/SMTP.php';
+require_once __DIR__ . '/phpmailer/src/Exception.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . "/email/config.php";
 
