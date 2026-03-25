@@ -348,5 +348,6 @@ function ratingText($val)
 
     </div><!-- /max-w-5xl -->
 
+    <script src="../js/auto_refresh.js"></script>
 </body>
 </html>

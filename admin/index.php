@@ -512,5 +512,6 @@ function ratingLabel($val)
         <p class="text-gold-400/100 text-[0.8rem] uppercase tracking-[0.3em]">John Hay Hotels - Forest Wing Admin Panel</p>
     </footer>
 
+    <script src="../js/auto_refresh.js"></script>
 </body>
 </html>

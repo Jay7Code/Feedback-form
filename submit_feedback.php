@@ -112,6 +112,7 @@ function sendThankYouEmail(string $guestName, string $guestEmail): bool
                                             <!-- Closing message -->
                                             <p style="margin: 0; font-family: \'Playfair Display\', Georgia, serif; font-size: 16px; line-height: 1.8; color: rgba(255,255,255,0.9); font-style: italic; text-align: center;">
                                                 We look forward to welcoming you again soon.
+                                                Data Protection Notice: Any personal information submitted via this form is collected strictly for the purpose of gathering guest feedback. We are committed to ensuring your data remains confidential and secure in accordance with our privacy policy.
                                             </p>
                                         </td>
                                     </tr>

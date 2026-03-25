@@ -799,5 +799,6 @@ if (
         loadData('all');
     })();
     </script>
+    <script src="../js/auto_refresh.js"></script>
 </body>
 </html>

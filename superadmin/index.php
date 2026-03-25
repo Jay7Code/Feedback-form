@@ -819,6 +819,7 @@ if (
                 loadAdmins()
             })();
         </script>
+        <script src="../js/auto_refresh.js"></script>
     </body>
 
 </html>

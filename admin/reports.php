@@ -757,5 +757,6 @@ $_SESSION["admin_logged_in"] !== true
 
     })();
     </script>
+    <script src="../js/auto_refresh.js"></script>
 </body>
 </html>
