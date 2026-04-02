@@ -1,0 +1,138 @@
+# Guest Feedback System - User Manual
+**John Hay Hotels | Forest Wing**
+
+Welcome to the User Manual for the Guest Feedback System. This guide is designed to help both hotel guests and administrative staff use the system effectively to collect and analyze feedback.
+
+---
+
+## Table of Contents
+1. [System Overview](#system-overview)
+2. [Access & Authentication](#access-authentication)
+3. [Dashboard & Navigation](#dashboard-navigation)
+4. [Step-by-Step Guides](#step-by-step-guides)
+   - [For Guests: Submitting Feedback](#for-guests-submitting-feedback)
+   - [For Staff: Managing Feedback](#for-staff-managing-feedback)
+5. [Form Explanations](#form-explanations)
+6. [Troubleshooting](#troubleshooting)
+
+---
+
+## System Overview
+The **John Hay Hotels - Forest Wing Guest Feedback System** is a dedicated tool used to gather guest impressions during their stay. 
+
+- **For Guests**: It provides a beautiful, easy-to-use interface to share their experiences.
+- **For Staff**: It offers powerful tools to monitor hotel performance, visualize trends through charts, and generate detailed reports to ensure the highest level of service.
+
+---
+
+## Access & Authentication
+
+### Guest Access
+Guests can access the feedback form by scanning a QR code provided in their room or by visiting the specific feedback link on the hotel's network.
+
+![Guest Feedback Form](C:\Users\arjay\.gemini\antigravity\brain\ffe82d53-4763-4198-95e6-8807a96526e2\guest_feedback_form_png_1775090167907.png)
+
+- **Form Address**: `index.php` (The main landing page).
+- **Security**: No sign-in is required for guests. Every submission is treated securely.
+
+### Staff/Admin Access
+Administrative staff members access a private area to review feedback and manage data.
+- **Admin Panel Address**: `/admin/`
+- **Signing In**: 
+  1. Enter your **Username** and **Password** on the login page.
+  2. Click **Login**.
+  3. Upon success, you will see a welcome message and be redirected to the Dashboard.
+
+---
+
+## Dashboard & Navigation
+Once signed in, the Admin Panel offers several modules accessible via the top navigation bar:
+
+![Admin Dashboard Overview](C:\Users\arjay\.gemini\antigravity\brain\ffe82d53-4763-4198-95e6-8807a96526e2\admin_dashboard_1775090045031.png)
+
+- **Dashboard**: Your home screen. It shows a quick summary of total feedback, average satisfaction scores, and the most recent entries.
+- **Analytics**: A visual page with interactive charts. Use this to see trends over time and compare different hotel departments (e.g., Food & Beverage vs. Housekeeping).
+- **Reports**: A specialized view for deep-diving into specific data ranges and exporting information for meetings or records.
+- **Logout**: Located on the far right. Use this to securely exit the system when finished.
+
+---
+
+## Step-by-Step Guides
+
+### For Guests: Submitting Feedback
+Follow these steps to share your stay experience:
+
+1. **Information Source**: Tell us how you found out about the hotel (e.g., Internet, Radio) and your mode of reservation.
+2. **Rate Your Stay**: For each service (Front Office, Housekeeping, Dining, etc.), select one of the following:
+   - **Excellent**: Exceeded expectations.
+   - **Good**: Fully satisfied.
+   - **Poor**: Needs improvement.
+   - **N/A**: Did not use this service.
+3. **Overall Rating**: Give us a satisfaction score from **1 (Low)** to **5 (High)**.
+4. **Additional Comments**: 
+   - Mention helpful staff members by name.
+   - Provide any specific suggestions for improvement.
+5. **Your Details**: Enter your Name, Email, Room Number, and stay dates. 
+   - *Note: Fields marked with a red asterisk (*) must be completed.*
+6. **Submit**: Click the **Submit Feedback** button. A "Thank You" message will confirm your submission.
+
+### For Staff: Managing Feedback
+1. **Filtering Results**: Use the search bar on the Dashboard to find feedback by **Guest Name**, **Email**, or **Room Number**. You can also filter by a specific date range.
+2. **Reviewing Details**: Click the **"View"** link next to any feedback entry to see the full response, including all ratings and specific guest comments.
+3. **Visualizing Trends**: Go to the **Analytics** tab. Use the buttons (Today, Week, Month, All Time) to adjust the timeframe for the charts.
+4. **Exporting Data**: 
+   - On the Dashboard, click **"Export CSV"**.
+   - This downloads a spreadsheet file containing all feedback data, which you can open in programs like Microsoft Excel.
+
+---
+
+## Form Explanations
+
+### Service Ratings
+For every department listed, guests choose a level of satisfaction:
+| Rating | What it means |
+| :--- | :--- |
+| **Excellent** | Exceptional service/quality. |
+| **Good** | Standard quality was met correctly. |
+| **Poor** | The service or facility did not meet expectations. |
+| **N/A** | The guest did not experience this specific service. |
+
+### Required Fields
+The following information is mandatory to ensure we can follow up on any concerns:
+- **How you found us** and **Reservation mode**.
+- **First Stay?** (Yes/No).
+- **Purpose of Visit** (Business or Holiday).
+- **Nationality**.
+- **Guest Name, Email, Address, Contact No.**
+- **Room Number** and **Stay Dates** (Check-in and Check-out).
+
+---
+
+## Troubleshooting
+
+### Form Errors (Guests)
+- **"This field is required"**: Ensure all sections marked with a red asterisk (*) are filled.
+- **Invalid Email**: Check that your email address includes an "@" and a domain (e.g., .com).
+- **Check-out Date Error**: The system will not allow the Check-out date to be earlier than the Check-in date.
+
+### Login Issues (Staff)
+- **Incorrect Credentials**: Verify your username and password. Remember that passwords are case-sensitive.
+- **Expired Session**: If you have been inactive for a long time, you may be automatically signed out. Simply log in again to continue.
+
+---
+
+## Super Admin Panel
+The Super Admin Panel is used for high-level maintenance, such as creating and managing administrator accounts.
+
+![Superadmin Dashboard](C:\Users\arjay\.gemini\antigravity\brain\ffe82d53-4763-4198-95e6-8807a96526e2\superadmin_dashboard_1775090112029.png)
+
+### Tasks for Superadmins:
+1. **Create New Admin**: Add new staff members who need access to the feedback system.
+2. **Account Management**: Activate or deactivate admin accounts as staff roles change.
+3. **Password Resets**: Help admins regain access if they forget their credentials.
+
+---
+
+### Constraints & Support
+- **Mobile Friendly**: The feedback form can be completed on any smartphone or tablet.
+- **Privacy**: All information provided is used solely for service improvement and is not shared with third parties.

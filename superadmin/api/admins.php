@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             try {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $stmt = $mysqli->prepare(
-                    "INSERT INTO admins (username, password, full_name, is_active) VALUES (?, ?, ?, 1)",
+                    "INSERT INTO admins (username, password, full_name, is_active, must_change_password) VALUES (?, ?, ?, 1, 1)",
                 );
                 $fullNameToUse = $full_name ?: $username;
                 $stmt->bind_param("sss", $username, $hashedPassword, $fullNameToUse);
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             try {
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
                 $stmt = $mysqli->prepare(
-                    "UPDATE admins SET password = ? WHERE id = ?",
+                    "UPDATE admins SET password = ?, must_change_password = 1 WHERE id = ?",
                 );
                 $stmt->bind_param("si", $hashedPassword, $adminId);
                 $stmt->execute();

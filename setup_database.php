@@ -95,6 +95,7 @@ try {
             `password`      VARCHAR(255) NOT NULL,
             `full_name`     VARCHAR(100) NOT NULL DEFAULT '',
             `is_active`     TINYINT NOT NULL DEFAULT 1,
+            `must_change_password` TINYINT NOT NULL DEFAULT 0,
             `created_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             `updated_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -108,7 +109,7 @@ try {
     if ($row[0] == 0) {
         $hashedPassword = password_hash("admin123", PASSWORD_DEFAULT);
         $insertAdmin = $mysqli->prepare(
-            "INSERT INTO `admins` (`username`, `password`, `full_name`, `is_active`) VALUES (?, ?, ?, 1)",
+            "INSERT INTO `admins` (`username`, `password`, `full_name`, `is_active`, `must_change_password`) VALUES (?, ?, ?, 1, 0)",
         );
         $adminUsername = "admin";
         $adminFullName = "System Administrator";

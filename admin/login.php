@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
             $mysqli = getDBConnection();
             $stmt = $mysqli->prepare(
-                "SELECT id, username, password, full_name, is_active FROM admins WHERE username = ? LIMIT 1",
+                "SELECT id, username, password, full_name, is_active, must_change_password FROM admins WHERE username = ? LIMIT 1",
             );
             $stmt->bind_param("s", $username);
             $stmt->execute();
@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $_SESSION["admin_id"] = $admin["id"];
                     $_SESSION["admin_username"] = $admin["username"];
                     $_SESSION["admin_full_name"] = $admin["full_name"];
+                    $_SESSION["admin_must_change_password"] = $admin["must_change_password"] == 1;
                     header("Location: index.php");
                     exit();
                 } else {

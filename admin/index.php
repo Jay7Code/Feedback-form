@@ -7,15 +7,7 @@
  */
 session_start();
 require_once "../config.php";
-
-// Auth check
-if (
-    !isset($_SESSION["admin_logged_in"]) ||
-    $_SESSION["admin_logged_in"] !== true
-) {
-    header("Location: login.php");
-    exit();
-}
+require_once "includes/auth_check.php";
 
 $mysqli = getDBConnection();
 
@@ -223,7 +215,95 @@ function ratingLabel($val)
     </style>
 </head>
 <body class="font-sans text-white min-h-screen">
-    <?php if (isset($_SESSION['show_welcome_modal']) && $_SESSION['show_welcome_modal'] === true): ?>
+    <!-- ═══ FORCE PASSWORD CHANGE MODAL ═══ -->
+    <?php if (isset($_SESSION['admin_must_change_password']) && $_SESSION['admin_must_change_password'] === true): ?>
+    <div id="forcePasswordModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+        <div class="relative w-full max-w-md transform overflow-hidden rounded-2xl p-8 shadow-2xl transition-all" style="background: rgba(20, 43, 33, 0.95); border: 1px solid rgba(201, 169, 110, 0.3);">
+            <div class="text-center mb-6">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-gold-400/10 mb-4">
+                    <svg class="h-8 w-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-serif text-[1.75rem] text-white/90 tracking-wide mb-2">Update Password</h3>
+                <p class="text-white/50 text-sm leading-relaxed">
+                    To keep your account secure, please set a new password before continuing to the dashboard.
+                </p>
+            </div>
+
+            <form id="forceChangePasswordForm" class="space-y-4">
+                <div id="passwordError" class="hidden bg-red-900/20 border border-red-400/20 rounded-xl px-4 py-2 text-center">
+                    <p class="text-red-400/80 text-xs"></p>
+                </div>
+
+                <div>
+                    <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">New Password</label>
+                    <input type="password" id="new_password" required placeholder="Min. 6 characters" class="lodge-input w-full">
+                </div>
+                <div>
+                    <label class="block text-[0.75rem] font-semibold text-gold-400/90 uppercase tracking-[0.15em] mb-2">Confirm New Password</label>
+                    <input type="password" id="confirm_password" required placeholder="Repeat new password" class="lodge-input w-full">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btnUpdatePassword" class="w-full py-3.5 rounded-full font-semibold text-[1rem] uppercase tracking-[0.15em] transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #C9A96E, #b5893a); color: #0A1912;">
+                        Save & Continue
+                    </button>
+                    <a href="logout.php" class="block text-center mt-4 text-xs text-white/30 hover:text-white/50 transition-colors uppercase tracking-widest font-semibold">Logout</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('forceChangePasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var p1 = document.getElementById('new_password').value;
+            var p2 = document.getElementById('confirm_password').value;
+            var errBox = document.getElementById('passwordError');
+            var btn = document.getElementById('btnUpdatePassword');
+
+            if(p1.length < 6) {
+                showError('Password must be at least 6 characters.');
+                return;
+            }
+            if(p1 !== p2) {
+                showError('Passwords do not match.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'Updating...';
+
+            var fd = new FormData();
+            fd.append('new_password', p1);
+            fd.append('confirm_password', p2);
+
+            fetch('api/change_password.php', { method: 'POST', body: fd })
+                .then(r => r.json())
+                .then(d => {
+                    if(d.error) {
+                        showError(d.error);
+                        btn.disabled = false;
+                        btn.innerText = 'Save & Continue';
+                    } else {
+                        // Success!
+                        window.location.reload();
+                    }
+                })
+                .catch(e => {
+                    showError('System error. Please try again.');
+                    btn.disabled = false;
+                    btn.innerText = 'Save & Continue';
+                });
+
+            function showError(msg) {
+                errBox.classList.remove('hidden');
+                errBox.querySelector('p').innerText = msg;
+            }
+        });
+    </script>
+    <?php elseif (isset($_SESSION['show_welcome_modal']) && $_SESSION['show_welcome_modal'] === true): ?>
     <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWelcomeModal()"></div>
         

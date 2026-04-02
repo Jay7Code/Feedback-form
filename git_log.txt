@@ -1,0 +1,32 @@
+commit 08947cae086ae8d231117bfa51e36be0f10f793c
+Author: Jay7Code <arjayvelasco09@gmail.com>
+Date:   Wed Mar 25 12:49:45 2026 +0800
+
+    added jsautorefresh
+
+M	admin/analytics.php
+M	admin/index.php
+M	admin/reports.php
+M	admin/view.php
+A	deploy.zip
+A	js/auto_refresh.js
+M	submit_feedback.php
+M	superadmin/index.php
+
+commit 191a3126f505365b533e04b7058e2c64a3ffcd0d
+Author: Jay7Code <arjayvelasco09@gmail.com>
+Date:   Mon Mar 23 12:58:25 2026 +0800
+
+    modified the PHPMAILER path
+
+M	email/config.php
+
+commit 3948ac5ff0e2bd57121d2e90e7b90ee625513037
+Author: Jay7Code <arjayvelasco09@gmail.com>
+Date:   Sun Mar 22 15:30:35 2026 +0800
+
+    fix the submit feedback bug
+
+D	project_overview.txt
+M	submit_feedback.php
+M	test_mailer.php
