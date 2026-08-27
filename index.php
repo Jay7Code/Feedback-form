@@ -73,7 +73,7 @@
             width: 100%;
             height: 100vh;
             z-index: 0;
-            background: url('img/forest-bg.jpg') center/cover no-repeat;
+            background: url('img/forest.jpg') center/cover no-repeat;
         }
 
         .scene-bg::after {
